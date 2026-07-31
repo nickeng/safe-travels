@@ -1,0 +1,9 @@
+{
+  "name": "validate-guide",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "acorn": "^8.17.0",
+    "node-html-parser": "^6.1.13"
+  }
+}

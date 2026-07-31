@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>New York Off the Express — The Local's Guide · October</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Libre+Franklin:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* MTA line palette — the real signal colours of the system */
+  --c-do:#00933c;      /* 4·5·6 green — see, wander, green space */
+  --c-food:#ff6319;    /* B·D·F·M orange — eat */
+  --c-drink:#ee352e;   /* 1·2·3 red — drink */
+  --c-stay:#0039a6;    /* A·C·E blue — sleep */
+  --c-seven:#b933ad;   /* 7 purple — the Queens crawl accent */
+  /* surface */
+  --grout:#e7e6de; --tile:#faf9f4; --ink:#181712; --muted:#6b6a60; --line:#d2d0c4;
+  --leaf:#d9822b;      /* October foliage */
+  --maple:#b23a2e;
+  --deep:#14150f;      /* underground / cemetery dusk */
+  --deep2:#1f2418;
+  --card:300px;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:'Libre Franklin',system-ui,sans-serif;color:var(--ink);line-height:1.6;background:var(--deep)}
+img{max-width:100%}
+a{color:inherit}
+
+/* ── SUBWAY TILE SURFACE — offset white bevel tiles on grey grout ── */
+#content{width:100%;transition:width .35s ease;position:relative;
+  background:var(--grout) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='44' viewBox='0 0 64 44'%3E%3Crect width='64' height='44' fill='%23e7e6de'/%3E%3Cg%3E%3Crect x='1.2' y='1.2' width='29.6' height='19.6' rx='2.5' fill='%23faf9f4'/%3E%3Crect x='33.2' y='1.2' width='29.6' height='19.6' rx='2.5' fill='%23faf9f4'/%3E%3Crect x='-14.8' y='23.2' width='29.6' height='19.6' rx='2.5' fill='%23faf9f4'/%3E%3Crect x='17.2' y='23.2' width='29.6' height='19.6' rx='2.5' fill='%23faf9f4'/%3E%3Crect x='49.2' y='23.2' width='29.6' height='19.6' rx='2.5' fill='%23faf9f4'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  background-size:64px 44px;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.15rem}
+
+/* ── NAV — a route bullet + line strip ── */
+nav{position:sticky;top:0;z-index:10000;background:#111;color:#fff;display:flex;align-items:center;gap:.9rem;
+  padding:.5rem 1.15rem;border-bottom:3px solid var(--c-do)}
+nav .rb{width:2rem;height:2rem;font-size:1.05rem;flex:none}
+nav .brand{font-weight:800;letter-spacing:.02em;font-size:.95rem}
+nav .brand b{font-weight:900}
+nav .brand span{color:#b9b7ad;font-weight:600}
+nav .spacer{margin-left:auto}
+nav #toggle{cursor:pointer;background:none;border:1.5px solid #555;color:#fff;font-family:inherit;font-weight:700;
+  font-size:.78rem;letter-spacing:.05em;padding:.4rem .8rem;border-radius:3px}
+nav #toggle:hover{border-color:var(--c-do);color:var(--c-do)}
+@media(max-width:560px){nav .brand span{display:none}}
+
+/* ── ROUTE BULLET — the MTA line marker ── */
+.rb{display:inline-flex;align-items:center;justify-content:center;width:1.55em;height:1.55em;border-radius:50%;
+  background:var(--rbc,#00933c);color:#fff;font-family:'Libre Franklin';font-weight:800;line-height:1;flex:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.rb.do{--rbc:var(--c-do)} .rb.food{--rbc:var(--c-food)} .rb.drink{--rbc:var(--c-drink)}
+.rb.stay{--rbc:var(--c-stay)} .rb.seven{--rbc:var(--c-seven)}
+
+/* ── HERO ── */
+.hero{position:relative;height:clamp(440px,80vh,680px);overflow:hidden;background:#0a0a08}
+.hero>img{width:100%;height:100%;object-fit:cover;opacity:.68;filter:saturate(1.05)}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,8,.35) 0%,rgba(10,10,8,.15) 40%,rgba(10,10,8,.82) 100%)}
+.hero .hgrid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2.2rem 1.4rem 2.6rem}
+.hero .hinner{max-width:1120px;margin:0 auto;width:100%}
+.hero .kick{display:inline-flex;align-items:center;gap:.55rem;color:#fff;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;font-size:.72rem;background:rgba(0,0,0,.4);padding:.4rem .7rem;border-radius:3px}
+.hero h1{font-family:'DM Serif Display',serif;color:#fff;font-weight:400;line-height:.98;margin:.7rem 0 .5rem;
+  font-size:clamp(2.9rem,8.5vw,6.4rem);text-shadow:0 3px 30px rgba(0,0,0,.5)}
+.hero h1 em{font-style:italic;color:var(--leaf)}
+.hero .sub{color:#ede9df;font-size:clamp(1rem,2.1vw,1.3rem);max-width:40ch;font-weight:400;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.hero .credit{position:absolute;bottom:.4rem;right:.7rem;font-size:.58rem;letter-spacing:.05em;color:rgba(255,255,255,.5)}
+
+/* ── SECTIONS ── */
+section{padding:2.6rem 0 1rem}
+.sec-head{margin-bottom:.4rem}
+/* mosaic station-name tablet */
+.tablet{display:inline-block;position:relative;background:var(--tab,#1b3a2a);color:#f4ecd6;
+  font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,4.2vw,2.5rem);line-height:1.05;
+  padding:.5rem .95rem;border:3px solid #f4ecd6;border-radius:3px;
+  box-shadow:0 0 0 3px var(--tab,#1b3a2a),0 0 0 7px rgba(0,0,0,.12), 0 8px 20px -10px rgba(0,0,0,.4)}
+.tablet::before,.tablet::after{content:"";position:absolute;left:-3px;right:-3px;height:6px;
+  background-image:repeating-linear-gradient(90deg,#f4ecd6 0 5px,var(--tab,#1b3a2a) 5px 10px);opacity:.55}
+.tablet::before{top:-9px}.tablet::after{bottom:-9px}
+.tab-do{--tab:#17402a}.tab-food{--tab:#7a3410}.tab-drink{--tab:#7c1f1b}.tab-stay{--tab:#12275e}.tab-seven{--tab:#5a1a54}
+.kicker{display:block;font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;
+  color:var(--muted);margin:1.2rem 0 .3rem}
+.lead{font-size:1.06rem;max-width:66ch;margin:1.1rem 0}
+.lead.big{font-size:1.16rem}
+section>.wrap>p{max-width:70ch}
+h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.55rem;margin:2rem 0 .2rem;display:flex;align-items:center;gap:.5rem}
+h3 .rb{font-size:.72rem;width:1.5rem;height:1.5rem}
+.subhead-note{color:var(--muted);font-size:.95rem;max-width:64ch;margin:.15rem 0 .3rem}
+strong.hl{color:var(--maple);font-weight:700}
+strong.hlg{color:var(--c-do);font-weight:700}
+
+/* line-strip separator (a subway route drawn across the page) */
+.strip{display:flex;align-items:center;gap:0;margin:2.4rem 0 .4rem;height:12px}
+.strip .ln{flex:1;height:6px;border-radius:3px;background:var(--sc,#00933c)}
+.strip .dot{width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--sc,#00933c);margin:0 -2px;z-index:1}
+
+/* ── OPENING readout ── */
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;margin:1.6rem 0}
+.stat{background:var(--tile);border:1px solid var(--line);border-left:5px solid var(--sc,var(--c-do));border-radius:4px;padding:.8rem .9rem}
+.stat .n{font-family:'DM Serif Display',serif;font-size:1.7rem;line-height:1}
+.stat .l{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.35rem;font-weight:700}
+.dropcap::first-letter{float:left;font-family:'DM Serif Display',serif;font-size:4.1rem;line-height:.78;padding:.35rem .5rem 0 0;color:var(--maple)}
+.callout{border-left:4px solid var(--leaf);background:#fbf3e7;padding:.85rem 1.1rem;margin:1.4rem 0;border-radius:0 5px 5px 0;font-size:.96rem}
+.callout b{color:var(--maple)}
+
+/* itinerary — a subway line of days */
+.itin{list-style:none;padding:0;margin:1.5rem 0 0}
+.itin li{display:grid;grid-template-columns:34px 1fr;gap:0 1rem;position:relative}
+.itin .rail{display:flex;flex-direction:column;align-items:center}
+.itin .rail .rb{width:34px;height:34px;font-size:1rem}
+.itin .rail .line{width:4px;flex:1;background:var(--c-do);margin:3px 0;opacity:.4}
+.itin li:last-child .rail .line{display:none}
+.itin .body{padding-bottom:1.4rem}
+.itin .body h4{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.25rem;margin-bottom:.15rem}
+.itin .body p{font-size:.94rem;color:#33322a;max-width:64ch}
+.itin .body .tag{font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* ── SPECIAL DAYS band ── */
+.band{background:var(--deep);color:#ece7d8;padding:2.8rem 0 2.4rem;position:relative}
+.band.leafy{background:linear-gradient(180deg,#14150f,#1d1c12)}
+.band .tablet{box-shadow:0 0 0 3px var(--tab),0 0 0 7px rgba(255,255,255,.08),0 10px 26px -12px #000}
+.band .lead{color:#d8d2c2}
+.band h3{color:#f4ecd6}
+.band .subhead-note{color:#a9a599}
+.band .card-title{color:var(--ink)} /* cards stay light inside the dark band — title must not inherit the band's light text */
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.1rem;margin-top:1.6rem}
+.dayc{background:#20241a;border:1px solid #33372a;border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
+.dayc img{width:100%;height:170px;object-fit:cover;cursor:pointer}
+.dayc .db{padding:.9rem 1rem 1.1rem}
+.dayc .when{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:#0a0a08;background:var(--leaf);padding:.22rem .5rem;border-radius:3px;margin-bottom:.5rem}
+.dayc .when.red{background:var(--maple);color:#fff}
+.dayc h4{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.35rem;line-height:1.05;margin-bottom:.35rem;color:#f4ecd6}
+.dayc p{font-size:.88rem;color:#c3bfb2}
+.dayc .meta{font-size:.76rem;color:#8f8b7f;margin-top:.55rem}
+.dayc a{color:var(--leaf);text-decoration:underline}
+.schedule{margin:1.4rem 0 .3rem;max-width:560px}
+.ev{display:grid;grid-template-columns:78px 1fr;gap:.3rem 1rem;align-items:baseline}
+.ev .t{font-size:.78rem;color:var(--leaf);font-weight:800;text-align:right}
+.ev .bd{font-size:.9rem;color:#cbc6b8;padding:.6rem 0;border-bottom:1px solid #33372a}
+.ev:first-of-type .bd,.ev:first-of-type .t{padding-top:0}
+.ev:last-child .bd{border-bottom:0}
+
+/* ── CARDS ── */
+.cards{display:block;margin-top:1.3rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card),1fr));gap:1.15rem;list-style:none;margin:0;padding:0}
+.grid>li{display:contents}
+.cards.rail{min-width:0}
+.cards.rail>.grid{display:flex;flex-wrap:nowrap;overflow:auto hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;padding-block:.9rem;gap:1rem}
+.cards.rail .card{flex:0 0 var(--card);scroll-snap-align:start}
+.card{background:var(--tile);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;
+  position:relative;box-shadow:0 1px 0 rgba(0,0,0,.03);transition:transform .18s ease,box-shadow .18s ease}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--cc,var(--c-do));z-index:2}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 26px -14px rgba(0,0,0,.4)}
+.card.active{outline:3px solid var(--cc,var(--c-do));outline-offset:-3px}
+.card.cat-do{--cc:var(--c-do)} .card.cat-food{--cc:var(--c-food)} .card.cat-drink{--cc:var(--c-drink)} .card.cat-stay{--cc:var(--c-stay)}
+.card .body{padding:.85rem .95rem 1rem;flex:1;display:flex;flex-direction:column}
+.card-title{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.28rem;line-height:1.08;margin:0;display:flex;gap:.45rem;align-items:baseline}
+.card-title .rb{align-self:center;font-size:.62rem;width:1.35rem;height:1.35rem}
+.card .meta{font-size:.76rem;color:var(--muted);margin-top:.3rem;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+.desc{font-size:.9rem;color:#38372e;margin-top:.5rem}
+.card-sources{font-size:.7rem;color:#9a978c;margin-top:auto;padding-top:.7rem}
+.card-sources a{color:inherit;text-decoration:underline}
+.no-img{height:64px;display:flex;align-items:center;justify-content:center;background:#eceae0;color:#9a978c;font-size:.78rem;border-bottom:1px solid var(--line)}
+.car{position:relative;margin:0}
+.car-main{width:100%;height:200px;object-fit:cover;display:block;background:#eceae0;cursor:pointer}
+.car-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.55);color:#fff;border:0;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
+.car-nav.prev{left:6px}.car-nav.next{right:6px}
+.car-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;gap:5px;justify-content:center}
+.car-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55)}
+.car-dots i.active{background:#fff}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;margin:-1px;padding:0}
+
+/* feature card */
+.grid .card.feature{grid-column:1/-1;flex-direction:row;min-height:330px}
+.grid .card.feature .car{width:52%;flex:none;position:relative}
+.grid .card.feature .car-main{position:absolute;inset:0;width:100%;height:100%}
+.grid .card.feature .body{justify-content:center;padding:1.6rem 1.8rem}
+.grid .card.feature .card-title{font-size:1.9rem}
+.grid .card.feature .desc{font-size:.98rem}
+@media(max-width:680px){.grid .card.feature{flex-direction:column;min-height:0}.grid .card.feature .car{width:100%;position:static}.grid .card.feature .car-main{position:static;height:210px}}
+
+/* glossary */
+.gloss{border-bottom:1px dotted var(--food);cursor:help;position:relative}
+.gloss:hover::after,.gloss:focus::after{content:attr(data-def);position:absolute;left:0;bottom:135%;white-space:nowrap;
+  background:var(--ink);color:#faf9f4;font-size:.74rem;padding:.3rem .55rem;border-radius:5px;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:9;font-weight:400}
+
+/* day-trip mini guides */
+.daytrip{background:var(--tile);border:1px solid var(--line);border-radius:8px;padding:1.4rem 1.5rem;margin-top:1.5rem;border-top:6px solid var(--sc,var(--c-food))}
+.daytrip .transport{font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.03em;margin:.3rem 0 .8rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem}
+.daytrip .transport span{white-space:nowrap}
+.daytrip h3{margin-top:0}
+.tip{background:#fbf3e7;border-left:4px solid var(--leaf);padding:.7rem 1rem;border-radius:0 5px 5px 0;font-size:.9rem;margin-top:1rem}
+.tip b{color:var(--maple)}
+
+/* neighbourhood facts */
+.nb-facts{background:var(--tile);border:1px solid var(--line);border-radius:6px;padding:.9rem 1.1rem;font-size:.86rem;margin-top:.8rem}
+.nb-facts div{padding:.28rem 0;border-bottom:1px dashed var(--line)}
+.nb-facts div:last-child{border-bottom:0}
+.nb-facts b{color:var(--ink)}
+.twocol{display:grid;grid-template-columns:1.5fr 1fr;gap:1.6rem;align-items:start}
+@media(max-width:760px){.twocol{grid-template-columns:1fr}}
+
+/* map + filter */
+.mapfilter{display:flex;flex-wrap:wrap;gap:.5rem;margin:.9rem 0}
+.mapfilter button{display:inline-flex;align-items:center;gap:.45rem;font-size:.76rem;font-weight:700;background:var(--tile);
+  border:1px solid var(--line);border-radius:4px;padding:.35rem .7rem;cursor:pointer;color:var(--ink)}
+.mapfilter button i{width:11px;height:11px;border-radius:50%}
+.mapfilter button.off{opacity:.38}
+.map-container{margin-top:1.3rem}
+.map-container #map{height:470px;border:1px solid var(--line);border-radius:6px}
+body.split #content{width:50%}
+body.split .map-section>.wrap>h2,body.split .map-section .lead,body.split .export-row{display:none}
+/* Split view: float the legend over the map (top-right, clear of Leaflet's zoom + attribution)
+   so pins stay decodable and filterable. */
+body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;bottom:auto;z-index:60;margin:0;
+  max-width:min(60vw,340px);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
+  border:1px solid var(--line);border-radius:8px;padding:.55rem .6rem;box-shadow:0 8px 24px -10px rgba(0,0,0,.35)}
+body.split .map-container{position:fixed;top:0;right:0;width:50vw;height:100vh;margin:0;z-index:50}
+body.split .map-container #map{height:100vh !important;margin:0 !important;border-radius:0;border:0}
+@media(max-width:900px){body.split #content{width:auto;margin-top:33vh}
+  body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:33vh;z-index:50}
+  body.split .map-container #map{height:33vh !important}
+  body.split nav{top:33vh}}
+.map-section h2,.credits h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:2rem;margin-bottom:.3rem}
+.export-row{margin:.8rem 0 0}
+.export-btn{font-size:.76rem;font-weight:700;color:var(--muted);background:var(--tile);border:1px solid var(--line);padding:.45rem .85rem;border-radius:4px;cursor:pointer}
+.export-btn:hover{color:var(--c-do);border-color:var(--c-do)}
+dialog.export-dialog{border:0;border-radius:8px;padding:2rem 2.2rem;max-width:390px;width:90vw;background:#fff;color:var(--ink);box-shadow:0 24px 60px -12px rgba(0,0,0,.4);margin:auto}
+dialog.export-dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog.export-dialog h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.35rem;margin-bottom:.3rem;display:block}
+dialog.export-dialog p{font-size:.85rem;color:var(--muted);margin-bottom:1.1rem}
+dialog.export-dialog .cats{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem}
+dialog.export-dialog .cats label{display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer}
+dialog.export-dialog .opt{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:5px;cursor:pointer;background:none;text-align:left;width:100%;font-family:inherit}
+dialog.export-dialog .opt:hover{border-color:var(--c-do)}
+dialog.export-dialog .opt .icon{font-size:1.3rem}
+dialog.export-dialog .opt .label{font-weight:700;font-size:.88rem}
+dialog.export-dialog .opt .desc{font-size:.72rem;color:var(--muted)}
+dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:none;border:0;font-size:1.4rem;color:var(--muted);cursor:pointer}
+.export-attribution{font-size:.68rem !important;color:#aaa !important;margin-top:1rem !important}
+
+/* credits */
+.credits{background:#111;color:#cfccc2;padding:2.6rem 0}
+.credits .tablet{--tab:#333}
+.credits a{color:#c9c5ba}
+.credits .srcs{columns:2;column-gap:2rem;font-size:.82rem;margin-top:1rem}
+.credits .srcs a{display:block;padding:.2rem 0;break-inside:avoid}
+@media(max-width:640px){.credits .srcs{columns:1}}
+.credits .fine{font-size:.76rem;color:#8b887e;margin-top:1.4rem;max-width:75ch}
+.credits .signoff{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--leaf);margin-top:1.4rem}
+
+/* lightbox */
+.lightbox{border:0;padding:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:rgba(8,8,6,.94)}
+.lightbox::backdrop{background:rgba(8,8,6,.94)}
+.lightbox[open]{display:flex;align-items:center;justify-content:center}
+.lightbox img{max-width:90vw;max-height:78vh;object-fit:contain}
+.lightbox .cap{position:fixed;bottom:5vh;left:0;right:0;text-align:center;color:#fff;font-size:.9rem;padding:0 1rem}
+.lightbox .cap .cr{display:block;color:#b7b3a8;font-size:.75rem;margin-top:.25rem}
+.lightbox .cap .cr a{color:#b7b3a8}
+.lightbox .count{position:fixed;top:5vh;left:0;right:0;text-align:center;color:#b7b3a8;font-size:.85rem;pointer-events:none}
+.lightbox .arw{position:fixed;top:50%;transform:translateY(-50%);font-size:2.2rem;color:#fff;background:none;border:0;cursor:pointer;padding:1rem}
+.lightbox .arw.prev{left:2vw}.lightbox .arw.next{right:2vw}
+.lightbox .x{position:fixed;top:3vh;right:4vw;font-size:1.5rem;color:#fff;background:none;border:0;cursor:pointer}
+@media(prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
+</style></head>
+<body>
+<div id="content">
+<nav>
+  <span class="rb do">6</span>
+  <span class="brand"><b>The Local</b> <span>· New York off the express</span></span>
+  <span class="spacer"></span>
+  <button id="toggle">◂ Map</button>
+</nav>
+
+<header class="hero">
+  <img src="https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F6EGd3GRlKPuWQ1kc4SYVjH%2Fb8942afdbfd45ac59d262ad3aeba21fb%2FNYC_Halloween_Parade_20241031_Paola_Chapdelaine_54.jpg&w=1200&q=75" alt="Illuminated puppet heads over a costumed crowd at the Village Halloween Parade at night">
+  <div class="veil"></div>
+  <div class="hgrid"><div class="hinner">
+    <span class="kick"><span class="rb do" style="width:1.4em;height:1.4em;font-size:.72em">6</span> The city locals love · October</span>
+    <h1>New York,<br><em>Off the Express</em></h1>
+    <p class="sub">You've done the Empire State a hundred times. This is the other line — the weird, the old-guard, the outer boroughs. Ride the local.</p>
+  </div></div>
+  <span class="credit" data-src="https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F6EGd3GRlKPuWQ1kc4SYVjH%2Fb8942afdbfd45ac59d262ad3aeba21fb%2FNYC_Halloween_Parade_20241031_Paola_Chapdelaine_54.jpg&w=1200&q=75"></span>
+</header>
+
+<main>
+<section id="start"><div class="wrap">
+  <p class="lead big dropcap">October is the New Yorker's favorite month, and the one the guidebooks undersell. The summer crowds have thinned, the air turns sharp and dry, and the whole city pivots into its most atmospheric mode — Halloween-obsessed, leaf-drunk, and alive with the indoor culture that outlasts the tourists. For a visitor who has already ridden the express line a hundred times — the observation decks, the harbor ferry, the Midtown grid — this guide takes the <strong class="hlg">local</strong>: the freight-elevator museum on a Tribeca alley, the Victorian cemetery that throws an all-night arts party, the Sri Lankan lunch counter ten minutes off the ferry, the boxing dive hidden behind a faded Times Square awning.</p>
+
+  <div class="readout">
+    <div class="stat" style="--sc:var(--c-do)"><div class="n">5</div><div class="l">Boroughs, all in play</div></div>
+    <div class="stat" style="--sc:var(--c-food)"><div class="n">4</div><div class="l">Days, solo</div></div>
+    <div class="stat" style="--sc:var(--c-drink)"><div class="n">61°→48°F</div><div class="l">Early → late October</div></div>
+    <div class="stat" style="--sc:var(--c-seven)"><div class="n">Late Oct</div><div class="l">Peak fall foliage</div></div>
+  </div>
+
+  <p>Pack layers — the city's avenues become wind tunnels once the sun drops, and lows slide toward the high 40s°F by month's end. Bright, clear days are the norm; a rainy blue-hour evening is a photographer's gift, not a washout. Two things about October worth planning around: <strong class="hl">fall color peaks later than you'd think</strong> (the urban heat island keeps Manhattan warm — the North Woods and outer-borough forests hit their stride mid-to-late month, sliding into early November), and <strong class="hl">Halloween is a season here, not a day</strong> — costumed subway riders, after-dark cemetery tours, and pumpkin festivals run for weeks before the 31st.</p>
+
+  <div class="callout"><b>How this guide is wired.</b> Every place is colour-coded like a subway line — <span style="color:#00933c;font-weight:700">green</span> to see &amp; wander, <span style="color:#ff6319;font-weight:700">orange</span> to eat, <span style="color:#ee352e;font-weight:700">red</span> to drink, <span style="color:#0039a6;font-weight:700">blue</span> to sleep — matching the pins on the map. Hit the <b>◂ Map</b> button up top to ride the whole thing at once.</div>
+
+  <span class="kicker">Four days, riding local</span>
+  <ol class="itin">
+    <li><div class="rail"><span class="rb do">1</span><span class="line"></span></div>
+      <div class="body"><span class="tag">Lower Manhattan · Downtown</span>
+        <h4>The hidden grid &amp; the old-guard bars</h4>
+        <p>Start where the city is densest and strangest: Cortlandt Alley and its freight-elevator museum, the curve of Doyers Street, the nine-storey Beekman atrium, a secret Midtown waterfall. Eat carnitas and Fujianese wontons off the counter; end at McSorley's over a pair of ales. Time it for <strong class="hlg">Oct 31</strong> and build the night around the Village Halloween Parade.</p></div></li>
+    <li><div class="rail"><span class="rb do">2</span><span class="line"></span></div>
+      <div class="body"><span class="tag">Brooklyn</span>
+        <h4>Green-Wood, Sunset Park &amp; the waterfront</h4>
+        <p>A morning wandering Green-Wood Cemetery — arboretum, outdoor art, harbor views from the highest hill in Brooklyn (and, if your dates land right, its sold-out-fast <strong class="hlg">Nightfall</strong>). Egg tarts in Sunset Park, the Interference Archive in Park Slope, sunset off an industrial waterfront, and a dinner-and-dive crawl through Williamsburg and Red Hook.</p></div></li>
+    <li><div class="rail"><span class="rb do">3</span><span class="line"></span></div>
+      <div class="body"><span class="tag">The Bronx or Queens</span>
+        <h4>Foliage &amp; a food crawl in the greenest borough</h4>
+        <p>Two ways to spend it, both off the map: the Bronx for peak fall color (the Botanical Garden's old-growth forest, Woodlawn's arboretum-cemetery) plus the real Little Italy on Arthur Avenue — or Queens for the planet's most diverse eating, riding the elevated 7 from Jackson Heights to Flushing.</p></div></li>
+    <li><div class="rail"><span class="rb do">4</span><span class="line"></span></div>
+      <div class="body"><span class="tag">Staten Island</span>
+        <h4>The forgotten borough</h4>
+        <p>The free ferry drops you at a borough almost nobody follows you into: Little Sri Lanka ten minutes' walk from the terminal, a Tibetan monastery on a hilltop, a tugboat graveyard, and a restaurant where a different grandmother cooks every night. Save this for a clear day and give it the whole thing.</p></div></li>
+  </ol>
+  <p style="margin-top:1.4rem;color:var(--muted);font-size:.92rem">Short on time? Days 1–2 are the essential core; Days 3–4 are the deep cuts — pick the borough that matches your appetite, or stretch the trip to five and take both.</p>
+</div></section>
+<section class="band leafy"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-drink">Time It Right</span></div>
+  <p class="lead">October isn't just a good month to be here — a handful of genuinely singular events happen only now, and one or two are worth building the whole trip around. If your dates are flexible, aim them at these.</p>
+
+  <div class="twocol" style="margin-top:1.7rem">
+    <div>
+      <h3>The Village Halloween Parade</h3>
+      <p class="subhead-note" style="margin-bottom:.9rem">Friday, October 31 · 7–11 pm · Sixth Avenue, Canal to 15th St · free to watch</p>
+      <p style="color:#d8d2c2;font-size:.98rem">The largest Halloween parade on earth, and one of the city's few truly participatory spectacles — anyone in costume can join. Fifty-thousand-plus marchers process up Sixth Avenue: stilt-walkers, giant Ralph Lee puppets lit from within, brass bands, and a synchronized <em>Thriller</em> corps, watched by hundreds of thousands. Started in 1974 as a West Village puppeteer's neighborhood walk; the 2025 theme is <b style="color:var(--leaf)">"All the People."</b> If your trip overlaps the 31st, plan your entire last evening around it.</p>
+      <div class="schedule">
+        <div class="ev"><div class="t">6:30 pm</div><div class="bd">Marchers assemble at Canal St &amp; 6th Ave (enter from the east/south only).</div></div>
+        <div class="ev"><div class="t">7:00 pm</div><div class="bd">Parade steps off, heading north up Sixth Avenue.</div></div>
+        <div class="ev"><div class="t">~8:30 pm</div><div class="bd"><em>Thriller</em> dance performance mid-route.</div></div>
+        <div class="ev"><div class="t">11:00 pm</div><div class="bd">Disperses around 15th St. Sixth Ave is fully barricaded Spring–16th from ~6 pm — don't plan to cross it.</div></div>
+      </div>
+      <p style="font-size:.82rem;color:#8f8b7f;margin-top:.5rem">Official: <a href="https://halloween-nyc.com/" target="_blank" rel="noopener">halloween-nyc.com</a> · C/E to Spring St or 1 to Houston St</p>
+    </div>
+    <div>
+      <img data-lightbox="parade" src="https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F4yWMC8hOE0NT8fYimooTq2%2F41b691dbd10af0faa01a0bdb6e23e12e%2FNYC-Halloween-Parade-Manhattan-NYC-Photo-Paola_Chapdelaine-24.jpg%3Fw%3D1200%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75" alt="Giant illuminated pumpkin-head puppets carried above the crowd at night" style="width:100%;height:280px;object-fit:cover;border-radius:6px;cursor:pointer">
+      <p style="font-size:.78rem;color:#8f8b7f;margin-top:.4rem">Tap any photo to enlarge. Credit shows in the viewer.</p>
+    </div>
+  </div>
+
+  <div class="days">
+    <div class="dayc">
+      <img data-lightbox="nightfall" src="https://www.green-wood.com/wp-content/webp-express/webp-images/uploads/2022/09/gardens-cosmic-square.jpg.webp" alt="Outdoor light-and-art installation among cemetery monuments at Green-Wood">
+      <div class="db"><span class="when red">Oct 16–17 · two nights only</span>
+        <h4>Green-Wood Nightfall</h4>
+        <p>Death of Classical turns Green-Wood Cemetery into a three-hour, non-linear outdoor performance across 478 dark acres: film projected on mausoleums, musicians on hilltops, dancers out of the shadows, circus artists in the catacombs. Two thousand people wander freely in the dark. <b style="color:var(--leaf)">Sells out within hours</b> — join the Death of Classical mailing list for early access.</p>
+        <div class="meta"><a href="https://www.deathofclassical.com/concerts/nightfall-2025" target="_blank" rel="noopener">deathofclassical.com</a> · wear warm layers &amp; real shoes</div></div>
+    </div>
+    <div class="dayc">
+      <img data-lightbox="pumpkin" src="https://gov-island-site.s3.amazonaws.com/blog/2025/pumpkin-point-is-back-on-governors-island/_blogDetailImage2x/pumpkin-point-2025-sized-for-web.png" alt="Pumpkin Point pumpkin patch at Governors Island">
+      <div class="db"><span class="when">Oct 25–26 · 10am–5pm</span>
+        <h4>Pumpkin Point, Governors Island</h4>
+        <p>A car-free island in the harbor, quiet once summer programming winds down. For one weekend, Nolan Park becomes a free pumpkin patch with trick-or-treating, a fall-foliage tree tour, and cider. Ferries from the Battery are free before 11am on weekends.</p>
+        <div class="meta"><a href="https://www.govisland.com/things-to-do/events/pumpkin-point-2025" target="_blank" rel="noopener">govisland.com</a> · ~$4 ferry after 11am</div></div>
+    </div>
+    <div class="dayc">
+      <img data-lightbox="socrates" src="https://oana-ny.org/wp-content/uploads/2025/10/dome.jpg" alt="Geodesic dome art installation at Socrates Sculpture Park in October">
+      <div class="db"><span class="when">Oct 25 · free</span>
+        <h4>Halloween Harvest, Socrates</h4>
+        <p>Astoria's waterfront sculpture park — where artists fabricate large works on-site — throws a free community harvest festival: performances, pumpkin activities, seasonal food, and dramatic late-afternoon light on the Manhattan skyline across the East River.</p>
+        <div class="meta"><a href="https://oana-ny.org/october-at-socrates-sculpture-park/" target="_blank" rel="noopener">socratessculpturepark.org</a> · N/W to Broadway</div></div>
+    </div>
+  </div>
+  <div class="callout" style="background:#20241a;border-color:var(--leaf);color:#d8d2c2;margin-top:1.6rem"><b style="color:var(--leaf)">Also worth timing.</b> Green-Wood runs a full fall calendar of trolley and moonlight tours (Oct 6–26); the NYC Wine &amp; Food Festival lands at the Seaport (Oct 15–19); and the Queens Night Market plays its final Saturdays of the season through mid-October. All book up — reserve ahead.</div>
+</div></section>
+
+<main>
+
+<section id="hidden"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-do">The Hidden Grid</span></div>
+  <p class="lead big">Manhattan below Midtown is the densest, strangest square mileage in the country — and the parts locals love are the ones that don't announce themselves: a museum inside a freight elevator, a nine-storey atrium anyone can walk into, a waterfall behind an office building. Then, when the crowds get to you, the island's quiet green: the gardens and woodland corners that peak in October.</p>
+
+  <h3><span class="rb do">M</span> Oddities &amp; overlooked corners</h3>
+  <p class="subhead-note">Start downtown and work the seams — cobblestone alleys, an abandoned station, a museum the size of a closet. Most are free; several are best on an overcast morning before 9am.</p>
+  <div class="cards" data-section="hidden-odd"></div>
+
+  <h3><span class="rb do">M</span> Hidden gardens &amp; fall color in Manhattan</h3>
+  <p class="subhead-note">You know Central Park. You may not know its formal garden that goes dead quiet before 9am, or its most secluded woodland — the first place in the park to turn. Uptown, a mansion garden on a cliff over the Hudson lights up in mid-to-late October.</p>
+  <div class="cards" data-section="hidden-green"></div>
+
+  <h3><span class="rb do">M</span> Views only locals shoot</h3>
+  <p class="subhead-note">Not the observation decks. The offbeat vantages photographers chase: the highest subway platform in the city, a bouncing footbridge, rusting industrial gantries, a brutal 1916 steel arch across the East River. Best at golden hour, which in October lands around 5–6pm.</p>
+  <div class="cards" data-section="hidden-views"></div>
+</div></section>
+
+</main>
+
+<section class="band"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-do">The Cities of the Dead</span></div>
+  <p class="lead">If there is one thing that defines a local's October in New York, it's this: the great Victorian garden-cemeteries. Before Central Park existed, these were the city's parks — arboretums, sculpture gardens, and picnic grounds where families spent their Sundays. They remain the most beautiful, least-crowded, most genuinely strange places to walk when the leaves turn. Two, in Brooklyn and the Bronx, are National Historic Landmarks and Level-II arboretums in their own right.</p>
+  <p class="lead" style="margin-top:.4rem">Give one of them a slow half-day. This is the single most "the city locals love" thing in the guide.</p>
+  <div class="cards" data-section="cemeteries"></div>
+  <div class="callout" style="background:#20241a;border-color:var(--leaf);color:#d8d2c2;margin-top:1.7rem"><b style="color:var(--leaf)">A local's move.</b> Pick up a free map at the gate — the grounds are vast and winding. At Green-Wood, climb to Battle Hill (the highest natural point in Brooklyn) for a skyline view over the graves, then find Jean-Michel Basquiat's plain white headstone near the center. At Woodlawn, ask for the map to the "Jazz Corner" — Duke Ellington, Miles Davis, and Celia Cruz all rest within a short walk of each other.</div>
+</div></section>
+
+<main>
+
+<section id="eat"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-food">Where Locals Eat</span></div>
+  <p class="lead big">New York's cuisine defies every rule that makes a city's food legible. There's no single dish, no founding ingredient — only relentless accumulation. The city's 3.3 million immigrants, from more than 150 countries, <em>are</em> the cuisine. What makes it unlike any other food destination is the density of the authentic: a block in Flushing moves from hand-pulled Lanzhou noodles to Sichuan skewers in a hundred yards, and the Fujianese grandmother in Chinatown does not soften the fish-ball soup for tourists. None of the places below would appear in a "36 Hours in New York" roundup. That's the point.</p>
+
+  <div class="twocol">
+    <div>
+      <p>On top of that immigrant foundation, the city invented its own canon — not tourist items, but the baseline of how New Yorkers eat on a Tuesday: the water bagel, the deli pastrami piled past reason, the <span class="gloss" tabindex="0" data-def="bodega griddle sandwich — chopped beef, onions, melted American cheese on a hero">chopped cheese</span>, the $3 slice folded lengthwise on a corner. October only sweetens it: the Union Square Greenmarket fills with Hudson Valley Honeycrisp and cider donuts, and kitchens quietly rotate to root vegetables, game, and braises.</p>
+      <p style="margin-top:.7rem">The one true October priority: the <strong class="hl">Queens Night Market</strong> — an 80-vendor outdoor night market at Flushing Meadows, every dish $5 or under, running Saturdays through mid-October. These are typically its final weekends of the year.</p>
+    </div>
+    <aside class="nb-facts" style="border-left:5px solid var(--c-food)">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.15rem;border-bottom:1px solid var(--line);padding-bottom:.4rem;margin-bottom:.3rem">The off-list canon</div>
+      <div><b>Chopped cheese</b> — Harlem/Bronx bodega, not a burger</div>
+      <div><b>Jhol <span class="gloss" tabindex="0" data-def="Nepali/Tibetan dumpling, hand-pleated">momo</span></b> — dumplings in tomato-sesame broth, Jackson Heights</div>
+      <div><b>Doubles</b> — Trini fried bara + curried chickpeas</div>
+      <div><b>Lechón asado</b> — Puerto Rican whole roast pork, weekends only</div>
+      <div><b><span class="gloss" tabindex="0" data-def="chopped roti griddled with egg, spice and meat — Sri Lankan">Kothu roti</span></b> — off the ferry in Little Sri Lanka</div>
+      <div><b>Clam pie</b> — Staten Island cracker-thin tavern pizza</div>
+    </aside>
+  </div>
+
+  <div class="callout"><b>When locals actually eat.</b> The <b>bodega run</b> (6–9am) — a bacon-egg-and-cheese on a roll, assembled in under two minutes, taken standing. <b>Weekday lunch</b> (12–2pm) is fast and cheap: a slice, a halal-cart plate, a counter. <b>Dinner</b> is the main meal and runs late — 7:30pm is the sweet spot, 6pm feels tourist-early. And the <b>solo bar counter</b> is the canonical way to eat alone here, treated with complete normalcy — the best seats at Ha's, the Oyster Bar, and Carnitas Ramirez are one stool wide.</p></div>
+
+  <h3><span class="rb food">F</span> Counters &amp; hole-in-the-walls</h3>
+  <p class="subhead-note">The everyday greatness — cheap, walk-in, often cash-only, mostly a single counter. Where a solo traveler eats best.</p>
+  <div class="cards rail" data-section="food-counter"></div>
+
+  <h3><span class="rb food">F</span> Old guard &amp; institutions</h3>
+  <p class="subhead-note">Long-running, historic, quintessentially New York — the places that have outlasted every trend around them.</p>
+  <div class="cards rail" data-section="food-institution"></div>
+
+  <h3><span class="rb food">F</span> Sit down &amp; stay a while</h3>
+  <p class="subhead-note">The neighborhood restaurants and wine bars locals book for a real dinner — Ridgewood, Crown Heights, the West Village. Reserve, or arrive at 5:30 and put your name in.</p>
+  <div class="cards rail" data-section="food-dinner"></div>
+</div></section>
+
+<section class="band" id="drink"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-drink">The Last Great Dives</span></div>
+  <p class="lead">No city has a dive-bar culture like New York's — because no city has lost as many of them. What survives is all the more precious: bars that pre-date Prohibition, saved from the wrecking ball by their own regulars, still smelling of sawdust and spilled Rheingold, still running a jukebox loaded with Otis Redding and no DJ in sight. Not cocktail lounges, not gastropubs — the real thing, where the drinks are cheap, the décor happened by accident, and the person on the next stool has been coming since 1973.</p>
+  <p class="lead" style="margin-top:.4rem;color:#a9a599;font-size:.98rem">October is the month for it: the summer tourists are gone, the regulars are back, and the walk-in-alone welcome is exactly the point. Carry $40–60 in cash — several are cash-only.</p>
+  <h3 style="color:#f4ecd6"><span class="rb drink">F</span> Manhattan mainstays</h3>
+  <p class="subhead-note" style="color:#a9a599">The pre-Prohibition alehouse, the boxing dive off Times Square, the Federal-era longshoremen's bar, the oldest gay bar in the city.</p>
+  <div class="cards rail" data-section="drink-mn"></div>
+  <h3 style="color:#f4ecd6"><span class="rb drink">F</span> Outer-borough haunts</h3>
+  <p class="subhead-note" style="color:#a9a599">Worth the ride: a Red Hook longshoremen's bar with nightly live music, a Bronx pilsner hall open until 4am, a Sunnyside fixture nearing 100, and a Staten Island pub where anything goes.</p>
+  <div class="cards rail" data-section="drink-ob"></div>
+</div></section>
+
+<main>
+
+<section id="boroughs"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-seven">Ride the 7, or the 4</span></div>
+  <p class="lead big">Day 3 is a choice between two of the best days New York can give a repeat visitor, both entirely off the tourist map. Take the <strong style="color:var(--c-do)">4 train</strong> north into the Bronx — the greenest borough, at peak color — and eat your way down the real Little Italy. Or take the elevated <strong style="color:var(--c-seven)">7</strong> east through Queens, arguably the best eating on the continent. You can't lose. If you have a fifth day, do both.</p>
+
+  <div class="daytrip" style="--sc:var(--c-do)">
+    <h3><span class="rb do">4</span> The Bronx: foliage &amp; the real Little Italy</h3>
+    <div class="transport"><span>🚇 4 train / Metro-North Harlem Line</span><span>⏱ ~30–40 min from Midtown</span><span>🍂 Full day</span><span>🍝 Arthur Ave best on Saturdays</span></div>
+    <p>More than a quarter of the Bronx is parkland, and October is its month — you can walk a 500-year-old old-growth forest, wander a Victorian arboretum-cemetery, and gaze at the Palisades from a jewel-box garden on a Hudson cliff, then eat like it's 1935. The morning is green space (below); the afternoon is <strong class="hl">Arthur Avenue</strong>, where Manhattan's Little Italy went to survive.</p>
+
+    <h4 style="font-family:'DM Serif Display',serif;font-weight:400;font-size:1.3rem;margin:1.4rem 0 .2rem">Green space &amp; peak color</h4>
+    <p class="subhead-note">The Botanical Garden's Thain Forest and Woodlawn's arboretum-cemetery sit two subway stops apart — pair them into one foliage day. Wave Hill, in Riverdale, is the quiet splurge.</p>
+    <div class="cards" data-section="bronx-green"></div>
+
+    <h4 style="font-family:'DM Serif Display',serif;font-weight:400;font-size:1.3rem;margin:1.8rem 0 .2rem">Eating Arthur Avenue</h4>
+    <p class="subhead-note">This is the thing itself, not a nostalgia set: sawdust on butcher floors, espresso from a 1912 pastry shop, soppressata cured on-site. Graze the shops mid-morning; sit down for red sauce at night. Most shops close Sundays, so come Saturday.</p>
+    <div class="cards rail" data-section="bronx-food"></div>
+    <div class="tip"><b>The essential detour.</b> Three miles south in Mott Haven, <strong>Lechonera La Piraña</strong> — a trailer serving what The Infatuation calls the best lechón in the city — is open weekends only, roughly 10:30am–3pm, cash only. A $30 plate of shatter-skinned roast pork feeds two. Go before noon; the line runs down the block.</div>
+  </div>
+
+  <div class="daytrip" style="--sc:var(--c-seven)">
+    <h3><span class="rb seven">7</span> Queens: the world on one train line</h3>
+    <div class="transport"><span>🚇 7 train from Grand Central / Times Sq</span><span>⏱ 25–35 min</span><span>🥟 Full day · $2.90 a ride</span></div>
+    <p>The most genuinely foreign-feeling day you can have without leaving the city. <strong class="hl">Jackson Heights</strong> has been called the most diverse neighborhood on the planet — 167 languages — and the Roosevelt Avenue corridor under the elevated 7 runs through Himalayan momo stalls, Colombian empanada counters, and Tibetan <span class="gloss" tabindex="0" data-def="cold mung-bean noodle sheets in Sichuan chili oil — Tibetan">laphing</span> vendors within four blocks. Ride 20 minutes further to <strong class="hl">Flushing</strong> — the best Chinese food city in North America outside the mainland — and dive into the basement food courts. October brings comfortable walking weather and the lingering snacks of Mid-Autumn Festival.</p>
+    <p style="margin-top:.6rem"><b>A loose plan:</b> start late morning at Diversity Plaza (37th Ave &amp; 74th St), work west along Roosevelt to 82nd, then ride to Flushing–Main St for the afternoon. Astoria's Egyptian seafood counters and Elmhurst's Isan Thai are a short hop off the same line for dinner.</p>
+    <div class="cards rail" data-section="queens-food"></div>
+    <div class="tip"><b>How to eat it.</b> Hand-pleated momos and thukpa are best around 11am–1pm, first batch out. Laphing exists almost nowhere else in America. And in Flushing, the <strong>New World Mall</strong> food court (40-21 Main St, ~24 stalls) is the deepest single dive — hand-pulled noodles, Sichuan ma la, stinky tofu — no reservations, just a tray and a point.</div>
+  </div>
+</div></section>
+
+<section id="staten"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-do">The Forgotten Borough</span></div>
+  <p class="lead big">Here is the secret hiding in plain sight: the <strong class="hlg">free</strong> Staten Island Ferry deposits you at St. George and almost nobody follows you off the boat. In October the borough is at its best — the Greenbelt's 3,000 acres of old-growth forest go full color, its cluster of improbable small museums are all open, and Historic Richmond Town runs candlelit ghost tours through a real 300-year-old village. Give this a full clear day. The sites cluster into two arcs — the North Shore near the ferry, and the wilder center/south — so pick one and go deep, or Uber between them.</p>
+  <div class="callout"><b>Ferry logistics.</b> Board free at Whitehall Terminal (Lower Manhattan), ~25 minutes each way, arriving at St. George. The S51, S74, and S40 buses fan out from the terminal to every site below; the interior is spread out, so group by geography and budget bus time (or a short Uber between clusters). Most museums close Mon–Tue — aim for Wed–Sun.</div>
+
+  <h3><span class="rb do">S</span> Oddities, monasteries &amp; the strange edge</h3>
+  <p class="subhead-note">A Himalayan monastery on a suburban hilltop, a classical Chinese garden built without nails, an early photographer's waterfront cottage, and — for the intrepid with a car — a graveyard of rusting tugboats on the industrial southwest shore.</p>
+  <div class="cards" data-section="si-odd"></div>
+
+  <h3><span class="rb do">S</span> Cemeteries, gardens &amp; October color</h3>
+  <p class="subhead-note">The Greenbelt is more contiguous wild land than Central Park and Prospect Park combined. Its parks, ponds, and the gothic Moravian Cemetery are where the island's fall foliage peaks, mid-to-late month.</p>
+  <div class="cards" data-section="si-green"></div>
+
+  <h3><span class="rb food">F</span> Little Sri Lanka &amp; old-guard island eating</h3>
+  <p class="subhead-note">One of the largest Sri Lankan communities outside Sri Lanka sits a ten-minute walk from the ferry — and the borough's Italian-American institutions (thin-crust clam pies, 1912 bakeries) are the real, uncondescended-to thing. The nonna restaurant is one of a kind on earth.</p>
+  <div class="cards rail" data-section="si-food"></div>
+  <div class="tip"><b>Book the grandmothers.</b> <strong>Enoteca Maria</strong> in St. George — where a different immigrant grandmother cooks her homeland's food each night — inspired the 2025 Netflix film <em>Nonnas</em> and now books out weeks ahead on weekends. It's a three-minute walk from the ferry; call ahead, aim for a weeknight. And check that <strong>Skippy's Hot Dogs</strong> and <strong>Ralph's Italian Ices</strong> are still open — both close for the winter, and October may be their last weeks.</div>
+</div></section>
+
+<section id="stay"><div class="wrap">
+  <div class="sec-head"><span class="tablet tab-stay">Where to Base</span></div>
+  <p class="lead big">You've stayed in Midtown before. Don't. For this trip, base yourself somewhere with genuine neighborhood texture and a subway line that reaches all five boroughs — so the weird stuff is a ride away, and the nights are worth staying out for. Two zones fit a repeat visitor best; a third suits an art-and-architecture trip.</p>
+
+  <div class="twocol" style="margin-top:1.6rem">
+    <div>
+      <h3><span class="rb drink">F</span> Lower East Side &amp; East Village</h3>
+      <p>The standout base. The LES wakes slowly and stays alive until 3am — Jewish appetizing shops and record stores by day, a compressed circuit of small bars, basement music venues, and late-night food by night. The East Village blurs into it across Delancey, with Tompkins Square Park as its living room and St. Marks still carrying its punk residue. Old New York texture, no need to plan ahead, and the F/J/M/Z at Delancey–Essex reaches every borough in this guide.</p>
+    </div>
+    <aside class="nb-facts">
+      <div><b>On your doorstep</b> — Katz's, Bowery Ballroom, Essex Market, McSorley's, dozens of bars on Ludlow &amp; Orchard</div>
+      <div><b>Getting around</b> — F/J/M/Z at Delancey–Essex; 6 at Astor Pl; ~15 min walk to the L for Brooklyn</div>
+      <div><b>Trade-off</b> — loud on weekend nights; not for early risers</div>
+    </aside>
+  </div>
+  <div class="cards rail" data-section="stay-les"></div>
+
+  <div class="twocol" style="margin-top:2rem">
+    <div>
+      <h3><span class="rb stay">L</span> Williamsburg &amp; Greenpoint</h3>
+      <p>For treating a borough as home. North Brooklyn runs loudest along Bedford Avenue and the waterfront — industrial-chic design hotels, vintage shops, live music, Domino Park — with calmer Greenpoint and its Polish bakeries just north. The L train hits Union Square in about ten minutes, and the East River ferry is scenic in October. Rates tend to run a touch below comparable Manhattan rooms.</p>
+    </div>
+    <aside class="nb-facts">
+      <div><b>On your doorstep</b> — Wythe Ave restaurants, Music Hall of Williamsburg, Domino Park, record shops</div>
+      <div><b>Getting around</b> — L at Bedford Ave (~10 min to Union Sq); NYC Ferry</div>
+      <div><b>Trade-off</b> — Bedford Ave is loud on weekends; L crowds at rush</div>
+    </aside>
+  </div>
+  <div class="cards rail" data-section="stay-bk"></div>
+
+  <div class="twocol" style="margin-top:2rem">
+    <div>
+      <h3><span class="rb stay">L</span> Chelsea &amp; the Village</h3>
+      <p>An art-and-architecture base with quieter nights. Chelsea's gallery district hums between 10th and 11th Avenues with the High Line overhead; gallery openings fill Thursday and Friday evenings, and the West Village is a short walk south for dinner. Two hotels here trade on genuine historic character — a former 1895 Gothic seminary, and a 1900 Greenwich Village landmark on Washington Square. Some subway friction reaching Brooklyn.</p>
+    </div>
+    <aside class="nb-facts">
+      <div><b>On your doorstep</b> — the High Line, Chelsea galleries, Chelsea Market, West Village dinners</div>
+      <div><b>Getting around</b> — A/C/E &amp; 1 at 14th/23rd; the High Line as a walking spine</div>
+      <div><b>Trade-off</b> — less nightlife; some transit friction to Downtown/Brooklyn</div>
+    </aside>
+  </div>
+  <div class="cards rail" data-section="stay-chelsea"></div>
+</div></section>
+
+<section class="map-section" id="map-section"><div class="wrap">
+  <h2>The whole system, one map</h2>
+  <p class="lead">Every place in this guide, pinned and colour-coded by line — <span style="color:#00933c;font-weight:700">green</span> to see, <span style="color:#ff6319;font-weight:700">orange</span> to eat, <span style="color:#ee352e;font-weight:700">red</span> to drink, <span style="color:#0039a6;font-weight:700">blue</span> to sleep. Filter by category, hover a card in split view to light its pin, and export the lot to your phone.</p>
+  <div class="mapfilter" id="mapfilter"></div>
+  <div class="map-container"><div id="map"></div></div>
+  <div class="export-row"><button class="export-btn" id="export-btn">⤓ Save map to file</button></div>
+</div></section>
+
+<section class="credits"><div class="wrap">
+  <div class="sec-head"><span class="tablet">Sources &amp; Credits</span></div>
+  <p style="margin-top:1rem;font-size:.92rem;max-width:70ch">This guide was built from reporting and reviews by the writers and institutions below. Every place links back to where its details came from; follow any card's source line to read more.</p>
+  <div class="srcs">
+    <a href="https://ny.eater.com/maps/best-new-york-restaurants-38-map" target="_blank" rel="noopener">Eater NY — The 38 Best Restaurants</a>
+    <a href="https://www.theinfatuation.com/new-york" target="_blank" rel="noopener">The Infatuation — New York</a>
+    <a href="https://www.theinfatuation.com/new-york/guides/nyc-dive-bars" target="_blank" rel="noopener">The Infatuation — NYC Dive Bar Directory</a>
+    <a href="https://ny.eater.com/maps/the-best-dive-bars-nyc" target="_blank" rel="noopener">Eater NY — Best Dive Bars</a>
+    <a href="https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island" target="_blank" rel="noopener">The Infatuation — Staten Island</a>
+    <a href="https://gothamist.com/food/a-walking-tour-of-staten-islands-little-sri-lanka" target="_blank" rel="noopener">Gothamist — Little Sri Lanka</a>
+    <a href="https://ny.eater.com/maps/best-restaurants-arthur-ave-bronx" target="_blank" rel="noopener">Eater NY — Arthur Avenue</a>
+    <a href="https://www.green-wood.com/visit" target="_blank" rel="noopener">Green-Wood Cemetery</a>
+    <a href="https://www.deathofclassical.com/concerts/nightfall-2025" target="_blank" rel="noopener">Death of Classical — Nightfall</a>
+    <a href="https://www.woodlawn.org/conservancy/arboretum/" target="_blank" rel="noopener">Woodlawn Cemetery &amp; Arboretum</a>
+    <a href="https://www.nybg.org/garden/forest/fall-foliage-tracker/" target="_blank" rel="noopener">New York Botanical Garden</a>
+    <a href="https://www.wavehill.org/" target="_blank" rel="noopener">Wave Hill</a>
+    <a href="https://www.centralparknyc.org/press/the-best-places-in-central-park-to-see-fall-foliage" target="_blank" rel="noopener">Central Park Conservancy</a>
+    <a href="https://www.nyctourism.com/articles/guide-to-the-village-halloween-parade/" target="_blank" rel="noopener">NYC Tourism — Halloween Parade</a>
+    <a href="https://www.govisland.com/things-to-do/events/pumpkin-point-2025" target="_blank" rel="noopener">Governors Island — Pumpkin Point</a>
+    <a href="https://www.nyctourism.com/articles/staten-island-staff-picks-guide/" target="_blank" rel="noopener">NYC Tourism — Staten Island</a>
+    <a href="https://tibetanmuseum.org/" target="_blank" rel="noopener">Jacques Marchais Museum of Tibetan Art</a>
+    <a href="https://aliceausten.org/" target="_blank" rel="noopener">Alice Austen House</a>
+    <a href="https://www.atlasobscura.com/" target="_blank" rel="noopener">Atlas Obscura</a>
+    <a href="https://abandonednyc.com/" target="_blank" rel="noopener">AbandonedNYC (Will Ellis)</a>
+    <a href="https://jamesmaherphotography.com/best-new-york-photography-places/" target="_blank" rel="noopener">James Maher Photography</a>
+    <a href="https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/" target="_blank" rel="noopener">Susan Stripling — Secret NYC</a>
+    <a href="https://juleeho.com/blog/uncrowded-nyc-photography-spots" target="_blank" rel="noopener">Julee Ho — Uncrowded NYC</a>
+    <a href="https://interferencearchive.org/" target="_blank" rel="noopener">Interference Archive</a>
+    <a href="https://weeksvillesociety.org/" target="_blank" rel="noopener">Weeksville Heritage Center</a>
+    <a href="https://rebelatlas.com/destinations/usa/new-york/where-to-stay-in-new-york-the-best-neighbourhoods-for-alternative-travellers/" target="_blank" rel="noopener">Rebel Atlas — Where to Stay</a>
+    <a href="https://www.cntraveller.com/article/our-favourite-boutique-hotels-in-new-york-city" target="_blank" rel="noopener">Condé Nast Traveller — Boutique Hotels</a>
+  </div>
+  <p class="fine">Photographs are hotlinked from the sources above and remain the property of their respective photographers and publications; per-image credit appears in the lightbox when you enlarge a photo. Some images may fail to load if a source changes its hosting. Coordinates and the exportable map use data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL); base map tiles © CARTO. A few pins are approximate to a street address. Event dates, seasonal hours, and closures (Nightfall tickets, Enoteca Maria, Skippy's, the Queens Night Market's final Saturday, Weeksville house tours) shift year to year — confirm before you go.</p>
+  <p class="signoff">Now get off the express. Safe travels.</p>
+</div></section>
+
+</main>
+</div>
+
+<dialog class="export-dialog" id="export-dialog">
+  <button class="close" aria-label="Close">×</button>
+  <h3>Save these places</h3>
+  <p>Download as a .gpx file to import into your maps app.</p>
+  <div class="cats">
+    <label><input type="checkbox" value="do" checked> See &amp; wander</label>
+    <label><input type="checkbox" value="food" checked> Eat</label>
+    <label><input type="checkbox" value="drink" checked> Drink</label>
+    <label><input type="checkbox" value="stay" checked> Sleep</label>
+  </div>
+  <div class="opts">
+    <button class="opt" id="download-gpx"><span class="icon">⤓</span><span><span class="label">Download .gpx</span><br><span class="desc">Works with OsmAnd, Maps.me, Gaia GPS, Garmin, etc.</span></span></button>
+  </div>
+  <p class="export-attribution">Map data © OpenStreetMap contributors, provided under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL</a> license.</p>
+</dialog>
+
+<dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
+
+<script type="application/json" id="guide-data">
+{
+  "items": [
+
+    { "id":"mmuseumm", "category":"do", "section":"hidden-odd", "name":"Mmuseumm & Cortlandt Alley", "blurb":"Freight-elevator museum · free · Sat–Sun 11–6",
+      "description":"The world's smallest serious museum, in the ground floor of a working freight elevator on a cobblestone Tribeca alley that's stood in for old New York in a hundred films. Created by the Safdie brothers and Alex Kalman, it practices 'Object Journalism' — the shoe thrown at George W. Bush, a taxonomy of bread clips. Fits three people; visible 24/7 through viewing windows.",
+      "sources":[{"url":"https://www.atlasobscura.com/places/museum/","title":"Atlas Obscura"}],
+      "lat":40.717457, "lng":-74.002675,
+      "images":[] },
+
+    { "id":"doyers", "category":"do", "section":"hidden-odd", "name":"Doyers Street", "blurb":"Chinatown · the 'Bloody Angle' · free",
+      "description":"The sharpest street bend in the city — a 200-ft curved lane of red shopfronts, barber poles, and dim-sum awnings, once the most notorious gang turf in New York. One of the most cinematic street-photography blocks in the five boroughs; go before 9am or at dusk when the neon starts.",
+      "sources":[{"url":"https://jamesmaherphotography.com/best-new-york-photography-places/","title":"James Maher"}],
+      "lat":40.71463, "lng":-73.99817,
+      "images":[{"url":"https://live.staticflickr.com/162/331569915_4db29f8743_b.jpg","label":"The curve of Doyers Street, Chinatown","credit":"wallyg"},{"url":"https://live.staticflickr.com/3742/12447204825_290d47bbb1_b.jpg","label":"Doyers Street shopfronts","credit":"deshaunicus"}] },
+
+    { "id":"beekman", "category":"do", "section":"hidden-odd", "name":"The Beekman Atrium", "blurb":"Financial District · free lobby · walk right in",
+      "description":"A nine-storey Victorian atrium inside an 1881 landmark — wrought-iron railings stacked to a skylight, hand-painted ceilings, the interior of a music box. One of the most dramatic interior spaces in New York, and anyone can walk into the lobby and look straight up. Best on a quiet weekday morning.",
+      "sources":[{"url":"https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/","title":"Susan Stripling"}],
+      "lat":40.71101, "lng":-74.00689,
+      "images":[{"url":"https://susanstripling.com/wp-content/uploads/2023/10/Secret-Places-to-Take-Pictures-in-NYC-beekman-2.jpg","label":"The Beekman atrium — balconies and light through the skylight","credit":"Susan Stripling"},{"url":"https://susanstripling.com/wp-content/uploads/2023/10/Secret-Places-to-Take-Pictures-in-NYC-beekman-3.jpg","label":"Wrought-iron balcony detail, the Beekman","credit":"Susan Stripling"}] },
+
+    { "id":"greenacre", "category":"do", "section":"hidden-odd", "name":"Green Acre Park", "blurb":"Turtle Bay · free · daylight hours",
+      "description":"A privately owned public park barely a quarter-block wide, with a full 25-ft waterfall built into the back wall — a piece of New York almost nobody photographs. Open through October, then closes for winter. Bring lunch and sit with the office workers on the benches.",
+      "sources":[{"url":"https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/","title":"Susan Stripling"}],
+      "lat":40.75633, "lng":-73.96987,
+      "images":[] },
+
+    { "id":"interference", "category":"do", "section":"hidden-odd", "name":"Interference Archive", "blurb":"Park Slope · free · open-stacks archive",
+      "description":"A volunteer-run, open-stacks archive of the material that social movements actually made — five decades of protest posters, zines, buttons, and flyers you can pull off the shelf and sit with. Where you go to understand how ordinary people argued with power through design. Check hours before visiting.",
+      "sources":[{"url":"https://interferencearchive.org/","title":"Interference Archive"}],
+      "lat":40.67053, "lng":-73.98573,
+      "images":[] },
+
+    { "id":"weeksville", "category":"do", "section":"hidden-odd", "name":"Weeksville Heritage Center", "blurb":"Crown Heights · Tue–Sat · admission charged",
+      "description":"One of the most significant, least-visited historical sites in the city: Weeksville was one of the largest free Black communities in pre-Civil War America, founded 1838, then swallowed and forgotten until an aerial survey rediscovered its wood-frame houses in the 1960s. The cultural center is open Tue–Sat; confirm whether the restored Hunterfly Road house tours have resumed.",
+      "sources":[{"url":"https://weeksvillesociety.org/about-us/","title":"Weeksville Heritage Center"}],
+      "lat":40.67391, "lng":-73.92515,
+      "images":[] },
+
+    { "id":"cityhall", "category":"do", "section":"hidden-odd", "name":"Old City Hall Subway Station", "blurb":"Lower Manhattan · 6-train loop or Transit Museum tour",
+      "description":"The abandoned 1904 City Hall station — Guastavino tile vaulting, skylights, and brass chandeliers, the most beautiful station in the system. Glimpse it free by staying on a downtown 6 past Brooklyn Bridge as it loops to turn around, or book a New York Transit Museum tour (they sell out months ahead).",
+      "sources":[{"url":"https://jamesmaherphotography.com/best-new-york-photography-places/","title":"James Maher"}],
+      "lat":40.7128, "lng":-74.0055,
+      "images":[{"url":"https://live.staticflickr.com/4087/5041619618_92768203c5_b.jpg","label":"Old City Hall Station — arched Guastavino tile vaults","credit":"Ed Yourdon"},{"url":"https://live.staticflickr.com/4153/5041012333_b14c315e9a_b.jpg","label":"Skylit tile arches of the abandoned City Hall station","credit":"Ed Yourdon"}] },
+
+    { "id":"conservatory", "category":"do", "section":"hidden-green", "name":"Conservatory Garden", "blurb":"Central Park · free · 8am–dusk · a designated quiet zone",
+      "description":"The only formal garden in Central Park and one of its most reliably crowd-free corners. Enter at 105th St through the iron Vanderbilt Gate; in October the crabapple allées turn reddish-orange and the chrysanthemums bloom. On a sharp morning before 9am with nobody there, it's the finest free twenty minutes in the city.",
+      "sources":[{"url":"https://www.centralparknyc.org/locations/conservatory-garden","title":"Central Park Conservancy"}],
+      "lat":40.7935, "lng":-73.9516,
+      "images":[{"url":"https://thumbs.6sqft.com/wp-content/uploads/2019/10/02113906/Central-Park-Conservatory-Garden.jpg?w=1600&format=webp","label":"Conservatory Garden in fall color","credit":"Central Park Conservancy"}] },
+
+    { "id":"northwoods", "category":"do", "section":"hidden-green", "name":"The North Woods & Ravine", "blurb":"Central Park · free · peaks mid-October",
+      "description":"The 90-acre North Woods is the most secluded woodland in Central Park — and the first to hit peak color, a week or two before the rest. The Ravine is the only naturalistic stream valley left in Manhattan, dense with Black Cherry, Red Maple, and Scarlet Oak turning red and russet over rustic stone bridges.",
+      "sources":[{"url":"https://www.untappedcities.com/best-fall-foliage-central-park/","title":"Untapped Cities"}],
+      "lat":40.7969, "lng":-73.9581,
+      "images":[{"url":"https://thumbs.6sqft.com/wp-content/uploads/2019/10/02115335/Central-Park-Ravine-Loch-Fall-1.jpg?w=1024&format=webp","label":"The Ravine and Loch in the North Woods in fall","credit":"Central Park Conservancy"}] },
+
+    { "id":"ramble", "category":"do", "section":"hidden-green", "name":"The Ramble", "blurb":"Central Park · free · fall bird migration",
+      "description":"Central Park's 36-acre 'wild garden' — the city's best birding spot and one of its most atmospheric fall walks. During migration (late Sept–early Nov) rare species drop in daily; the winding paths blaze when the Red Oak, Sweet Gum, and Black Tupelo turn. Come early on a weekday.",
+      "sources":[{"url":"https://www.centralparknyc.org/press/the-best-places-in-central-park-to-see-fall-foliage","title":"Central Park Conservancy"}],
+      "lat":40.7778, "lng":-73.9700,
+      "images":[{"url":"https://thumbs.6sqft.com/wp-content/uploads/2019/10/02115027/Central-Park-The-Ramble-Shoreline-Pels-Fall.jpg?w=1024&format=webp","label":"The Ramble shoreline in fall color","credit":"Central Park Conservancy"}] },
+
+    { "id":"forttryon", "category":"do", "section":"hidden-green", "name":"Fort Tryon Park & Heather Garden", "blurb":"Washington Heights · free · peak color mid–late Oct",
+      "description":"The city's largest public garden with unrestricted access, on a dramatic hill above the Hudson. A stone archway — last remains of a mansion that burned in 1925 — frames the George Washington Bridge and the Palisades; the Heather Garden ignites in mid-to-late October. Climb the arch at sunset for light trails on the parkway below.",
+      "sources":[{"url":"https://juleeho.com/blog/uncrowded-nyc-photography-spots","title":"Julee Ho"}],
+      "lat":40.8625555, "lng":-73.9663189,
+      "images":[{"url":"https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482469299768-PHUDBYT0E9LHG4PRYABN/image-asset.jpeg?format=1500w","label":"Fort Tryon stone archway at sunset with the GW Bridge","credit":"Julee Ho"}] },
+
+    { "id":"lighthouse", "category":"do", "section":"hidden-green", "name":"The Little Red Lighthouse", "blurb":"Fort Washington Park · free · under the GW Bridge",
+      "description":"Manhattan's only remaining lighthouse — a vibrant red beacon at the base of the George Washington Bridge, on the Hudson. Almost always uncrowded; the annual festival lands in early October. Morning mist off the river is magical.",
+      "sources":[{"url":"https://juleeho.com/blog/uncrowded-nyc-photography-spots","title":"Julee Ho"}],
+      "lat":40.8503109, "lng":-73.9819366,
+      "images":[{"url":"https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482468632091-4NNTHCL5KSOWF3B1ZVJS/image-asset.jpeg?format=1500w","label":"Little Red Lighthouse beneath the George Washington Bridge","credit":"Julee Ho"}] },
+
+    { "id":"smith9", "category":"do", "section":"hidden-views", "name":"Smith–9th Streets Platform", "blurb":"Gowanus · free with a MetroCard · golden hour",
+      "description":"The highest elevated subway platform in New York — an outdoor F/G platform with a sweeping, unobstructed view of Lower Manhattan. At golden hour the light rakes across the skyline and reflects off the trains. Handheld only; no tripods on active platforms.",
+      "sources":[{"url":"https://niredonahue.com/brooklyn-photography-spots/","title":"Erin Donahue"}],
+      "lat":40.6737, "lng":-73.9958,
+      "images":[{"url":"https://niredonahue.com/wp-content/uploads/2022/04/Brooklyn-Photography-Spots-Smith-9-Streets-Station.jpg","label":"Smith–9th Streets elevated platform, Lower Manhattan beyond","credit":"Erin Donahue"}] },
+
+    { "id":"squibb", "category":"do", "section":"hidden-views", "name":"Squibb Park Bridge", "blurb":"Brooklyn Heights · free · the 'bouncy bridge'",
+      "description":"A zig-zag pedestrian footbridge, intentionally springy underfoot, dropping from Brooklyn Heights into Brooklyn Bridge Park with Lower Manhattan framed dead ahead. The geometry of the bridge itself is the shot — stand at a bend and shoot back along the angle.",
+      "sources":[{"url":"https://niredonahue.com/brooklyn-photography-spots/","title":"Erin Donahue"}],
+      "lat":40.70102, "lng":-73.99619,
+      "images":[{"url":"https://niredonahue.com/wp-content/uploads/2022/04/Brooklyn-Photography-Spots-Squibb-Park-Bridge.jpg","label":"Squibb Park Bridge zig-zag with Lower Manhattan behind","credit":"Erin Donahue"}] },
+
+    { "id":"gantry", "category":"do", "section":"hidden-views", "name":"Gantry Plaza State Park", "blurb":"Long Island City · free · best sunset in the city",
+      "description":"The LIC waterfront, with two original 1920s coal-loading gantries as foreground and the Midtown skyline behind — rusting industrial bones almost nobody shoots. Arrive by 4:30pm in October for golden hour; the Pepsi-Cola neon sign glows next door at blue hour.",
+      "sources":[{"url":"https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/","title":"Susan Stripling"}],
+      "lat":40.7454847, "lng":-73.9937169,
+      "images":[{"url":"https://susanstripling.com/wp-content/uploads/2023/10/Secret-Places-to-Take-Pictures-in-NYC-gantry-park.jpg","label":"Gantry Plaza — the Pepsi-Cola sign with Manhattan behind","credit":"Susan Stripling"},{"url":"https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482471850340-W46OEEYGKVYE1A7DVOSK/image-asset.jpeg?format=1500w","label":"LIC waterfront and Midtown skyline at sunset","credit":"Julee Ho"}] },
+
+    { "id":"hellgate", "category":"do", "section":"hidden-views", "name":"Hell Gate Bridge from Ralph DeMarco Park", "blurb":"Astoria · free · two epic bridges, one frame",
+      "description":"The massive, brutal 1916 Hell Gate steel arch shot alongside the RFK Bridge from a rocky East River shore — an architecture image that looks nothing like mainstream NYC photography. Golden hour glows the steel; weekday evenings are silent. Bring bug spray for the rocks.",
+      "sources":[{"url":"https://juleeho.com/blog/uncrowded-nyc-photography-spots","title":"Julee Ho"}],
+      "lat":40.7825906, "lng":-73.9569321,
+      "images":[{"url":"https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482470045392-N3M1KEEQUYZBS1KSYW51/image-asset.jpeg?format=1500w","label":"Hell Gate Bridge and RFK Bridge from the Astoria shore","credit":"Julee Ho"}] },
+
+    { "id":"calvary", "category":"do", "section":"hidden-views", "name":"Calvary Cemetery", "blurb":"Woodside, Queens · free · October golden hour",
+      "description":"A vast Victorian cemetery with headstones stretching to the horizon and the Midtown skyline rising behind them. October is the ideal season — the cemetery closes around 4–4:30pm, which lines up exactly with golden hour over the skyline. Shoot through the tombstone rows as leading lines.",
+      "sources":[{"url":"https://juleeho.com/blog/uncrowded-nyc-photography-spots","title":"Julee Ho"}],
+      "lat":40.7389398, "lng":-73.9471512,
+      "images":[{"url":"https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482472825749-CWGRHME0D5PL82WEPYAD/image-asset.jpeg?format=1500w","label":"Calvary Cemetery headstones with the Manhattan skyline behind","credit":"Julee Ho"}] },
+
+    { "id":"manhbridge", "category":"do", "section":"hidden-views", "name":"Manhattan Bridge South Walkway", "blurb":"DUMBO ↔ Canal St · free · tourist-free views",
+      "description":"The south pedestrian side of the Manhattan Bridge, empty of tourists, with the best views in the city per lifelong New Yorker James Maher: Lower East Side tenement skylines against the Financial District, the Brooklyn Bridge from mid-span, dramatic ironwork and graffiti. Watch for bike messengers.",
+      "sources":[{"url":"https://jamesmaherphotography.com/best-new-york-photography-places/","title":"James Maher"}],
+      "lat":40.7078, "lng":-73.9903,
+      "images":[{"url":"https://live.staticflickr.com/8361/29295495504_c4ab77a134_b.jpg","label":"The city framed from the Manhattan Bridge walkway","credit":"sergei.gussev"},{"url":"https://live.staticflickr.com/65535/51843371900_699a29bca8_b.jpg","label":"Lower East Side and East Broadway from the bridge","credit":"joiseyshowaa"}] },
+
+    { "id":"sunsetpark", "category":"do", "section":"hidden-views", "name":"Sunset Park Hilltop", "blurb":"Sunset Park, Brooklyn · free · sunset only",
+      "description":"A hilltop park in an overlooked Brooklyn neighborhood, with a panorama of Lower Manhattan, the Jersey City skyline, and the Statue of Liberty — a local Brooklyn park most visitors never find, compared to Alamo Square. West-facing, so strictly a sunset destination; arrive 30 min before.",
+      "sources":[{"url":"https://niredonahue.com/brooklyn-photography-spots/","title":"Erin Donahue"}],
+      "lat":40.6455, "lng":-74.0055,
+      "images":[{"url":"https://niredonahue.com/wp-content/uploads/2022/04/Brooklyn-Photography-Spots-Sunset-Park.jpg","label":"Sunset Park hilltop view of Lower Manhattan and the harbor","credit":"Erin Donahue"}] },
+
+    { "id":"greenwood", "category":"do", "section":"cemeteries", "feature":true, "name":"Green-Wood Cemetery", "blurb":"Sunset Park, Brooklyn · free · 8am–5pm daily · R to 25th St",
+      "description":"478 acres of Victorian rural cemetery, arboretum, and outdoor art — once the second-most-visited attraction in America after Niagara Falls. Enter through Richard Upjohn's 1861 Gothic gates, climb Battle Hill (the highest natural point in Brooklyn) for a skyline view over the graves of Basquiat, Bernstein, and Boss Tweed, and lose an afternoon among the turning specimen trees. October brings a full calendar of moonlight and trolley tours — and, on Oct 16–17, the sold-out-fast Nightfall.",
+      "sources":[{"url":"https://www.green-wood.com/visit","title":"Green-Wood Cemetery"},{"url":"https://jamesmaherphotography.com/best-new-york-photography-places/","title":"James Maher"}],
+      "lat":40.65942, "lng":-73.99639,
+      "images":[{"url":"https://jamesmaherphotography.com/wp-content/uploads/2022/05/brooklyn-print-8-1.jpg","label":"Green-Wood Cemetery grounds and architecture","credit":"James Maher"},{"url":"https://www.green-wood.com/wp-content/webp-express/webp-images/uploads/2020/03/atour-guide-crop-sq.jpg.webp","label":"A tour among the monuments at Green-Wood","credit":"Green-Wood"}] },
+
+    { "id":"woodlawn", "category":"do", "section":"cemeteries", "name":"Woodlawn Cemetery & Arboretum", "blurb":"The Bronx · free · 8:30am–4:30pm · 4 to Woodlawn",
+      "description":"The Bronx's National Historic Landmark answer to Green-Wood, and a Level-II arboretum with 400+ tree species blazing in October. Duke Ellington, Miles Davis, Celia Cruz, and Herman Melville all rest here among Gilded Age mausoleums that range from Egyptian Revival to Greek temple. The 4 train ends across the street. Ask for the map to the Jazz Corner.",
+      "sources":[{"url":"https://www.woodlawn.org/conservancy/arboretum/","title":"Woodlawn Conservancy"}],
+      "lat":40.887254, "lng":-73.877909,
+      "images":[{"url":"https://live.staticflickr.com/641/23002025274_03545d91dd_b.jpg","label":"Autumn among the monuments at Woodlawn Cemetery","credit":"Marcela McGreal"},{"url":"https://live.staticflickr.com/3060/2356877530_934f72e3b2_c.jpg","label":"Mausoleums and fall trees at Woodlawn","credit":"Pro-Zak"}] },
+
+    { "id":"carnitas", "category":"food", "section":"food-counter", "name":"Carnitas Ramirez", "blurb":"East Village · CDMX carnitas · $ · walk-in",
+      "description":"Mexico City-style carnitas, snout to tail: order the surtida (mixed cuts, $6), the lengua, the cuero, and dress everything at the salsa bar. A single counter, always open, the canonical solo lunch.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/carnitas-ramirez","title":"The Infatuation"}],
+      "lat":40.722509, "lng":-73.98284,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/CarnitasRamirez_CuttingBoard_AlexStaniloff_NYC-19_dsizz0","label":"Cutting board of carnitas cuts","credit":"Alex Staniloff"},{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2024/07/Eater_Carnitas_Ramirez_029.jpg?quality=90&strip=all&crop=0.0043252595155678,0,99.991349480969,100","label":"The carnitas counter","credit":"Eater NY"}] },
+
+    { "id":"taqueria", "category":"food", "section":"food-counter", "name":"Taqueria Ramirez", "blurb":"Greenpoint · CDMX tacos · $ · walk-in",
+      "description":"The city's best suadero taco — brisket-adjacent beef stewed three hours in lard until it melts. Tiny, CDMX-style, walk-in only; get the campechano and the tripa blowtorched to order.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/taqueria-ramirez","title":"The Infatuation"}],
+      "lat":40.731701, "lng":-73.957321,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/DavidALee_NYC_Taqueria_Ramirez_All_Dishes_005_lkt6ti","label":"A lineup of tacos at Taqueria Ramirez","credit":"David A. Lee"}] },
+
+    { "id":"shujiao", "category":"food", "section":"food-counter", "name":"Shu Jiao Fu Zhou", "blurb":"Lower East Side · Fujianese · $ · cash",
+      "description":"A dumpling counter on the Chinatown edge: the $3 plate of wheat noodles with peanut sauce is sweet-salty-savory and bouncy, the wontons gossamer. Order dumplings to take home frozen too.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/shu-jiao-fu-zhou-cuisine","title":"The Infatuation"}],
+      "lat":40.71753, "lng":-73.99201,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_ShuJiaoFuZhou_PorkChiveDumplings_KatePrevite_00003_mubvv4","label":"Pork and chive dumplings","credit":"Kate Previte"}] },
+
+    { "id":"has", "category":"food", "section":"food-counter", "name":"Ha's Snack Bar", "blurb":"Lower East Side · Vietnamese wine bar · $$$ · counter",
+      "description":"A Vietnamese wine bar of big flavors in close quarters — snails in tamarind butter with baguette to soak it up, a pho-broth riff on French onion soup, chicken-liver pâté on toast. The solo bar counter is the seat to want.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/has-snack-bar","title":"The Infatuation"}],
+      "lat":40.71861, "lng":-73.99205,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Ha_sSnackBar_Interior_EmilySchindler_iPhoneContent_EDIT_01_kahhzk","label":"The bar counter at Ha's Snack Bar","credit":"Emily Schindler"}] },
+
+    { "id":"golden", "category":"food", "section":"food-counter", "name":"Golden Diner", "blurb":"Two Bridges · Asian-American diner · $$ · counter",
+      "description":"An Asian-American diner serving breakfast until 10pm — the Chinatown egg-and-cheese on a sesame-scallion milk bun and the mochi-like honey butter pancakes all day. There's a line thanks to TikTok; sit at the counter.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.712427, "lng":-73.994195,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/6/2026/04/012926_Eater_GoldenDiner_0144.jpg?quality=90&strip=all&crop=0,0,100,100","label":"Thick honey butter pancakes at Golden Diner","credit":"Cole Saladino"}] },
+
+    { "id":"whitebear", "category":"food", "section":"food-counter", "name":"White Bear", "blurb":"Flushing · Fujianese wontons · $ · cash only",
+      "description":"A tiny cash-only window in Flushing famous for one thing: the No. 6, wontons in chili sauce with a spice mix that 'screams comfort food.' Order from the window, eat standing. A worthy anchor for the Queens day.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/white-bear","title":"The Infatuation"}],
+      "lat":40.75893, "lng":-73.83177,
+      "images":[] },
+
+    { "id":"yonah", "category":"food", "section":"food-institution", "name":"Yonah Schimmel Knish Bakery", "blurb":"Lower East Side · since 1910 · $",
+      "description":"A living museum of the New York knish — dough stuffed with potato, kasha, or spinach, baked since 1910, in 18 varieties down to a pizza knish. A relic of the immigrant Lower East Side that never left.",
+      "sources":[{"url":"https://ny.eater.com/guides/410947/new-york-travel-tourist-food-restaurant-guide-weekend","title":"Eater NY"}],
+      "lat":40.72319, "lng":-73.98967,
+      "images":[] },
+
+    { "id":"oysterbar", "category":"food", "section":"food-institution", "name":"Grand Central Oyster Bar", "blurb":"Midtown · since 1913 · $$$ · Mon–Fri only",
+      "description":"Beneath Grand Central since 1913, under vaulted Guastavino tile — 25+ rotating oyster varieties, pan roasts, and oyster stew. The counter is the best seat in the house for a solo lunch. Closed weekends — don't miss that caveat.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.75254, "lng":-73.97851,
+      "images":[{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/2026/01/010926_Eater_GCOB_0034.jpg?quality=90&strip=all&crop=0,0.02498750624688,100,99.950024987506","label":"The vaulted, tiled dining room of the Oyster Bar","credit":"Eater NY"}] },
+
+    { "id":"charles", "category":"food", "section":"food-institution", "name":"Charles' Pan-Fried Chicken", "blurb":"Harlem · soul food · $$",
+      "description":"Charles Gabriel's pan-fried chicken, cooked in massive cast-iron skillets — nearly half an hour per bird, for a perfectly browned crust and moist inside. A Harlem institution and an innovator; get the black-eyed peas, grits, and mac 'n' cheese.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.812565, "lng":-73.955323,
+      "images":[{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/23349817/20220326_Eater_CharlesPanFriedChicken_MelanieLandsman_08.jpg?quality=90&strip=all&crop=0,0,100,100","label":"Pan-fried chicken in a cast-iron skillet","credit":"Melanie Landsman"}] },
+
+    { "id":"aabake", "category":"food", "section":"food-institution", "name":"A&A Bake Doubles", "blurb":"Bed-Stuy · Trinidadian · $ · James Beard Classic",
+      "description":"A Bed-Stuy Trinidadian counter feeding the neighborhood since 2002 — doubles, the deep-fried bara stuffed with curried channa, are the thing (get oxtail and shrimp). Won the James Beard America's Classic award. Breakfast onward.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.680491, "lng":-73.947949,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/13730212/a_a_1_1_orig.jpg?quality=90&strip=all&crop=0,5.5555555555556,100,88.888888888889","label":"The doubles counter at A&A","credit":"Eater NY"}] },
+
+    { "id":"viacarota", "category":"food", "section":"food-institution", "name":"Via Carota", "blurb":"West Village · Italian · $$$$ · walk-in only",
+      "description":"The West Village institution — walk-in only, no reservations, worth the wait. The tonarelli cacio e pepe is the flagship; also the olive all'ascolana and the svizzerina. Locals put their name in at 5:30 and come back later.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/via-carota","title":"The Infatuation"}],
+      "lat":40.731701, "lng":-74.003403,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/TeddyWolff.ViaCarota.socials.70_oq474e","label":"The dining room at Via Carota","credit":"Teddy Wolff"},{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2014/11/EaterRefresh_ViaCarota_0024.jpg?quality=90&strip=all&crop=0,29.234067033517,100,44.466666666667","label":"Cacio e pepe and dishes at Via Carota","credit":"Eater NY"}] },
+
+    { "id":"bong", "category":"food", "section":"food-dinner", "name":"Bong", "blurb":"Crown Heights · Cambodian · $$$$ · reserve",
+      "description":"One of New York's hottest tables, an ode to Khmer cuisine: crispy whole fried fish, salted-egg golden squid, coconut-cloaked corn. October brings seasonal corn and squash dishes. Book ahead.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/bong","title":"The Infatuation"}],
+      "lat":40.672689, "lng":-73.954668,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2025/11/20251018_EATER_Bong_XXX2224.jpg?quality=90&strip=all&crop=0,8.3562271062271,100,83.287545787546","label":"The colorful dining room at Bong","credit":"Eater NY"},{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Lifestyle_KatePrevite_00009_o2ajc1","label":"Khmer dishes at Bong","credit":"Kate Previte"}] },
+
+    { "id":"rolos", "category":"food", "section":"food-dinner", "name":"Rolo's", "blurb":"Ridgewood, Queens · American · $$$ · off the map",
+      "description":"An off-the-beaten-path Ridgewood restaurant from four Gramercy Tavern vets — house-made mortadella, wood-fired polenta bread, crispy 'war-style' potatoes with mayo and spicy peanut sauce, a double smash burger made in limited quantity. Go on a weekday to get the burger.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.701942, "lng":-73.903534,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2021/02/ROLOS_AF_Chicken_1.jpeg?quality=90&strip=all&crop=0,0.041631973355535,100,99.916736053289","label":"Roast chicken at Rolo's","credit":"Eater NY"}] },
+
+    { "id":"mam", "category":"food", "section":"food-dinner", "name":"Mắm", "blurb":"Lower East Side · seasonal Vietnamese · $$$ · bar solo",
+      "description":"Regional, seasonal Vietnamese in a casual room — the menu changes with the calendar. In the cooler months (October), seek out the Bún Hến, a brothy shore-clam noodle soup thick with dill, better than any chowder.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/mam","title":"The Infatuation"}],
+      "lat":40.717026, "lng":-73.993312,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Mam_BunDauMamTom_EmilySchindler_02_mxtzrd","label":"Bún Đậu platter with herbs and tofu at Mắm","credit":"Emily Schindler"}] },
+
+    { "id":"tatiana", "category":"food", "section":"food-dinner", "name":"Tatiana", "blurb":"Lincoln Center · Caribbean-American · $$$$ · special",
+      "description":"Kwame Onwuachi's Caribbean-American fine dining that made dining fun again — the short-rib pastrami suya on caraway coco bread is the single must-order, alongside braised oxtails and curried-goat patties. Book well ahead.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/tatiana","title":"The Infatuation"}],
+      "lat":40.77104, "lng":-73.98148,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/Tatiana_Everything_DavidALee_NYC_005_n1hhaf","label":"A full spread at Tatiana","credit":"David A. Lee"}] },
+
+    { "id":"cocina", "category":"food", "section":"food-dinner", "name":"Cocina Consuelo", "blurb":"Hamilton Heights · Mexican · $$ · reserve",
+      "description":"A north-Manhattan neighborhood secret — a Mexican supper club whose deservedly famous masa pancake (corn-pudding flavor, honey butter) anchors breakfast, plus bone marrow with birria at dinner. Reserve for the popular brunch.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/cocina-consuelo","title":"The Infatuation"}],
+      "lat":40.82394, "lng":-73.94924,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/Cocina_Consuelo_Everything_DavidALee_NYC_002_yrbebb","label":"A full spread at Cocina Consuelo","credit":"David A. Lee"}] },
+
+    { "id":"fourhorsemen", "category":"food", "section":"food-dinner", "name":"The Four Horsemen", "blurb":"Williamsburg · natural wine · $$$ · arrive early",
+      "description":"James Murphy's Williamsburg natural-wine bar that hit a home run on both the drink and the food — a decade on, still packed by 8pm. Ask the servers to guide the list; the small plates change with the season.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.71265, "lng":-73.95579,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2015/05/022526_Eater_FourHorsemen_0061.jpg?quality=90&strip=all&crop=0,0,100,100","label":"The bar and dining room at The Four Horsemen","credit":"Eater NY"}] },
+
+    { "id":"chamamama", "category":"food", "section":"food-dinner", "name":"Chama Mama", "blurb":"Chelsea · Georgian · $$$",
+      "description":"The flagship of NYC's decade-long Georgian boom — the adjarian khachapuri, a bread boat filled with molten sulguni cheese, a raw egg and butter dropped in at the table. Charcoal kebabs, stews, and lesser-seen Georgian natural wines round it out.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.73790, "lng":-73.99797,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2019/12/031326_Eater_ChamaMama_0100.jpg?quality=90&strip=all&crop=0.0072865053920097,0,99.985426989216,100","label":"Khachapuri at Chama Mama","credit":"Eater NY"}] },
+
+    { "id":"thaidiner", "category":"food", "section":"food-dinner", "name":"Thai Diner", "blurb":"Nolita · Thai-American · $$",
+      "description":"A near-flawless Thai-American diner from the Uncle Boons team — the Thai Diner egg sandwich on roti, the disco fries with massaman gravy, the khao soi. Weekend brunch draws lines; arrive early or reserve.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/thai-diner","title":"The Infatuation"}],
+      "lat":40.72083, "lng":-73.99570,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/cms/TeddyWolff.ThaiDiner.Thaiteababkafrenchtoast.111","label":"Thai tea babka French toast at Thai Diner","credit":"Teddy Wolff"}] },
+
+    { "id":"nepali", "category":"food", "section":"queens-food", "name":"Nepali Bhanchha Ghar", "blurb":"Jackson Heights · Nepali · $$ · BYOB",
+      "description":"The jhol momo — steamed dumplings floating in a spicy tomato-sesame broth — won the Jackson Heights Momo Crawl five times. Also the sel roti and thali. Casual, home-style, and central to the Roosevelt Ave crawl.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/nepali-bhanchha-ghar","title":"The Infatuation"}],
+      "lat":40.747066, "lng":-73.889316,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2024/01/IMG_2556.jpg?quality=90&strip=all&crop=0,5.6073648971784,100,88.785270205643","label":"Momos in tomato broth","credit":"Eater NY"}] },
+
+    { "id":"abuqir", "category":"food", "section":"queens-food", "name":"AbuQir", "blurb":"Astoria · Egyptian seafood · $$ · counter",
+      "description":"Astoria's less-touristy pick-your-own seafood counter: choose from the fresh fish and shrimp on display, tell them how to cook it. The grilled whole shrimp and blackened whole fish are blissful. Walk-in, casual, solo-easy.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/abuqir","title":"The Infatuation"}],
+      "lat":40.768398, "lng":-73.911003,
+      "images":[{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/24878400/Abuqir.jpg?quality=90&strip=all&crop=0,5.5555555555556,100,88.888888888889","label":"The seafood counter at AbuQir","credit":"Eater NY"}] },
+
+    { "id":"zaab", "category":"food", "section":"queens-food", "name":"Zaab Zaab", "blurb":"Elmhurst · Isan Thai · $$$",
+      "description":"The original and most fun Zaab Zaab, focused on the fiery dishes of Northeast Thailand — duck larb, roasted tilapia, and the gai yang whole chicken with papaya salad. Chili-forward and adventurous; a Queens crawl anchor.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-new-york-restaurants-38-map","title":"Eater NY"}],
+      "lat":40.743263, "lng":-73.888664,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2022/05/feast1_sized.jpg?quality=90&strip=all&crop=0,0,100,100","label":"An Isan Thai spread at Zaab Zaab","credit":"Eater NY"}] },
+
+    { "id":"trinciti", "category":"food", "section":"queens-food", "name":"Trinciti Roti Shop", "blurb":"South Ozone Park · Trinidadian · $ · takeout",
+      "description":"A Trinidadian counter deep in Queens — oxtail doubles, goat roti with dough so soft it stretches, and the Bake and Shark sandwich Fri–Sun only. Everything stains your fingers curry-yellow. Get one of everything.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/trinciti-roti-shop","title":"The Infatuation"}],
+      "lat":40.68043, "lng":-73.82124,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Trinciti_AssemblyLine_KatePrevite_00006_q4qefo","label":"The roti assembly line at Trinciti","credit":"Kate Previte"}] },
+
+    { "id":"jimmys", "category":"drink", "section":"drink-mn", "name":"Jimmy's Corner", "blurb":"Midtown · boxing dive · $ · to 2/4am",
+      "description":"Hidden behind a faded awning half a block from Times Square — the best dive in New York, arguably, and the last thing you'd expect there. Boxing memorabilia on every surface, a soul-heavy jukebox, well drinks still around $3.50. Founded 1971 by trainer Jimmy Glenn.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/guides/nyc-dive-bars","title":"The Infatuation"}],
+      "lat":40.75655, "lng":-73.98430,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/IMG_4945_lrjp4b","label":"The green awning of Jimmy's Corner on 44th St","credit":"Britt Lam"}] },
+
+    { "id":"mcsorleys", "category":"drink", "section":"drink-mn", "name":"McSorley's Old Ale House", "blurb":"East Village · since c.1854 · cash only",
+      "description":"One of the oldest continuously operating bars in America. Two things on the menu — light ale or dark, served in pairs. Sawdust on the floor, wishbones hung by WWI soldiers who never came back, and a motto: 'Be Good or Be Gone.' Lincoln drank here; so did Houdini and Lennon.",
+      "sources":[{"url":"https://mcsorleysoldalehouse.nyc/a-tour-of-mcsorleys/","title":"McSorley's"}],
+      "lat":40.72878, "lng":-73.98983,
+      "images":[{"url":"https://live.staticflickr.com/7277/7532232588_df46b92528_b.jpg","label":"McSorley's Old Ale House interior","credit":"lulun & kame"},{"url":"https://live.staticflickr.com/2410/2514396543_239539fbc7_b.jpg","label":"Inside McSorley's Old Ale House","credit":"Scott Beale"}] },
+
+    { "id":"earinn", "category":"drink", "section":"drink-mn", "name":"Ear Inn", "blurb":"Hudson Square · Federal-era longshoremen's bar · $",
+      "description":"In a c.1770 Federal house built for an aide to George Washington — one of the oldest buildings in Manhattan. The Hudson once lapped five feet from the door; the nautical clutter honors the longshoremen who drank here. The name is a painted-over 'BAR.' Get the chicken pot pie.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/guides/nyc-dive-bars","title":"The Infatuation"}],
+      "lat":40.72579, "lng":-74.00764,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/EARINN-1729_s3bhay","label":"The exterior of the Ear Inn","credit":"Ear Inn"}] },
+
+    { "id":"rudys", "category":"drink", "section":"drink-mn", "name":"Rudy's Bar & Grill", "blurb":"Hell's Kitchen · since 1933 · free hot dogs",
+      "description":"One of New York's first post-Prohibition liquor licenses, 1933. A six-foot fiberglass pig stands guard out front, the beer-and-shot is $4, and a free hot dog comes with every drink — the whole place smells like a ballpark. A Bourdain favorite.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.75994, "lng":-73.99162,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NoahDevreaux_MidtownBars_055_Rudys_wjjxnk","label":"Rudy's exterior with the pig statue","credit":"Noah Devereaux"}] },
+
+    { "id":"julius", "category":"drink", "section":"drink-mn", "name":"Julius'", "blurb":"West Village · NYC's oldest gay bar · $ · cash",
+      "description":"New York's oldest continuously operating gay bar, predating Stonewall by decades — site of the 1966 'Sip-In' protest. Narrow, packed, Playbills in the bathroom, and a bar burger cooked on a grill top across the wood. The real thing, not the tourist circuit.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.73451, "lng":-74.00165,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/Julius_Interior_AlexStaniloff_NYC-7_gcwrhv","label":"The bar interior at Julius'","credit":"Alex Staniloff"}] },
+
+    { "id":"spring", "category":"drink", "section":"drink-mn", "name":"Spring Lounge", "blurb":"Nolita · century-old dive · $ · opens 8am",
+      "description":"A Nolita dive since the 1920s (an illegal beer shop during Prohibition), nicknamed the Shark Bar for the stuffed sharks on the walls. Opens at 8am daily; fifteen weekday-before-2pm visits earns you the 'Early Morning Drinkers Society.'",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/guides/nyc-dive-bars","title":"The Infatuation"}],
+      "lat":40.72193, "lng":-73.99637,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/NYC_Spring_Lounge_NoahDevereaux_01_shoso9","label":"Spring Lounge at night, neon and twinkle lights","credit":"Noah Devereaux"}] },
+
+    { "id":"vazacs", "category":"drink", "section":"drink-mn", "name":"7B Horseshoe Bar (Vazacs)", "blurb":"East Village · punk dive · $ · late",
+      "description":"The horseshoe bar dates to a 1935 Polish catering hall; the place has been in Crocodile Dundee, The Godfather Part II, and Rent. On the corner of Tompkins Square Park — quintessential East Village, two dozen taps, $4 PBR.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.7250535, "lng":-73.9814144,
+      "images":[{"url":"https://live.staticflickr.com/920/28531587077_affab7d514_b.jpg","label":"The Vazac Hall / 7B sign","credit":"edenpictures"}] },
+
+    { "id":"sunnys", "category":"drink", "section":"drink-ob", "name":"Sunny's", "blurb":"Red Hook · 100-year longshoremen's bar · live music",
+      "description":"A Red Hook institution for over a century — once a longshoreman's hangout, now a neighborhood hub with live music almost every night and $5 Budweisers. The waterfront courtyard is a de facto block party; in early October it's still pleasant, later you're by the fire.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.67565, "lng":-74.01699,
+      "images":[{"url":"https://live.staticflickr.com/6139/6203686622_0153487416_b.jpg","label":"Sunny's Bar in Red Hook","credit":"Zach K"},{"url":"https://live.staticflickr.com/7014/6616819507_67f03c5028_b.jpg","label":"Inside Sunny's","credit":"joseph a"}] },
+
+    { "id":"montero", "category":"drink", "section":"drink-ob", "name":"Montero Bar and Grill", "blurb":"Brooklyn Heights · 80-year maritime dive · karaoke",
+      "description":"On Atlantic Ave for 80+ years, walls bursting with life preservers, model frigates, and ship wheels — real artifacts of the working waterfront. The neon sign is iconic, the pool table always busy, and karaoke (Thu–Sat) is a local institution.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.691434, "lng":-73.997899,
+      "images":[{"url":"https://live.staticflickr.com/5758/30134502170_3a01bf1d80_b.jpg","label":"The Montero Bar & Grill neon sign","credit":"Hobo Matt"},{"url":"https://live.staticflickr.com/7057/6952671087_074581149e_b.jpg","label":"Montero Bar & Grill","credit":"joseph a"}] },
+
+    { "id":"tiptop", "category":"drink", "section":"drink-ob", "name":"Tip Top Bar & Grill", "blurb":"Bed-Stuy · basement soul-jukebox dive · $",
+      "description":"A basement Bed-Stuy dive with bars on the windows and Christmas lights year-round — family-owned, wonderfully friendly, free food, and a soul jukebox (Charles Bradley gigged here before fame). Absurdly cheap drinks; get the rum punch.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.68386, "lng":-73.95629,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NoahDevereaux_BedStuyBars_59_TipTop_l82bbi","label":"Tip Top interior with Christmas lights","credit":"Noah Devereaux"}] },
+
+    { "id":"irishhaven", "category":"drink", "section":"drink-ob", "name":"Irish Haven", "blurb":"Sunset Park · Irish pub since 1964 · $",
+      "description":"Open since 1964, walls covered in framed photos of past guests — Aubrey Plaza, Mac Miller, and the cast of The Departed, who filmed the cranberry-juice scene here. A perfect Guinness, darts and pool in back, deep in local Sunset Park.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/guides/nyc-dive-bars","title":"The Infatuation"}],
+      "lat":40.64237, "lng":-74.01674,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_IrishHaven_WillaMoore_iPhoneContent_EDIT_02_s3xcjz","label":"The interior of Irish Haven","credit":"Willa Moore"}] },
+
+    { "id":"jarbar", "category":"drink", "section":"drink-ob", "name":"The Jar Bar", "blurb":"Sunnyside, Queens · ~100 years old · $",
+      "description":"A Sunnyside fixture two years shy of its 100th birthday — so beloved the neighborhood ran a fundraiser when the owner was mugged. A shot and a jar of beer for $6, $5 recession-buster frozen margaritas, backyard picnic tables, open 365 days a year.",
+      "sources":[{"url":"https://ny.eater.com/maps/the-best-dive-bars-nyc","title":"Eater NY"}],
+      "lat":40.739281, "lng":-73.920113,
+      "images":[] },
+
+    { "id":"punchbowl", "category":"drink", "section":"drink-ob", "name":"The Punch Bowl", "blurb":"Kingsbridge, Bronx · pre-Prohibition · 8am–4am",
+      "description":"One of the few surviving pre-Prohibition bars in the city — and the least celebrated, which makes it the most authentic. Started c.1901 as a German pilsner hall; original 1901 ceramic floor, tin ceiling, backlit stained glass, a wooden statue of a soused German at the door. Open 8am–4am every single day, steps from the 238th St stop on the 1.",
+      "sources":[{"url":"https://ny.eater.com/2011/6/17/6674345/the-punch-bowl-a-century-old-watering-hole-in-the-bronx","title":"Eater NY"}],
+      "lat":40.88520, "lng":-73.90051,
+      "images":[] },
+
+    { "id":"duffys", "category":"drink", "section":"drink-ob", "name":"Duffy's Tavern", "blurb":"Staten Island · anything-goes Irish pub · $",
+      "description":"Staten Island's most lovably unhinged dive, in West New Brighton — 'a guy at the bar drinks a pint glass full of vodka on a Monday morning.' The burger arrives on an English muffin with three slices of American cheese. Solo lunch at the bar is the move.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/duffys-tavern","title":"The Infatuation"}],
+      "lat":40.62969, "lng":-74.11087,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_Duffy_sTavern_WillaMoore_iPhoneContent_EDIT_02_d4hwo2","label":"The interior of Duffy's Tavern","credit":"Willa Moore"}] },
+
+    { "id":"nybg", "category":"do", "section":"bronx-green", "name":"New York Botanical Garden", "blurb":"The Bronx · Tue–Sun · Metro-North 20 min from Grand Central",
+      "description":"The anchor of any Bronx foliage trip, and its hidden heart is the Thain Family Forest — 50 acres of old-growth woodland that has never been logged, its canopy ablaze with sweetgum reds and ginkgo gold in mid-to-late October. Check the garden's live Fall Foliage Tracker the day before you go.",
+      "sources":[{"url":"https://www.nybg.org/garden/forest/fall-foliage-tracker/","title":"NYBG"}],
+      "lat":40.85972, "lng":-73.88064,
+      "images":[{"url":"https://www.nybg.org/content/uploads/2020/04/MCO_7338_4.3-1600x1200.jpg","label":"A forest trail ringed with fall color at NYBG","credit":"NYBG"},{"url":"https://www.nybg.org/content/uploads/2020/04/MCO-0356_4.3-1600x1200.jpg","label":"Overhead of the multi-colored fall canopy","credit":"NYBG"}] },
+
+    { "id":"wavehill", "category":"do", "section":"bronx-green", "name":"Wave Hill", "blurb":"Riverdale · Tue–Sun · free Thursdays · #1 to 242nd St",
+      "description":"The Bronx's most beautiful secret: a 28-acre garden on a bluff over the Hudson, with a vine-draped pergola framing the New Jersey Palisades. Once Mark Twain's home. In late October the Flower Garden's burgundy foliage and the golden Wild Garden against the river are as close to perfect autumn as the city gets. Sit in the famous lawn chairs.",
+      "sources":[{"url":"https://www.wavehill.org/visit/getting-here","title":"Wave Hill"}],
+      "lat":40.89788, "lng":-73.91127,
+      "images":[{"url":"https://staytowander.com/wp-content/uploads/2025/08/The-Palisades.jpg","label":"The Palisades across the Hudson from Wave Hill","credit":"Stay to Wander"},{"url":"https://staytowander.com/wp-content/uploads/2025/08/Wave-Hill-NYC.jpg","label":"The gardens and grounds at Wave Hill","credit":"Stay to Wander"}] },
+
+    { "id":"vancortlandt", "category":"do", "section":"bronx-green", "name":"Van Cortlandt Park & Vault Hill", "blurb":"Riverdale · free · dawn–dusk · #1 to 242nd St",
+      "description":"The city's third-largest park, and most visitors only see the ballfields. Go deeper into the 600-acre Northwest Forest — the Cross Country Trail turns tunnel-gold in late October — and climb to Vault Hill Overlook, a granite summit with the Manhattan skyline and GW Bridge through autumn haze. Pairs naturally with Wave Hill off the same subway stop.",
+      "sources":[{"url":"https://theparkschannel.com/park_content/van-cortlandt-park-a-hidden-gem-in-the-bronx","title":"The Parks Channel"}],
+      "lat":40.8952, "lng":-73.8930,
+      "images":[{"url":"https://theparkschannel.com/wp-content/uploads/2024/11/8_VaultHillOverlook-sq-1536x2048.webp","label":"The view from Vault Hill Overlook","credit":"Devin McBrayer"},{"url":"https://theparkschannel.com/wp-content/uploads/2024/11/1_OpenField-1536x1152.webp","label":"Open fields and autumn trees at Van Cortlandt Park","credit":"Devin McBrayer"}] },
+
+    { "id":"aaretail", "category":"food", "section":"bronx-food", "name":"Arthur Avenue Retail Market", "blurb":"Belmont · indoor market · $ · closed Sun",
+      "description":"Built by Mayor LaGuardia in 1940 to get the pushcarts off the street — inside, meat stalls, pasta sellers, a cigar roller, and Café al Mercato (focaccia sandwiches, tripe soup). The best single stop for pre-dinner grazing on the avenue.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-restaurants-arthur-ave-bronx","title":"Eater NY"}],
+      "lat":40.85424, "lng":-73.88862,
+      "images":[{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/24755048/AAMikes.jpg?quality=90&strip=all&crop=0,5.5555555555556,100,88.888888888889","label":"Mike's Deli counter in the Retail Market","credit":"Eater NY"},{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/16335564/Arthur_Avenue_57.jpg?quality=90&strip=all&crop=0%2C0%2C100%2C100&w=1440","label":"Inside the Arthur Avenue Retail Market","credit":"Alex Staniloff"}] },
+
+    { "id":"casadella", "category":"food", "section":"bronx-food", "name":"Casa della Mozzarella", "blurb":"Belmont · fresh cheese deli · $ · closed Sun",
+      "description":"The neighborhood benchmark for fresh mozzarella, pulled by hand daily — creamy, just-warm, milky-sweet. Best eaten in the shop's own prosciutto-and-sun-dried-pepper hero on a sesame roll. Worth a trip from anywhere.",
+      "sources":[{"url":"https://theinfatuation.com/new-york/reviews/casa-della-mozzarella","title":"The Infatuation"}],
+      "lat":40.85541, "lng":-73.88742,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_CasaDellaMozzarella_Exterior_EmilySchindler_01_thai8n","label":"The exterior of Casa della Mozzarella","credit":"Emily Schindler"}] },
+
+    { "id":"egidio", "category":"food", "section":"bronx-food", "name":"Egidio Pastry Shop", "blurb":"Belmont · Neapolitan pastry · $ · since 1912",
+      "description":"A neighborhood espresso bar and pastry shop since 1912 — the ricotta-filled sfogliatelle 'lobster tail' is the definitive one, plus cannoli and rainbow cookies at the marble counter. The morning colazione ritual, still practiced by older residents daily.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-restaurants-arthur-ave-bronx","title":"Eater NY"}],
+      "lat":40.85511, "lng":-73.88681,
+      "images":[{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/24754633/P1030681.jpg?quality=90&strip=all&crop=0.1953125,0,99.609375,100","label":"The pastry display at Egidio","credit":"Eater NY"}] },
+
+    { "id":"dominicks", "category":"food", "section":"bronx-food", "name":"Dominick's", "blurb":"Belmont · red-sauce trattoria · $$ · no reservations",
+      "description":"An old-world communal-table trattoria since 1962 — trestle tables seating several families at once, waiters who recite part of the menu and then tell you what to get. Big plates of well-sauced pasta, stuffed artichokes, chicken scarpariello. No reservations; solo diners share tables.",
+      "sources":[{"url":"https://ny.eater.com/2019/6/14/18637240/best-food-restaurants-arthur-avenue-little-italy-bronx-nyc","title":"Eater NY"}],
+      "lat":40.85413, "lng":-73.88890,
+      "images":[] },
+
+    { "id":"robertos", "category":"food", "section":"bronx-food", "name":"Roberto's", "blurb":"Belmont · Italian, specials-driven · $$$ · reserve",
+      "description":"The off-avenue local pick since 1989, a block west on Crescent Ave — a mammoth specials board with treasures like Genovese pasta studded with short rib and topped with bone marrow. Takes OpenTable; book ahead for an October weekend.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-restaurants-arthur-ave-bronx","title":"Eater NY"}],
+      "lat":40.85364, "lng":-73.88835,
+      "images":[] },
+
+    { "id":"pirana", "category":"food", "section":"bronx-food", "name":"Lechonera La Piraña", "blurb":"Mott Haven · Puerto Rican lechón · $ · weekends, cash",
+      "description":"A Mott Haven trailer serving what The Infatuation calls the best lechón in New York — whole pig slow-roasted overnight, skin shattering like peanut brittle. A $30 plate feeds two. Saturdays and Sundays only, ~10:30am–3pm; go before noon or wait an hour-plus.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/lechonera-la-pirana","title":"The Infatuation"}],
+      "lat":40.81567, "lng":-73.90659,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2020/02/La_Piran_a_Lechonera__1_.jpeg?quality=90&strip=all&crop=3.9256198347107,0,92.148760330579,100","label":"Roast pork at the La Piraña trailer","credit":"Eater NY"}] },
+
+    { "id":"jacques", "category":"do", "section":"si-odd", "name":"Jacques Marchais Museum of Tibetan Art", "blurb":"Lighthouse Hill · Thu–Sun · ~$10",
+      "description":"The most improbable museum in New York: a hand-built replica of a Tibetan mountain monastery on a quiet residential hilltop, holding one of the largest collections of Himalayan art in the West — gilded deities, thangkas, ritual objects from the 15th century on. Tiered gardens with a lily pond overlook Raritan Bay. Fall color in the surrounding hills is as good as it gets.",
+      "sources":[{"url":"https://tibetanmuseum.org/","title":"Jacques Marchais Museum"}],
+      "lat":40.57628, "lng":-74.13848,
+      "images":[{"url":"https://live.staticflickr.com/3267/2605226221_95a914a735_b.jpg","label":"The fieldstone monastery buildings of the Jacques Marchais Museum","credit":"jasoneppink"},{"url":"https://live.staticflickr.com/3257/2605224337_22cc37197f_b.jpg","label":"Himalayan-style architecture on the Staten Island hilltop","credit":"jasoneppink"}] },
+
+    { "id":"scholars", "category":"do", "section":"si-odd", "name":"NY Chinese Scholar's Garden", "blurb":"Snug Harbor · Wed–Sun · ~$5",
+      "description":"One of only two authentic classical Chinese gardens in the US, built by Suzhou craftsmen without a single nail — zigzag bridges, a moon gate, scholar's rocks, koi ponds, all following Ming design to slowly reveal shifting views. The surrounding Snug Harbor campus adds five museums and botanical gardens. Autumn color, minimal crowds.",
+      "sources":[{"url":"https://snug-harbor.org/things-to-do/outdoor-exploration/chinese-scholars-garden/","title":"Snug Harbor"}],
+      "lat":40.64483, "lng":-74.10092,
+      "images":[{"url":"https://snug-harbor.org/nitropack_static/EQrKJjymJWoMKwOsstIfqBjTpGOTtOgd/assets/images/optimized/rev-2bb7923/snug-harbor.org/wp-content/uploads/2026/03/LJR_2201_NYCSG-1.webp","label":"The pavilion and koi pond","credit":"Snug Harbor"},{"url":"https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2FKkAgfRd44mcSgmPHcrgwb%2F568024bd494cece8b22aacb30fffcf2d%2Fsnugharbor_taggeryanceyiv_4162snugharbor_taggeryanceyiv_4162_7b254fe8-5056-a36f-238c75b4039b9e5a%3Fw%3D1200%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75","label":"Chinese pavilion beside the garden pond","credit":"Tagger Yancey IV"}] },
+
+    { "id":"aliceausten", "category":"do", "section":"si-odd", "name":"Alice Austen House", "blurb":"Rosebank · Wed–Sat · suggested $5",
+      "description":"A Victorian Gothic cottage on a lawn over the Narrows, home to one of America's earliest and most transgressive female photographers. Austen documented immigrant New York and her own queer circle decades ahead of her time; a nationally designated site of LGBTQ+ history. The waterfront grounds, with the Verrazzano and Manhattan beyond, are exceptional in October.",
+      "sources":[{"url":"https://aliceausten.org/home-2/","title":"Alice Austen House"}],
+      "lat":40.61552, "lng":-74.06318,
+      "images":[{"url":"https://i0.wp.com/aliceausten.org/wp-content/uploads/2019/06/1-ENTRANCE.jpg?w=1160&ssl=1","label":"The Alice Austen House — Victorian Gothic cottage","credit":"Alice Austen House"}] },
+
+    { "id":"tugboats", "category":"do", "section":"si-odd", "name":"Arthur Kill Ship Graveyard", "blurb":"Rossville · free · car recommended · low tide",
+      "description":"Twenty to forty rusting tugboats, ferries, and barges half-sunk in the tidal mud of the Arthur Kill — 'Staten Island Gothic' at its purest. Best on a foggy, overcast October morning at low tide, approached via the path from the adjacent Sleight Family (Blazing Star) colonial cemetery. The salvage yard itself is private; shoot from the public shore.",
+      "sources":[{"url":"https://www.atlasobscura.com/places/tugboat-graveyard","title":"Atlas Obscura"}],
+      "lat":40.554398, "lng":-74.217873,
+      "images":[{"url":"https://abandonednyc.com/wp-content/uploads/2012/05/wooden-shipwreck.jpg?w=750&h=505","label":"A wooden shipwreck at the Arthur Kill boat graveyard","credit":"Will Ellis"},{"url":"https://i0.wp.com/farm8.staticflickr.com/7005/6808138301_2d4209e558_b.jpg","label":"Rotting hulls in the shallows","credit":"Will Ellis"}] },
+
+    { "id":"moravian", "category":"do", "section":"si-green", "name":"Moravian Cemetery", "blurb":"New Dorp · free · dawn–dusk · car",
+      "description":"A 113-acre historic cemetery (est. 1740) with curving paths, a lake, and one of the city's most gothic mausoleums — the Vanderbilt family vault, a Romanesque granite fortress dug into a hillside. The older sections rival a botanical garden; in October the maples and oaks turn extraordinary.",
+      "sources":[{"url":"https://statenislandlifestyle.com/top-spots-to-see-fall-foliage-on-staten-island/","title":"Staten Island Lifestyle"}],
+      "lat":40.58001, "lng":-74.11406,
+      "images":[{"url":"https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_0644-1536x1024.jpg","label":"Fall foliage at the Moravian Cemetery","credit":"Staten Island Lifestyle"}] },
+
+    { "id":"clovelakes", "category":"do", "section":"si-green", "name":"Clove Lakes Park", "blurb":"West Brighton · free · peak color late Oct",
+      "description":"Three glacial kettle lakes in a 195-acre park — stone footbridges, heron-patrolled shores, and towering tulip trees and oaks that flare orange-red in October. A local photographer's 'personal favorite park'; morning mist over the water is the shot.",
+      "sources":[{"url":"https://statenislandlifestyle.com/top-spots-to-see-fall-foliage-on-staten-island/","title":"Staten Island Lifestyle"}],
+      "lat":40.61820, "lng":-74.10521,
+      "images":[{"url":"https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_0293-1536x1024.jpg","label":"The stone bridge at Clove Lakes Park in fall","credit":"Staten Island Lifestyle"},{"url":"https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_8888_Facetune_11-11-2021-10-28-39-1536x1024.jpg","label":"Fall light and reflections on Clove Lakes","credit":"Staten Island Lifestyle"}] },
+
+    { "id":"highrock", "category":"do", "section":"si-green", "name":"High Rock Park & the Greenbelt", "blurb":"Egbertville · free · dawn–dusk · 35+ mi of trails",
+      "description":"The quiet heart of the Staten Island Greenbelt — nearly 3,000 acres of forest, more contiguous wild land than Central Park and Prospect Park combined. High Rock's kettle ponds and hemlock woods are 'one of the most tranquil places in New York City,' and its red maples blaze in mid-to-late October. Free trail maps at the Nature Center.",
+      "sources":[{"url":"https://sigreenbelt.org/about-us/","title":"Greenbelt Conservancy"}],
+      "lat":40.58415, "lng":-74.12553,
+      "images":[{"url":"https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_0894-1536x1027.jpg","label":"Autumn foliage and a pond in the Staten Island Greenbelt","credit":"Staten Island Lifestyle"}] },
+
+    { "id":"richmondtown", "category":"do", "section":"si-green", "name":"Historic Richmond Town", "blurb":"Richmond · Wed–Sun · candlelit ghost tours in Oct",
+      "description":"A preserved colonial village that somehow survived inside the suburban sprawl — the Voorlezer's House (c.1695) is the oldest surviving elementary school in the country. October is the month: Old Home Day, weekend pumpkin picking at Decker Farm, and after-dark candlelit Village Ghost Tours through real 300-year-old structures.",
+      "sources":[{"url":"https://hrtown.squarespace.com/events-programs","title":"Historic Richmond Town"}],
+      "lat":40.56985, "lng":-74.14458,
+      "images":[{"url":"https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F2AT12l4fvmo70xjXZVeBOI%2Fcc014cbdfbaf74f4fee36b1d59ba53e6%2FNeighborhood-WalkingTours-RichmondTown-StatenIsland-Gabby-Jones_001.jpg%3Fw%3D1200%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75","label":"Costumed interpreters outside a colonial log structure","credit":"Gabby Jones"},{"url":"https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F27fYjE2w5ONe8EzeN9F6Kp%2F3502de7e1d8d38abe150e25bd7fdccdb%2FBread-Baking-Walking-Tours-Richmond-Town-StatenIsland-NYC-Photo-Gabby-Jones.jpg%3Fw%3D1200%26h%3D192%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75","label":"Bread baking in the 1820s kitchen","credit":"Gabby Jones"}] },
+
+    { "id":"sagara", "category":"food", "section":"si-food", "name":"Sagara Food City", "blurb":"St. George · Sri Lankan · $ · Michelin Bib · counter",
+      "description":"A Sri Lankan grocery with a long menu beside the register — get the mutton kottu roti (chopped and griddled to order), the banana-leaf lamprais, and short eats from the front case. A ten-minute walk from the ferry; the essential first stop in Little Sri Lanka.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/sagara-food-city","title":"The Infatuation"}],
+      "lat":40.63776, "lng":-74.07960,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_SaharaFoodCity_BrittLamiPhoneContent_EDIT_05_ne6ocr","label":"A dish at Sagara Food City","credit":"Britt Lam"}] },
+
+    { "id":"lakruwana", "category":"food", "section":"si-food", "name":"Lakruwana", "blurb":"Stapleton · Sri Lankan · $$ · weekend buffet, BYOB",
+      "description":"The most immersive Sri Lankan dining room in the city, its facade carved with elephants and a stone Buddha at the door. The Sat–Sun all-you-can-eat BYOB buffet ($20.99) works through clay pots of deviled chicken, black pork curry, dal, and melty eggplant. Arrive before noon or after 2pm.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/lakruwana","title":"The Infatuation"}],
+      "lat":40.62564, "lng":-74.07513,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/IMG_3807-Edit_clykfa","label":"A plate of food at Lakruwana","credit":"Willa Moore"}] },
+
+    { "id":"newasha", "category":"food", "section":"si-food", "name":"New Asha", "blurb":"Tompkinsville · Sri Lankan · $ · counter",
+      "description":"The most personal Sri Lankan experience in Little Sri Lanka — Viji Devadas has run this no-frills home kitchen since 2000, and treats you like family. Daily curry plates change with what she cooks; arrive around noon and if she says come back in 30, come back.",
+      "sources":[{"url":"https://ny.eater.com/maps/best-staten-island-restaurants-nyc","title":"Eater NY"}],
+      "lat":40.63438, "lng":-74.08528,
+      "images":[{"url":"https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/11733563/P1170980x.jpg?quality=90&strip=all&crop=0.1953125,0,99.609375,100","label":"A food spread at New Asha","credit":"Eater NY"},{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_NewAsha_WillaMooreiPhoneContent_EDIT_01_okqw79","label":"A plate of meats, vegetables and roti","credit":"Willa Moore"}] },
+
+    { "id":"deninos", "category":"food", "section":"si-food", "name":"Denino's Pizzeria & Tavern", "blurb":"Port Richmond · SI thin-crust · $$ · since 1937",
+      "description":"The original Staten Island pizza institution, a saloon since 1937 and pizza since 1951 — the cracker-thin white clam pie (fresh clams, garlic, no tomato) is the definitive version, eaten with a pitcher of domestic beer. Walk-in; solo-easy at the bar.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/deninos-staten-island","title":"The Infatuation"}],
+      "lat":40.63008, "lng":-74.14020,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/NoahDevereaux_Denios_Clam_Pizza_30_qparjk","label":"The clam pizza at Denino's","credit":"Noah Devereaux"}] },
+
+    { "id":"enoteca", "category":"food", "section":"si-food", "name":"Enoteca Maria", "blurb":"St. George · nonna kitchen · $$$ · Fri–Sun, reserve",
+      "description":"The most singular restaurant in the five boroughs — a St. George trattoria where a different grandmother cooks her homeland's food every night, from Sri Lanka to Ghana to Ukraine, with an Italian nonna always on. Inspired the 2025 Netflix film Nonnas; books out weeks ahead. Three minutes from the ferry.",
+      "sources":[{"url":"https://www.theinfatuation.com/new-york/reviews/enoteca-maria","title":"The Infatuation"}],
+      "lat":40.64195, "lng":-74.07723,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_EnotecaMaria_WillaMooreiPhoneContent_EDIT_02_b5ufrz","label":"The whole grilled lamb's head at Enoteca Maria","credit":"Willa Moore"}] },
+
+    { "id":"bowery", "category":"stay", "section":"stay-les", "name":"The Bowery Hotel", "blurb":"East Village · boutique · ~$614–695",
+      "description":"The definitive downtown splurge — dark wood, crimson velvet, iron beds, Carrara marble baths, and casement windows that put you on the street. A fireplace lobby to come home to. It defined boutique romance in 2007 and has aged better than its peers.",
+      "sources":[{"url":"https://guide.michelin.com/en/hotels-stays/nyc/the-bowery-hotel-2881","title":"Michelin Guide"}],
+      "lat":40.7262, "lng":-73.9917,
+      "images":[{"url":"https://images.squarespace-cdn.com/content/v1/5abe5c9696e76f5262fb8f6d/6373c093-be57-4cde-98ba-30d53b3ee238/The+Bowery+New+York+The+Three+Drinkers+Aidy+Smith+%283%29.jpg?format=1500w","label":"The Bowery Hotel facade","credit":"Aidy Smith"},{"url":"https://images.squarespace-cdn.com/content/v1/5abe5c9696e76f5262fb8f6d/af7a7c8d-0a0f-4bea-bf38-1db4c313549b/The+Bowery+New+York+The+Three+Drinkers+Aidy+Smith+%285%29.jpg?format=1500w","label":"A guest room with iron bed and casement windows","credit":"Aidy Smith"}] },
+
+    { "id":"ludlow", "category":"stay", "section":"stay-les", "name":"The Ludlow Hotel", "blurb":"Lower East Side · boutique · ~$299–349",
+      "description":"The grown-up LES pick — moody design with a proper sense of place, without the Bowery's price. You sleep directly inside the scene: Katz's two blocks away, Bowery Ballroom a short walk, Ludlow Street's bars on the doorstep.",
+      "sources":[{"url":"https://rebelatlas.com/destinations/usa/new-york/where-to-stay-in-new-york-the-best-neighbourhoods-for-alternative-travellers/","title":"Rebel Atlas"}],
+      "lat":40.7218, "lng":-73.9877,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/67396579.webp?k=142906ea7e1abab9443c3a90127a7b93752c8810bc2fdd9cfb28c78864b1f23e&o=","label":"The Ludlow Hotel","credit":"Booking.com"}] },
+
+    { "id":"nineorchard", "category":"stay", "section":"stay-les", "name":"Nine Orchard", "blurb":"Lower East Side · boutique · ~$650+",
+      "description":"Housed in the century-old Jarmulowsky bank building with restored vaulted ceilings — pure downtown glamour, plus the Swan Room, a scene-y lobby lounge with a no-reservations waitlist. Rooms take cues from real NYC apartments, understated and residential.",
+      "sources":[{"url":"https://www.cntraveller.com/hotels/new-york/nine-orchard","title":"Condé Nast Traveller"}],
+      "lat":40.71487, "lng":-73.99199,
+      "images":[] },
+
+    { "id":"untitled", "category":"stay", "section":"stay-les", "name":"UNTITLED at 3 Freeman Alley", "blurb":"Bowery · boutique · ~$189–220 · best value",
+      "description":"Tucked into hidden Freeman Alley off the Bowery — one of the only hotels in the city with a genuinely secret address. Artfully curated design, continental breakfast, an on-site coffee shop, and character and location without the Ludlow or Bowery price tag.",
+      "sources":[{"url":"https://www.tripadvisor.com/Hotel_Review-g60763-d25355097-Reviews-Untitled_at_3_Freeman_Alley-New_York_City_New_York.html","title":"TripAdvisor"}],
+      "lat":40.72144, "lng":-73.99263,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/454145358.webp?k=7109b4a64e6a7361852b702d534612da93c8e7e2ef32c99774f8b20557a460e7&o=","label":"UNTITLED at 3 Freeman Alley","credit":"Booking.com"}] },
+
+    { "id":"citizenm", "category":"stay", "section":"stay-les", "name":"citizenM New York Bowery", "blurb":"Bowery · design hotel · ~$386",
+      "description":"The most efficient downtown base for someone out all day: compact but sharp design-forward rooms, on the Bowery between the LES, Nolita, Chinatown, SoHo, and the East Village — perfectly positioned for walking everywhere.",
+      "sources":[{"url":"https://rebelatlas.com/destinations/usa/new-york/where-to-stay-in-new-york-the-best-neighbourhoods-for-alternative-travellers/","title":"Rebel Atlas"}],
+      "lat":40.7206, "lng":-73.9938,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/785807885.webp?k=c81142c0822b4011ec5119c8ba9851e7e18a8d95751ff5c9d3d087166c2d7e5c&o=","label":"A room at citizenM New York Bowery","credit":"Booking.com"}] },
+
+    { "id":"wythe", "category":"stay", "section":"stay-bk", "name":"Wythe Hotel", "blurb":"Williamsburg · boutique · ~$390",
+      "description":"The hotel that essentially invented Williamsburg's industrial-chic identity — a 1901 cooperage with preserved masonry, sixteen-foot timber ceilings, and arched windows framing Manhattan. Le Crocodile downstairs is a neighborhood mainstay; Bar Blondeau upstairs is one of the city's best sunset spots.",
+      "sources":[{"url":"https://www.wythehotel.com/","title":"Wythe Hotel"}],
+      "lat":40.721, "lng":-73.9582,
+      "images":[{"url":"https://www.wythehotel.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fq8q5tcan%2Fproduction%2F85436fc0a85f55a2deabb086e4796f6f3a60b3e2-3000x2143.jpg%3Frect%3D0%2C72%2C3000%2C2000%26w%3D3000%26h%3D2000%26q%3D75%26fit%3Dmax%26auto%3Dformat&w=1200&q=75","label":"The Wythe lobby, original brick and windows","credit":"Wythe Hotel"},{"url":"https://www.wythehotel.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fq8q5tcan%2Fproduction%2F7a1d44c597e67ffcefd4c16b444d2c1d3d9fd62d-8712x5724.jpg%3Frect%3D63%2C0%2C8586%2C5724%26w%3D3000%26h%3D2000%26q%3D75%26fit%3Dmax%26auto%3Dformat&w=1200&q=75","label":"Sunset toward Manhattan from the Wythe","credit":"Wythe Hotel"}] },
+
+    { "id":"hoxton", "category":"stay", "section":"stay-bk", "name":"The Hoxton, Williamsburg", "blurb":"Williamsburg · design hotel · ~$450",
+      "description":"A lively, design-led stay with a built-in social scene — the lobby is genuinely worth spending time in. On Wythe Ave near the East River, Domino Park, and Music Hall of Williamsburg; tends younger and louder than its neighbor the Wythe.",
+      "sources":[{"url":"https://thehoxton.com/williamsburg/","title":"The Hoxton"}],
+      "lat":40.7222, "lng":-73.9579,
+      "images":[] },
+
+    { "id":"highline", "category":"stay", "section":"stay-chelsea", "name":"The High Line Hotel", "blurb":"Chelsea · historic boutique · ~$232–235 · best value",
+      "description":"Sixty rooms inside an 1895 Collegiate Gothic seminary — red brick, a cloistered garden, hardwood floors, Brimfield-sourced furniture, reproduced 19th-century wallpaper. Guests borrow bicycles; the Intelligentsia coffee bar is a fine morning ritual. Steps from the High Line and the galleries.",
+      "sources":[{"url":"https://www.cntraveller.com/hotels/new-york/the-high-line-hotel","title":"Condé Nast Traveller"}],
+      "lat":40.74632, "lng":-74.00508,
+      "images":[{"url":"https://live.staticflickr.com/65535/50187042657_e9baa06812_b.jpg","label":"The High Line Hotel, the former seminary, at night","credit":"edenpictures"}] },
+
+    { "id":"marlton", "category":"stay", "section":"stay-chelsea", "name":"The Marlton Hotel", "blurb":"Greenwich Village · historic boutique · ~$310+",
+      "description":"A 1900 Greenwich Village landmark that once housed Neal Cassady and Lenny Bruce — a dim, dark-wood lobby with antique rugs and a fireplace where you forget what era you're in. Washington Square Park is visible from the windows; the fireplace is perfect for October evenings.",
+      "sources":[{"url":"https://www.cntraveller.com/hotels/new-york/the-marlton-hotel","title":"Condé Nast Traveller"}],
+      "lat":40.73242, "lng":-73.99658,
+      "images":[] }
+
+  ]
+}
+</script>
+<script type="application/json" id="attribution-data">{
+  "https://live.staticflickr.com/162/331569915_4db29f8743_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "wallyg",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/70323761@N00/331569915"
+  },
+  "https://live.staticflickr.com/3742/12447204825_290d47bbb1_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "deshaunicus",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/60423311@N05/12447204825"
+  },
+  "https://susanstripling.com/wp-content/uploads/2023/10/Secret-Places-to-Take-Pictures-in-NYC-beekman-2.jpg": {
+    "siteName": "Susan Stripling Photography",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/"
+  },
+  "https://susanstripling.com/wp-content/uploads/2023/10/Secret-Places-to-Take-Pictures-in-NYC-beekman-3.jpg": {
+    "siteName": "Susan Stripling Photography",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/"
+  },
+  "https://live.staticflickr.com/4087/5041619618_92768203c5_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Ed Yourdon",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/72098626@N00/5041619618"
+  },
+  "https://live.staticflickr.com/4153/5041012333_b14c315e9a_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Ed Yourdon",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/72098626@N00/5041012333"
+  },
+  "https://thumbs.6sqft.com/wp-content/uploads/2019/10/02113906/Central-Park-Conservatory-Garden.jpg?w=1600&format=webp": {
+    "siteName": "6sqft | NYC Real Estate news and information",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.centralparknyc.org/press/the-best-places-in-central-park-to-see-fall-foliage"
+  },
+  "https://thumbs.6sqft.com/wp-content/uploads/2019/10/02115335/Central-Park-Ravine-Loch-Fall-1.jpg?w=1024&format=webp": {
+    "siteName": "6sqft | NYC Real Estate news and information",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.centralparknyc.org/press/the-best-places-in-central-park-to-see-fall-foliage"
+  },
+  "https://thumbs.6sqft.com/wp-content/uploads/2019/10/02115027/Central-Park-The-Ramble-Shoreline-Pels-Fall.jpg?w=1024&format=webp": {
+    "siteName": "6sqft | NYC Real Estate news and information",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.centralparknyc.org/press/the-best-places-in-central-park-to-see-fall-foliage"
+  },
+  "https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482469299768-PHUDBYT0E9LHG4PRYABN/image-asset.jpeg?format=1500w": {
+    "siteName": "Julee Ho Media",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://juleeho.com/blog/uncrowded-nyc-photography-spots"
+  },
+  "https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482468632091-4NNTHCL5KSOWF3B1ZVJS/image-asset.jpeg?format=1500w": {
+    "siteName": "Julee Ho Media",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://juleeho.com/blog/uncrowded-nyc-photography-spots"
+  },
+  "https://niredonahue.com/wp-content/uploads/2022/04/Brooklyn-Photography-Spots-Smith-9-Streets-Station.jpg": {
+    "siteName": "niredonahue.com",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://niredonahue.com/brooklyn-photography-spots/"
+  },
+  "https://niredonahue.com/wp-content/uploads/2022/04/Brooklyn-Photography-Spots-Squibb-Park-Bridge.jpg": {
+    "siteName": "niredonahue.com",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://niredonahue.com/brooklyn-photography-spots/"
+  },
+  "https://susanstripling.com/wp-content/uploads/2023/10/Secret-Places-to-Take-Pictures-in-NYC-gantry-park.jpg": {
+    "siteName": "Susan Stripling Photography",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://susanstripling.com/blog/secret-places-to-take-pictures-in-nyc/"
+  },
+  "https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482471850340-W46OEEYGKVYE1A7DVOSK/image-asset.jpeg?format=1500w": {
+    "siteName": "Julee Ho Media",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://juleeho.com/blog/uncrowded-nyc-photography-spots"
+  },
+  "https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482470045392-N3M1KEEQUYZBS1KSYW51/image-asset.jpeg?format=1500w": {
+    "siteName": "Julee Ho Media",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://juleeho.com/blog/uncrowded-nyc-photography-spots"
+  },
+  "https://images.squarespace-cdn.com/content/v1/57da005459cc6819438b6261/1482472825749-CWGRHME0D5PL82WEPYAD/image-asset.jpeg?format=1500w": {
+    "siteName": "Julee Ho Media",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://juleeho.com/blog/uncrowded-nyc-photography-spots"
+  },
+  "https://live.staticflickr.com/8361/29295495504_c4ab77a134_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "sergei.gussev",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/133200397@N03/29295495504"
+  },
+  "https://live.staticflickr.com/65535/51843371900_699a29bca8_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "joiseyshowaa",
+    "license": "CC BY-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/30201239@N00/51843371900"
+  },
+  "https://niredonahue.com/wp-content/uploads/2022/04/Brooklyn-Photography-Spots-Sunset-Park.jpg": {
+    "siteName": "niredonahue.com",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://niredonahue.com/brooklyn-photography-spots/"
+  },
+  "https://jamesmaherphotography.com/wp-content/uploads/2022/05/brooklyn-print-8-1.jpg": {
+    "siteName": "New York Photography, Prints, Portraits, Events, Workshops",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://jamesmaherphotography.com/best-new-york-photography-places/"
+  },
+  "https://www.green-wood.com/wp-content/webp-express/webp-images/uploads/2020/03/atour-guide-crop-sq.jpg.webp": {
+    "siteName": "Green-Wood",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.green-wood.com/visit"
+  },
+  "https://live.staticflickr.com/641/23002025274_03545d91dd_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Marcela McGreal",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/122896845@N07/23002025274"
+  },
+  "https://live.staticflickr.com/3060/2356877530_934f72e3b2_c.jpg": {
+    "siteName": "Flickr",
+    "credit": "Pro-Zak",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/28998362@N00/2356877530"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/CarnitasRamirez_CuttingBoard_AlexStaniloff_NYC-19_dsizz0": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/carnitas-ramirez"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2024/07/Eater_Carnitas_Ramirez_029.jpg?quality=90&strip=all&crop=0.0043252595155678,0,99.991349480969,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#carnitas-ramirez"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/DavidALee_NYC_Taqueria_Ramirez_All_Dishes_005_lkt6ti": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/taqueria-ramirez"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_ShuJiaoFuZhou_PorkChiveDumplings_KatePrevite_00003_mubvv4": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/shu-jiao-fu-zhou-cuisine"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Ha_sSnackBar_Interior_EmilySchindler_iPhoneContent_EDIT_01_kahhzk": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/has-snack-bar"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/2026/01/010926_Eater_GCOB_0034.jpg?quality=90&strip=all&crop=0,0.02498750624688,100,99.950024987506": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#grand-central-oyster-bar"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/23349817/20220326_Eater_CharlesPanFriedChicken_MelanieLandsman_08.jpg?quality=90&strip=all&crop=0,0,100,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#charles-pan-fried-chicken"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/13730212/a_a_1_1_orig.jpg?quality=90&strip=all&crop=0,5.5555555555556,100,88.888888888889": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#a-a-bake-doubles-and-roti"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/TeddyWolff.ViaCarota.socials.70_oq474e": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/via-carota"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2014/11/EaterRefresh_ViaCarota_0024.jpg?quality=90&strip=all&crop=0,29.234067033517,100,44.466666666667": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#via-carota"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2025/11/20251018_EATER_Bong_XXX2224.jpg?quality=90&strip=all&crop=0,8.3562271062271,100,83.287545787546": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#bong"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Lifestyle_KatePrevite_00009_o2ajc1": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/bong"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2021/02/ROLOS_AF_Chicken_1.jpeg?quality=90&strip=all&crop=0,0.041631973355535,100,99.916736053289": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#rolo-s-2"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Mam_BunDauMamTom_EmilySchindler_02_mxtzrd": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/mam"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/Tatiana_Everything_DavidALee_NYC_005_n1hhaf": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/tatiana"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/Cocina_Consuelo_Everything_DavidALee_NYC_002_yrbebb": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/cocina-consuelo"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2015/05/022526_Eater_FourHorsemen_0061.jpg?quality=90&strip=all&crop=0,0,100,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#the-four-horsemen-2"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2019/12/031326_Eater_ChamaMama_0100.jpg?quality=90&strip=all&crop=0.0072865053920097,0,99.985426989216,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#chama-mama"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/cms/TeddyWolff.ThaiDiner.Thaiteababkafrenchtoast.111": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/thai-diner"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2024/01/IMG_2556.jpg?quality=90&strip=all&crop=0,5.6073648971784,100,88.785270205643": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#nepali-bhanchha-ghar-2"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/24878400/Abuqir.jpg?quality=90&strip=all&crop=0,5.5555555555556,100,88.888888888889": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#abuqir"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2022/05/feast1_sized.jpg?quality=90&strip=all&crop=0,0,100,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#zaab-zaab"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_Trinciti_AssemblyLine_KatePrevite_00006_q4qefo": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/trinciti-roti-shop"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/IMG_4945_lrjp4b": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://live.staticflickr.com/7277/7532232588_df46b92528_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "lulun & kame",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/53125271@N04/7532232588"
+  },
+  "https://live.staticflickr.com/2410/2514396543_239539fbc7_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Scott Beale",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/27403767@N00/2514396543"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/EARINN-1729_s3bhay": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NoahDevreaux_MidtownBars_055_Rudys_wjjxnk": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/Julius_Interior_AlexStaniloff_NYC-7_gcwrhv": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/NYC_Spring_Lounge_NoahDevereaux_01_shoso9": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://live.staticflickr.com/920/28531587077_affab7d514_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "edenpictures",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/10485077@N06/28531587077"
+  },
+  "https://live.staticflickr.com/6139/6203686622_0153487416_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Zach K",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/98411817@N00/6203686622"
+  },
+  "https://live.staticflickr.com/7014/6616819507_67f03c5028_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "joseph a",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/7150652@N02/6616819507"
+  },
+  "https://live.staticflickr.com/5758/30134502170_3a01bf1d80_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Hobo Matt",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/48099890@N08/30134502170"
+  },
+  "https://live.staticflickr.com/7057/6952671087_074581149e_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "joseph a",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/7150652@N02/6952671087"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NoahDevereaux_BedStuyBars_59_TipTop_l82bbi": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_IrishHaven_WillaMoore_iPhoneContent_EDIT_02_s3xcjz": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/nyc-dive-bars"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_Duffy_sTavern_WillaMoore_iPhoneContent_EDIT_02_d4hwo2": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island"
+  },
+  "https://www.nybg.org/content/uploads/2020/04/MCO_7338_4.3-1600x1200.jpg": {
+    "siteName": "New York Botanical Garden",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.nybg.org/garden/forest/"
+  },
+  "https://www.nybg.org/content/uploads/2020/04/MCO-0356_4.3-1600x1200.jpg": {
+    "siteName": "New York Botanical Garden",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.nybg.org/garden/forest/"
+  },
+  "https://staytowander.com/wp-content/uploads/2025/08/The-Palisades.jpg": {
+    "siteName": "Stay to Wander",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://staytowander.com/wave-hill/"
+  },
+  "https://staytowander.com/wp-content/uploads/2025/08/Wave-Hill-NYC.jpg": {
+    "siteName": "Stay to Wander",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://staytowander.com/wave-hill/"
+  },
+  "https://theparkschannel.com/wp-content/uploads/2024/11/8_VaultHillOverlook-sq-1536x2048.webp": {
+    "siteName": "The Parks Channel",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theparkschannel.com/park_content/van-cortlandt-park-a-hidden-gem-in-the-bronx"
+  },
+  "https://theparkschannel.com/wp-content/uploads/2024/11/1_OpenField-1536x1152.webp": {
+    "siteName": "The Parks Channel",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theparkschannel.com/park_content/van-cortlandt-park-a-hidden-gem-in-the-bronx"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/24755048/AAMikes.jpg?quality=90&strip=all&crop=0,5.5555555555556,100,88.888888888889": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-restaurants-arthur-ave-bronx#arthur-avenue-retail-market"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/16335564/Arthur_Avenue_57.jpg?quality=90&strip=all&crop=0%2C0%2C100%2C100&w=1440": {
+    "siteName": "Eater NY",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/2019/6/14/18637240/best-food-restaurants-arthur-avenue-little-italy-bronx-nyc"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/NYC_CasaDellaMozzarella_Exterior_EmilySchindler_01_thai8n": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/new-york/reviews/casa-della-mozzarella"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/24754633/P1030681.jpg?quality=90&strip=all&crop=0.1953125,0,99.609375,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-restaurants-arthur-ave-bronx#egidio-pastry-shop"
+  },
+  "https://platform.eater.com/wp-content/uploads/sites/2/2020/02/La_Piran_a_Lechonera__1_.jpeg?quality=90&strip=all&crop=3.9256198347107,0,92.148760330579,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-new-york-restaurants-38-map#lechonera-la-pira-a"
+  },
+  "https://live.staticflickr.com/3267/2605226221_95a914a735_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "jasoneppink",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/38102495@N00/2605226221"
+  },
+  "https://live.staticflickr.com/3257/2605224337_22cc37197f_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "jasoneppink",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/38102495@N00/2605224337"
+  },
+  "https://snug-harbor.org/nitropack_static/EQrKJjymJWoMKwOsstIfqBjTpGOTtOgd/assets/images/optimized/rev-2bb7923/snug-harbor.org/wp-content/uploads/2026/03/LJR_2201_NYCSG-1.webp": {
+    "siteName": "Snug Harbor",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://snug-harbor.org/things-to-do/outdoor-exploration/chinese-scholars-garden/"
+  },
+  "https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2FKkAgfRd44mcSgmPHcrgwb%2F568024bd494cece8b22aacb30fffcf2d%2Fsnugharbor_taggeryanceyiv_4162snugharbor_taggeryanceyiv_4162_7b254fe8-5056-a36f-238c75b4039b9e5a%3Fw%3D1200%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75": {
+    "siteName": "New York City Tourism + Conventions",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.nyctourism.com/articles/staten-island-staff-picks-guide/"
+  },
+  "https://i0.wp.com/aliceausten.org/wp-content/uploads/2019/06/1-ENTRANCE.jpg?w=1160&ssl=1": {
+    "siteName": "The Alice Austen House Museum",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://aliceausten.org/home-2/"
+  },
+  "https://abandonednyc.com/wp-content/uploads/2012/05/wooden-shipwreck.jpg?w=750&h=505": {
+    "siteName": "AbandonedNYC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://abandonednyc.com/2012/05/04/a-watery-grave-for-historic-ships-on-staten-island/"
+  },
+  "https://i0.wp.com/farm8.staticflickr.com/7005/6808138301_2d4209e558_b.jpg": {
+    "siteName": "AbandonedNYC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://abandonednyc.com/2012/05/04/a-watery-grave-for-historic-ships-on-staten-island/"
+  },
+  "https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_0644-1536x1024.jpg": {
+    "siteName": "Staten Island Lifestyle - Staten Island News, Staten Island Real Estate Blog",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://statenislandlifestyle.com/top-spots-to-see-fall-foliage-on-staten-island/"
+  },
+  "https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_0293-1536x1024.jpg": {
+    "siteName": "Staten Island Lifestyle - Staten Island News, Staten Island Real Estate Blog",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://statenislandlifestyle.com/top-spots-to-see-fall-foliage-on-staten-island/"
+  },
+  "https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_8888_Facetune_11-11-2021-10-28-39-1536x1024.jpg": {
+    "siteName": "Staten Island Lifestyle - Staten Island News, Staten Island Real Estate Blog",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://statenislandlifestyle.com/top-spots-to-see-fall-foliage-on-staten-island/"
+  },
+  "https://statenislandlifestyle.com/wp-content/uploads/2021/11/IMG_0894-1536x1027.jpg": {
+    "siteName": "Staten Island Lifestyle - Staten Island News, Staten Island Real Estate Blog",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://statenislandlifestyle.com/top-spots-to-see-fall-foliage-on-staten-island/"
+  },
+  "https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F2AT12l4fvmo70xjXZVeBOI%2Fcc014cbdfbaf74f4fee36b1d59ba53e6%2FNeighborhood-WalkingTours-RichmondTown-StatenIsland-Gabby-Jones_001.jpg%3Fw%3D1200%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75": {
+    "siteName": "New York City Tourism + Conventions",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.nyctourism.com/articles/staten-island-staff-picks-guide/"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_SaharaFoodCity_BrittLamiPhoneContent_EDIT_05_ne6ocr": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/IMG_3807-Edit_clykfa": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island"
+  },
+  "https://platform.ny.eater.com/wp-content/uploads/sites/6/chorus/uploads/chorus_asset/file/11733563/P1170980x.jpg?quality=90&strip=all&crop=0.1953125,0,99.609375,100": {
+    "siteName": "Eater",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://ny.eater.com/maps/best-staten-island-restaurants-nyc#new-asha"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_NewAsha_WillaMooreiPhoneContent_EDIT_01_okqw79": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/NoahDevereaux_Denios_Clam_Pizza_30_qparjk": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_fill,w_1200,ar_4:3,g_center,f_auto/images/NYC_EnotecaMaria_WillaMooreiPhoneContent_EDIT_02_b5ufrz": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.theinfatuation.com/new-york/guides/best-restaurants-staten-island"
+  },
+  "https://images.squarespace-cdn.com/content/v1/5abe5c9696e76f5262fb8f6d/6373c093-be57-4cde-98ba-30d53b3ee238/The+Bowery+New+York+The+Three+Drinkers+Aidy+Smith+%283%29.jpg?format=1500w": {
+    "siteName": "The Three Drinkers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thethreedrinkers.com/magazine-content/tag/Best+Boutique+Hotels+in+New+York+2026"
+  },
+  "https://images.squarespace-cdn.com/content/v1/5abe5c9696e76f5262fb8f6d/af7a7c8d-0a0f-4bea-bf38-1db4c313549b/The+Bowery+New+York+The+Three+Drinkers+Aidy+Smith+%285%29.jpg?format=1500w": {
+    "siteName": "The Three Drinkers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thethreedrinkers.com/magazine-content/tag/Best+Boutique+Hotels+in+New+York+2026"
+  },
+  "https://www.wythehotel.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fq8q5tcan%2Fproduction%2F85436fc0a85f55a2deabb086e4796f6f3a60b3e2-3000x2143.jpg%3Frect%3D0%2C72%2C3000%2C2000%26w%3D3000%26h%3D2000%26q%3D75%26fit%3Dmax%26auto%3Dformat&w=1200&q=75": {
+    "siteName": "Wythe Hotel",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.wythehotel.com/"
+  },
+  "https://www.wythehotel.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fq8q5tcan%2Fproduction%2F7a1d44c597e67ffcefd4c16b444d2c1d3d9fd62d-8712x5724.jpg%3Frect%3D63%2C0%2C8586%2C5724%26w%3D3000%26h%3D2000%26q%3D75%26fit%3Dmax%26auto%3Dformat&w=1200&q=75": {
+    "siteName": "Wythe Hotel",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.wythehotel.com/"
+  },
+  "https://live.staticflickr.com/65535/50187042657_e9baa06812_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "edenpictures",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/10485077@N06/50187042657"
+  },
+  "https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F6EGd3GRlKPuWQ1kc4SYVjH%2Fb8942afdbfd45ac59d262ad3aeba21fb%2FNYC_Halloween_Parade_20241031_Paola_Chapdelaine_54.jpg&w=1200&q=75": {
+    "siteName": "New York City Tourism + Conventions",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.nyctourism.com/articles/guide-to-the-village-halloween-parade/"
+  },
+  "https://www.nyctourism.com/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2F1aemqu6a6t65%2F4yWMC8hOE0NT8fYimooTq2%2F41b691dbd10af0faa01a0bdb6e23e12e%2FNYC-Halloween-Parade-Manhattan-NYC-Photo-Paola_Chapdelaine-24.jpg%3Fw%3D1200%26q%3D75%26fm%3Dwebp%26fit%3Dfill%26f%3Dcenter&w=1200&q=75": {
+    "siteName": "New York City Tourism + Conventions",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.nyctourism.com/articles/guide-to-the-village-halloween-parade/"
+  },
+  "https://www.green-wood.com/wp-content/webp-express/webp-images/uploads/2022/09/gardens-cosmic-square.jpg.webp": {
+    "siteName": "Green-Wood",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.green-wood.com/visit"
+  },
+  "https://gov-island-site.s3.amazonaws.com/blog/2025/pumpkin-point-is-back-on-governors-island/_blogDetailImage2x/pumpkin-point-2025-sized-for-web.png": {
+    "siteName": "Governors Island (en-US)",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.govisland.com/blog/pumpkin-point-is-back-on-governors-island"
+  },
+  "https://oana-ny.org/wp-content/uploads/2025/10/dome.jpg": {
+    "siteName": "OANA - Old Astoria Neighborhood Association",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://oana-ny.org/october-at-socrates-sculpture-park/"
+  }
+}</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+const DATA  = JSON.parse(document.getElementById('guide-data').textContent);
+const ITEMS = DATA.items || [];
+const ROUTE = DATA.route || [];
+const RB = {do:'6',food:'F',drink:'F',stay:'L'};
+
+let GALLERIES = [];
+function galleryHTML(images, season){
+  let imgs = images || [];
+  if (season){ const f = imgs.filter(i => !i.season || i.season === season); if (f.length) imgs = f; }
+  if (!imgs.length) return '<div class="no-img">No photo — described in text</div>';
+  const gid = GALLERIES.push(imgs) - 1, f = imgs[0], multi = imgs.length > 1;
+  return `<div class="car" data-gid="${gid}" role="group" aria-roledescription="carousel" aria-label="Images">
+    <img class="car-main" src="${f.url}" alt="${f.label}" loading="lazy" role="button" tabindex="0" aria-label="Enlarge image" onerror="this.style.opacity=.2">
+    ${multi ? `<button class="car-nav prev" aria-label="Previous">‹</button><button class="car-nav next" aria-label="Next">›</button>
+    <div class="car-dots" aria-hidden="true">${imgs.map((_,i) => `<i class="${i?'':'active'}"></i>`).join('')}</div>
+    <span class="car-live sr-only" aria-live="polite"></span>` : ''}
+  </div>`;
+}
+function renderCard(it, season){
+  return `<article class="card cat-${it.category}${it.feature ? ' feature' : ''}" data-id="${it.id}" aria-labelledby="t-${it.id}">${galleryHTML(it.images, season)}
+    <div class="body"><p class="card-title" id="t-${it.id}"><span class="rb ${it.category}">${RB[it.category]||'•'}</span>${it.name}</p><p class="meta">${it.blurb}</p>
+    ${it.description ? `<p class="desc">${it.description}</p>` : ''}
+    ${it.sources?.length ? `<div class="card-sources">${it.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>`).join(' · ')}</div>` : ''}
+    </div></article>`;
+}
+function render(){
+  GALLERIES = [];
+  document.querySelectorAll('.cards[data-section]').forEach(el => {
+    const sec = el.dataset.section, leg = el.dataset.leg;
+    const items = ITEMS.filter(i => i.section === sec && (leg === undefined ? i.leg == null : String(i.leg) === leg));
+    el.innerHTML = `<ul class="grid" role="list">${items.map(it => `<li>${renderCard(it)}</li>`).join('')}</ul>`;
+  });
+  wire();
+}
+
+const cs = getComputedStyle(document.documentElement);
+const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
+const map = L.map('map'); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+if (ROUTE.length) L.polyline(ROUTE, {color:'#888', weight:2, dashArray:'7 7', opacity:.6}).addTo(map);
+
+const markers = {}, catOf = {}, pts = [];
+ITEMS.filter(i => i.lat && i.lng).forEach(it => {
+  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
+    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
+  m.on('click', () => focusCard(it.id));
+  markers[it.id] = m; catOf[it.id] = it.category; pts.push([it.lat,it.lng]);
+});
+if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([40.71,-73.98],11);
+
+const mf = document.getElementById('mapfilter');
+if (mf){
+  const labels = {do:'See & wander',food:'Eat',drink:'Drink',stay:'Sleep'};
+  mf.innerHTML = [...new Set(ITEMS.filter(i => i.lat && i.lng).map(i => i.category))]
+    .map(c => `<button data-cat="${c}"><i style="background:${color(c)}"></i>${labels[c]||c}</button>`).join('');
+  mf.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const c = btn.dataset.cat, off = btn.classList.toggle('off');
+    Object.entries(markers).forEach(([id, m]) => {
+      if (catOf[id] !== c) return;
+      if (off) map.removeLayer(m); else if (!map.hasLayer(m)) m.addTo(map);
+    });
+  }));
+}
+
+const isSplit = () => document.body.classList.contains('split');
+function focusCard(id){
+  if (!isSplit()) return;
+  document.querySelectorAll('[data-id]').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+  const el = document.querySelector(`[data-id="${id}"]`); if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function wire(){
+  document.querySelectorAll('.car').forEach(car => {
+    const imgs = GALLERIES[+car.dataset.gid], main = car.querySelector('.car-main'),
+          dots = car.querySelectorAll('.car-dots i'), live = car.querySelector('.car-live');
+    let idx = 0;
+    const set = d => { idx = (idx + d + imgs.length) % imgs.length; const im = imgs[idx];
+      main.src = im.url; main.alt = im.label;
+      if (live) live.textContent = `${idx+1} of ${imgs.length}: ${im.label||''}`;
+      dots.forEach((x,i) => x.classList.toggle('active', i === idx)); };
+    car.querySelector('.next')?.addEventListener('click', e => { e.stopPropagation(); set(1); });
+    car.querySelector('.prev')?.addEventListener('click', e => { e.stopPropagation(); set(-1); });
+    main.addEventListener('click', () => openLB(imgs, idx));
+    main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
+  });
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+}
+
+const ATTRIBUTION = JSON.parse(document.getElementById('attribution-data').textContent || '{}');
+document.querySelectorAll('.credit[data-src]').forEach(el => {
+  const attr = ATTRIBUTION[el.dataset.src];
+  if (attr) el.textContent = attr.credit ? `${attr.credit} · ${attr.siteName}` : attr.siteName || '';
+  else if (el.dataset.src) try { el.textContent = new URL(el.dataset.src).hostname.replace('www.',''); } catch{}
+});
+
+const lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'),
+      lbCap = lb.querySelector('.cap'), lbCount = lb.querySelector('.count');
+let lbImgs = [], lbI = 0;
+function openLB(imgs, start){ lbImgs = imgs; lbI = start || 0; drawLB(); lb.showModal(); }
+function drawLB(){ const im = lbImgs[lbI]; lbImg.src = im.url; lbImg.alt = im.label;
+  const attr = ATTRIBUTION[im.url] || {};
+  const siteName = attr.siteName || (attr.sourcePage ? new URL(attr.sourcePage).hostname.replace('www.','') : '');
+  const person = im.credit || attr.credit || '';
+  const site = attr.sourcePage ? `<a href="${attr.sourcePage}" target="_blank" rel="noopener">${siteName}</a>` : siteName;
+  const lic = attr.license && attr.licenseUrl ? ` · <a href="${attr.licenseUrl}" target="_blank" rel="noopener">${attr.license}</a>` : '';
+  const parts = [person, site].filter(Boolean).join(' · ');
+  lbCap.innerHTML = `${im.label}<span class="cr">${parts}${lic}</span>`;
+  lbCount.textContent = lbImgs.length > 1 ? `${lbI+1} / ${lbImgs.length}` : '';
+  lb.querySelectorAll('.arw').forEach(a => a.style.display = lbImgs.length > 1 ? '' : 'none'); }
+function stepLB(d){ lbI = (lbI + d + lbImgs.length) % lbImgs.length; drawLB(); }
+lb.querySelector('.next').addEventListener('click', e => { e.stopPropagation(); stepLB(1); });
+lb.querySelector('.prev').addEventListener('click', e => { e.stopPropagation(); stepLB(-1); });
+lb.querySelector('.x').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+document.addEventListener('keydown', e => { if (!lb.open) return;
+  if (e.key === 'ArrowRight') stepLB(1); if (e.key === 'ArrowLeft') stepLB(-1); });
+document.addEventListener('click', e => {
+  const img = e.target.closest('img[data-lightbox]');
+  if (!img) return;
+  const group = img.dataset.lightbox;
+  const all = group ? [...document.querySelectorAll(`img[data-lightbox="${group}"]`)] : [img];
+  const imgs = all.map(i => { const attr = ATTRIBUTION[i.src]||{}; return {url:i.src, label:i.alt||'', credit:attr.credit||''}; });
+  openLB(imgs, all.indexOf(img));
+});
+
+document.getElementById('toggle').addEventListener('click', e => {
+  const split = document.body.classList.toggle('split');
+  e.target.textContent = split ? 'Close ▸' : '◂ Map';
+  setTimeout(() => map.invalidateSize(), 200);
+});
+
+const exportDialog = document.getElementById('export-dialog');
+document.getElementById('export-btn').addEventListener('click', () => exportDialog.showModal());
+exportDialog.querySelector('.close').addEventListener('click', () => exportDialog.close());
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+document.getElementById('download-gpx').addEventListener('click', () => {
+  const checked = [...exportDialog.querySelectorAll('.cats input:checked')].map(c => c.value);
+  const mapped = ITEMS.filter(i => i.lat && i.lng && checked.includes(i.category));
+  const title = document.title;
+  const wpts = mapped.map(i => `<wpt lat="${i.lat}" lon="${i.lng}"><name>${esc(i.name)}</name><desc>${esc(i.blurb||'')}</desc></wpt>`).join('\n');
+  const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="travel-guide"><metadata><name>${esc(title)}</name></metadata>\n${wpts}\n</gpx>`], {type:'application/gpx+xml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'nyc-local-places.gpx';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  exportDialog.close();
+});
+
+render();
+</script>
+</body></html>

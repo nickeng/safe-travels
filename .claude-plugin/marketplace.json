@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "safe-travels",
+  "description": "Travel guides made just for you.",
+  "owner": {
+    "name": "Nick Eng",
+    "url": "https://github.com/nickeng"
+  },
+  "plugins": [
+    {
+      "name": "safe-travels",
+      "description": "Creates one-of-a-kind travel guides just for you. Dream about your next vacation while Claude works away. Each guide is web-researched around your needs and interests, then crafted into a beautiful, magazine-style webpage.",
+      "source": "./plugins/safe-travels"
+    }
+  ]
+}

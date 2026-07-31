@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Data-Driven Guide — MECHANISM Reference</title>
+<!-- ═══════════════════════════════════════════════════════════════════════════
+  THIS IS A MECHANISM REFERENCE, NOT A LOOK. The styling here is deliberately
+  plain (system font, gray) so you DO NOT copy it. Redesign ALL visuals per the
+  destination (palette, fonts, hero, card shape, layout) — see the design mandate.
+
+  COPY THE MECHANISM, NOT THE STYLE:
+  • ONE `ITEMS[]` array is the single source of truth — it drives BOTH the cards
+    (via galleryHTML) AND the map markers. Never hand-write static cards, and
+    never maintain a second parallel markers array.
+  • galleryHTML() renders every image an item has as a carousel (1 → plain; >1 → ‹ › arrows + dots).
+  • render() loops ITEMS into the `.cards[data-section]` mounts so images can never silently collapse to one.
+  • A category filter toggles markers by category via map.hasLayer() — NEVER a custom flag on the marker.
+  • Map split view toggle, card↔marker sync, and an optional season filter all read the same ITEMS.
+  • ROUTE/MULTI-STOP guides: each stop gets its own uniquely-named sections (data-section="<town>-do"),
+    and a ROUTE polyline links the stops. The SAME mechanism. (Single-city guides leave ROUTE empty.)
+═══════════════════════════════════════════════════════════════════════════ -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+/* PLAIN ON PURPOSE — replace all of this. */
+/* role tokens — components read these for shared text roles; a section with its own
+   background (a feature band) re-assigns them and consumes --text so its prose follows:
+   .band{color:var(--text);--text:…;--muted:…} */
+:root{--c-do:#16a085;--c-food:#d68910;--c-stay:#8e44ad;--card:280px;
+  --bg:#fff;--text:#222;--muted:#666;--line:#ddd;--accent:#333}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:1rem}
+nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:1rem;padding:.6rem 1rem;z-index:10000}
+nav button{margin-left:auto;cursor:pointer}
+h2{margin:1.5rem 0 .5rem}
+h3{font-size:1.15rem;margin:1.5rem 0 .3rem}  /* sub-section headings */
+.cards{display:block;margin-top:1.5rem} /* separates the mount from a preceding heading or section-intro paragraph */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card,280px),1fr));gap:1rem;list-style:none;margin:0;padding:0}
+.grid>li{display:contents} /* semantic list wrapper; card stays the grid item so feature grid-column still works */
+/* rail: opt-in horizontal scroll for browse-and-skim sets (food, stay) — add class="cards rail" to the mount. Cards size from --card, so the rail matches the grid; padding-block leaves room for card hover lift/shadow (the rail clips vertically). No horizontal padding — the x-axis scrolls, so cards stay edge-aligned. */
+.cards.rail{min-width:0}
+.cards.rail>.grid{display:flex;flex-wrap:nowrap;overflow:auto hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;padding-block:.9rem}
+.cards.rail .card{flex:0 0 var(--card,280px);scroll-snap-align:start}
+.card{border:1px solid #ddd;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.card.active{outline:2px solid var(--c-do)}
+.card .body{padding:.7rem;flex:1;display:flex;flex-direction:column}
+.card-title{font-size:1rem;font-weight:600;margin:0}
+.card .meta{font-size:.85rem;color:var(--muted)}
+/* carousel: one image with overlaid ‹ › arrows + dots; cycles inline. Click image → lightbox. */
+.car{position:relative;margin:0}
+.car-main{width:100%;height:190px;object-fit:cover;display:block;background:#eee;cursor:pointer}
+.car-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:0;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
+.car-nav.prev{left:6px}.car-nav.next{right:6px}
+.car-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;gap:5px;justify-content:center}
+.car-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5)}
+.car-dots i.active{background:#fff}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;margin:-1px;padding:0}
+.desc{font-size:.85rem;color:var(--muted);margin-top:.3rem}
+.card-sources{font-size:.72rem;color:var(--muted);margin-top:auto;padding-top:.4rem}
+.card-sources a{color:inherit;text-decoration:underline}
+.no-img{height:70px;display:flex;align-items:center;justify-content:center;background:#eee;color:var(--muted);font-size:.8rem}
+/* FEATURE CARD: `feature:true` item — the one unmissable place. Grid-breaking hero on wide screens
+   (image beside prose), stacks like a normal card on narrow. Redesign the look; keep the mechanism. */
+.grid .card.feature{grid-column:1/-1;flex-direction:row;min-height:300px}
+.grid .card.feature .car{width:54%;flex:none;position:relative}
+.grid .card.feature .car-main{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.grid .card.feature .body{justify-content:center}
+@media(max-width:680px){.grid .card.feature{flex-direction:column;min-height:0}.grid .card.feature .car{width:100%;position:static}.grid .card.feature .car-main{position:static;min-height:0;height:190px}}
+/* category filter chips (overlay or in-flow — your call); toggle markers by category */
+.mapfilter{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.mapfilter button{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;background:#fff;border:1px solid #ddd;border-radius:3px;padding:.3rem .6rem;cursor:pointer;color:#333}
+.mapfilter button i{width:9px;height:9px;border-radius:50%}
+.mapfilter button.off{opacity:.4}
+#map{height:420px}
+/* Map split view. TWO rules make it robust:
+   1) Wrap ALL reading content (nav, hero, sections) in ONE #content; shrink THAT to 50% — never
+      constrain individual blocks, or content outside the one you shrink overlaps the map.
+   2) Position the .map-container WRAPPER, NOT #map. Leaflet sets an inline style="position:relative"
+      on the #map element, and inline styles beat the stylesheet — so `body.split #map{position:fixed}`
+      is silently ignored. The wrapper has no inline style, so fixing it works. */
+/* Map: in-flow by default (shows as a section in article mode).
+   In split mode, it becomes fixed on the right and #content shrinks to reveal it. */
+.map-container{margin-top:1.5rem}
+.map-container #map{height:450px}
+#content{width:100%;transition:width .35s ease;position:relative;background:inherit}
+body.split #content{width:50%}
+body.split .map-section>h2,body.split .export-row{display:none}
+body.split .map-container{position:fixed;top:0;right:0;width:50vw;height:100vh;margin:0;z-index:50}
+body.split .map-container #map{height:100vh !important;margin:0 !important}
+/* Split view: float the legend over the map (top-right, clear of Leaflet's zoom + attribution)
+   so pins stay decodable and filterable. Style it to the basemap, not the guide theme — a light
+   card on the light basemap (a dark card + light text if you switch to a dark basemap). */
+body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;bottom:auto;z-index:60;margin:0;
+  max-width:min(60vw,340px);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
+  border:1px solid #ddd;border-radius:8px;padding:.55rem .6rem;box-shadow:0 8px 24px -10px rgba(0,0,0,.35)}
+@media(max-width:900px){body.split #content{width:auto;margin-top:33vh}
+  body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:33vh;z-index:50}
+  body.split .map-container #map{height:33vh !important}
+  body.split nav{top:33vh}}
+/* cycling lightbox = <dialog>: native Esc + focus; ← → / arrow buttons; counter; backdrop click */
+.lightbox{border:0;padding:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:rgba(0,0,0,.93)}
+.lightbox::backdrop{background:rgba(0,0,0,.93)}
+.lightbox[open]{display:flex;align-items:center;justify-content:center}
+.lightbox img{max-width:90vw;max-height:78vh;object-fit:contain}
+.lightbox .cap{position:fixed;bottom:5vh;left:0;right:0;text-align:center;color:#fff;font-size:.9rem}
+.lightbox .cap .cr{display:block;color:#bbb;font-size:.75rem;margin-top:.2rem}
+.lightbox .cap .cr a{color:#bbb;text-decoration:underline}
+.hero{position:relative} .hero .credit{position:absolute;bottom:.5rem;right:.8rem;font-size:.6rem;letter-spacing:.05em;color:rgba(255,255,255,.5)}
+.lightbox .count{position:fixed;top:5vh;left:0;right:0;text-align:center;color:#bbb;font-size:.85rem;pointer-events:none}
+.lightbox .arw{position:fixed;top:50%;transform:translateY(-50%);font-size:2.2rem;color:#fff;background:none;border:0;cursor:pointer;padding:1rem}
+.lightbox .arw.prev{left:2vw}.lightbox .arw.next{right:2vw}
+.lightbox .x{position:fixed;top:3vh;right:4vw;font-size:1.5rem;color:#fff;background:none;border:0;cursor:pointer}
+/* map export */
+.export-row{margin:.7rem 0 0}
+.export-btn{font-size:.74rem;color:var(--muted);background:none;border:1px solid var(--line);padding:.4rem .8rem;border-radius:3px;cursor:pointer}
+.export-btn:hover{color:var(--accent);border-color:var(--accent)}
+dialog.export-dialog{border:0;border-radius:6px;padding:2rem 2.2rem;max-width:380px;width:90vw;background:#fff;color:#222;box-shadow:0 24px 60px -12px rgba(0,0,0,.35);margin:auto}
+dialog.export-dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog.export-dialog h3{font-size:1.2rem;margin-bottom:.3rem}
+dialog.export-dialog p{font-size:.85rem;color:#666;margin-bottom:1.2rem}
+dialog.export-dialog .cats{display:flex;flex-wrap:wrap;gap:.5rem .9rem;margin-bottom:1.2rem}
+dialog.export-dialog .cats label{display:flex;align-items:center;gap:.4rem;font-size:.78rem;cursor:pointer}
+dialog.export-dialog .opts{display:flex;flex-direction:column;gap:.6rem}
+dialog.export-dialog .opt{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border:1px solid #ddd;border-radius:4px;cursor:pointer;background:none;text-align:left;width:100%;font-family:inherit}
+dialog.export-dialog .opt:hover{border-color:#333;background:rgba(0,0,0,.03)}
+dialog.export-dialog .opt .icon{font-size:1.3rem;width:2rem;text-align:center}
+dialog.export-dialog .opt .label{font-weight:600;font-size:.85rem}
+dialog.export-dialog .opt .desc{font-size:.72rem;color:#666}
+dialog.export-dialog .close{position:absolute;top:.8rem;right:1rem;background:none;border:0;font-size:1.3rem;color:#666;cursor:pointer}
+</style></head><body>
+<div id="content"><!-- EVERYTHING that should shift left in the split view goes inside #content; the map does NOT -->
+<nav>
+  <strong>Destination</strong>
+  <!-- SEASONAL guides only: add a season switcher here — where each control calls setSeason('<season>'). -->
+  <button id="toggle">◂ Map</button>
+</nav>
+<!-- hero, intro, and every section also belong inside #content -->
+<header class="hero"><img src="" alt=""><span class="credit" data-src=""></span></header>
+<main class="wrap">
+  <section id="section-id">
+    <!-- your section content here -->
+    <!-- CARDS: Mounts are `.cards`, NOT `.grid` — render() fills each by matching item.section, and emits
+       the inner `.grid` wrappers. -->
+    <div class="cards" data-section="do"></div>
+  </section>
+
+  <!-- ROUTE / MULTI-STOP (OMIT for a single city): one uniquely-named section set per stop.
+  <section class="leg"><h2>Leg 1 · {{Town}}</h2>
+    <div class="cards" data-section="{{Town}}-do"></div>
+    <div class="cards" data-section="{{Town}}-food"></div>
+  </section> -->
+
+  <!-- Keep map inside main.wrap so it follows the article layout. Split view is position:fixed, so nesting is safe. -->
+  <section class="map-section" id="map-section"><h2>Map</h2>
+  <!-- The Leaflet div is the ONLY element with id="map". To link a nav item to the map, point it
+       at #map-section — NEVER put id="map" on a heading or section: it would steal
+       getElementById('map') from the real map div and L.map('map') would init on the wrong element. -->
+  <div class="mapfilter" id="mapfilter"></div>
+  <div class="map-container"><div id="map"></div></div>
+  <div class="export-row"><button class="export-btn" id="export-btn">⤓ Save map to file</button></div></section>
+</main>
+
+<dialog class="export-dialog" id="export-dialog">
+  <button class="close" aria-label="Close">×</button>
+  <h3>Save these places</h3>
+  <p>Download as a .gpx file to import into your maps app.</p>
+  <div class="cats">
+    <label><input type="checkbox" value="do" checked> Things to see &amp; do</label>
+    <label><input type="checkbox" value="food" checked> Food</label>
+    <label><input type="checkbox" value="stay" checked> Stay</label>
+  </div>
+  <div class="opts">
+    <button class="opt" id="download-gpx"><span class="icon"></span><span><span class="label">Download .gpx</span><br><span class="desc">Works with OsmAnd, Maps.me, Gaia GPS, Garmin, etc.</span></span></button>
+  </div>
+  <p class="export-attribution">Map data © OpenStreetMap contributors, provided under the <a href="https://www.openstreetmap.org/copyright">ODbL</a> license.</p>
+</dialog>
+</div><!-- /#content -->
+<dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="application/json" id="guide-data">
+{
+  "items": [
+    { "id":"d1", "category":"do", "section":"do", "feature":true, "name":"{{THE unmissable place}}", "blurb":"{{best time · what it is}}",
+      "description":"{{1-2 sentences — what it is and why it's the one thing not to miss}}",
+      "sources":[{ "url":"{{SOURCE_URL}}", "title":"{{source name}}" }],
+      "lat":0, "lng":0,
+      "images":[
+        { "url":"{{IMG_1}}", "label":"{{what it shows}}", "credit":"{{author}}" },
+        { "url":"{{IMG_2}}", "label":"{{what it shows}}", "credit":"{{author}}" } ] },
+    { "id":"f1", "category":"food", "section":"food", "name":"{{RESTAURANT}}", "blurb":"{{cuisine · price}}",
+      "description":"{{1-2 sentence writeup — what makes it special, what to order}}",
+      "sources":[{ "url":"{{SOURCE_URL}}", "title":"{{source name}}" }],
+      "lat":0, "lng":0,
+      "images":[ { "url":"{{IMG_1}}", "label":"interior", "credit":"{{source}}" } ] },
+    { "id":"s1", "category":"stay", "section":"stay", "name":"{{HOTEL}}", "blurb":"{{price · type}}",
+      "description":"{{why stay here}}",
+      "sources":[{ "url":"{{SOURCE_URL}}", "title":"{{source name}}" }],
+      "lat":0, "lng":0,
+      "images":[ { "url":"{{IMG_1}}", "label":"{{room/exterior}}", "credit":"{{source}}" } ] }
+  ],
+  "route": [],
+  "branches": []
+}
+</script>
+<!-- attribution: machine-injected by inject-attribution.mjs; leave as {} -->
+<script type="application/json" id="attribution-data">{}</script>
+<script type="module">
+// ─── ONE SOURCE OF TRUTH ─────────────────────────────────────────────────────
+// All data lives in the <script type="application/json" id="guide-data"> block ABOVE and is
+// read here with JSON.parse. Because it is JSON: double-quoted keys/strings, NO comments, NO
+// trailing commas. Populate it from the researchers' markdown:
+//   • URLs VERBATIM — paste each image/source URL whole; JSON has no variables or concatenation.
+//   • `description` = the researcher's "What:" field (1-2 sentences).
+//   • `sources` = [{url, title}] from the researcher's "Sources:" URLs.
+//   • `category` = map color + filter chip + GPX export; palette do / food / stay.
+//   • `section`  = the mount (its data-section) this card renders in. Many sections can
+//                  share a category (category "food" → sections "food-soul", "food-sea", …).
+//                  Items rendered in content (id on a data-id element) have no card: skip it.
+//   • `feature`  = OPTIONAL boolean — THE one unmissable place → renders as a larger feature card.
+//   • `name`/`blurb`/`description` MAY contain trusted inline HTML (e.g. <span class='jp'>…</span>)
+//     and it renders as markup. Never let a raw closing-script tag appear inside any string — it
+//     would terminate this block. (The JSON data block above has the same restriction.)
+//   • `route` = [[lat,lng], …] leg hubs for multi-stop guides (dashed map line); [] for a single city.
+//   • `branches` = optional side-trips off the route: [{label, color, coords:[[lat,lng],…]}, …]; [] when none.
+const DATA   = JSON.parse(document.getElementById('guide-data').textContent);
+const ITEMS  = DATA.items  || [];
+const ROUTE  = DATA.route  || [];
+const BRANCHES = DATA.branches || [];
+let activeSeason = null;   // SEASONAL guides only (see references/seasonal-tabs.md): setSeason() sets this; null = show everything
+
+// ─── GALLERY: a carousel — 1 image → plain; >1 → ‹ › arrows + dots, cycles inline ───
+// Registers each item's (season-filtered) images in GALLERIES so wire() can drive it.
+let GALLERIES = [];
+function galleryHTML(images){
+  let imgs = images || [];
+  if (activeSeason){ const f = imgs.filter(i => inSeason(i.season, activeSeason)); if (f.length) imgs = f; }
+  if (!imgs.length) return '<div class="no-img">No image</div>';
+  const gid = GALLERIES.push(imgs) - 1, f = imgs[0], multi = imgs.length > 1;
+  return `<div class="car" data-gid="${gid}" role="group" aria-roledescription="carousel" aria-label="Images">
+    <img class="car-main" src="${f.url}" alt="${f.label}" loading="lazy" role="button" tabindex="0" aria-label="Enlarge image" onerror="this.style.opacity=.2">
+    ${multi ? `<button class="car-nav prev" aria-label="Previous">‹</button><button class="car-nav next" aria-label="Next">›</button>
+    <div class="car-dots" aria-hidden="true">${imgs.map((_,i) => `<i class="${i?'':'active'}"></i>`).join('')}</div>
+    <span class="car-live sr-only" aria-live="polite"></span>` : ''}
+  </div>`;
+}
+
+// ─── RENDER LOOP: builds every card from ITEMS (this is why images don't drop) ─
+// Fills each `.cards[data-section]` mount by matching item.section. A day-trip/route leg
+// section is the SAME loop with its own uniquely-named mount + editorial framing around it (see day-trips.md).
+//
+// Card variants: renderCard is the default. To render a whole section as a different kind of card,
+// register a renderer in CARD_VARIANTS and set `data-variant="<name>"` on that section's mount — one
+// kind of card per section. A variant MUST keep `class="card"` + `data-id="${it.id}"` (map sync) and
+// emit images via galleryHTML(it.images). Style a variant's container/cards with CSS scoped
+// to the mount, e.g. `.cards[data-variant="elevation"] > .grid`.
+const CARD_VARIANTS = {};   // { <name>: (it) => htmlString }
+function renderCard(it){
+  return `<article class="card${it.feature ? ' feature' : ''}" data-id="${it.id}" aria-labelledby="t-${it.id}">${galleryHTML(it.images)}
+    <div class="body"><p class="card-title" id="t-${it.id}">${it.name}</p><p class="meta">${it.blurb}</p>
+    ${it.description ? `<p class="desc">${it.description}</p>` : ''}
+    ${it.sources?.length ? `<div class="card-sources">${it.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>`).join(' · ')}</div>` : ''}
+    </div></article>`;
+}
+function render(){
+  GALLERIES = [];
+  const sectionOf = i => i.section;   // the routing key — a mount matches item.section
+  // Scoped to `.cards[data-section]` — NOT a bare `[data-section]`. A mount claims items by
+  // section. An item with its own `season` shows only in it.
+  document.querySelectorAll('.cards[data-section]').forEach(el => {
+    const sec = el.dataset.section;
+    const items = ITEMS.filter(i => sectionOf(i) === sec
+      && inSeason(i.season, activeSeason))
+      .sort((a, b) => (b.feature ? 1 : 0) - (a.feature ? 1 : 0));   // feature card leads its section (stable)
+    // One mount = one grid. To sub-divide a big block, author more sections (a heading + its own
+    // `.cards[data-section]` mount), not a grouping field — see the SECTIONS comment above.
+    const draw = CARD_VARIANTS[el.dataset.variant] || renderCard;   // one renderer per section (data-variant)
+    el.innerHTML = `<ul class="grid" role="list">${items.map(it => `<li>${draw(it)}</li>`).join('')}</ul>`;
+  });
+  wire();
+}
+
+// ─── MAP: markers from the SAME ITEMS array, colored by --c-<category> ───────
+const cs = getComputedStyle(document.documentElement);
+const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
+// Leave scroll-wheel zoom on (default) — {scrollWheelZoom:false} kills pinch to zoom on laptops.
+const map = L.map('map'); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+
+// ROUTE (multi-stop guides only): a dashed line through the leg hubs, in order — from the `route`
+// array in the data block above. Empty [] for a single city.
+if (ROUTE.length) L.polyline(ROUTE, {color:'#888', weight:2, dashArray:'7 7', opacity:.6}).addTo(map);
+// BRANCHES: optional side-trips off the main route — thinner, quieter lines.
+BRANCHES.forEach(b => L.polyline(b.coords, {color: b.color || '#aaa', weight:1.5, dashArray:'4 6', opacity:.5}).addTo(map));
+
+const markers = {}, catOf = {}, seasonOf = {}, pts = [];
+ITEMS.filter(i => i.lat && i.lng).forEach(it => {
+  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
+    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
+  m.on('click', () => focusCard(it.id));
+  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);  // category + season tracked OFF the marker
+});
+if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([20,0],2);
+
+// Marker visibility = the category filter AND (for seasonal guides) the active season. Both run
+// through ONE function so they can't fight (e.g. a season switch re-adding a category you turned
+// off). inSeason() is a no-op until activeSeason is set. seasonOf[id] may be a string, an array, or
+// undefined — undefined means the place shows in every season.
+const catOff = new Set();
+const inSeason = (val, s) => !s || val == null || (Array.isArray(val) ? val.includes(s) : val === s);
+function applyMarkerFilters(){
+  Object.entries(markers).forEach(([id, m]) => {
+    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
+    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
+    else if (map.hasLayer(m)) map.removeLayer(m);
+  });
+}
+
+// ─── category filter chips: toggle marker visibility via map.hasLayer/removeLayer ────────────
+// NEVER store a custom flag on the marker (m._on, m._map, …) — those names shadow Leaflet
+// internals and throw "this._on is not a function". Read category from the parallel `catOf`.
+const mf = document.getElementById('mapfilter');
+if (mf){
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  mf.innerHTML = [...new Set(ITEMS.filter(i => i.lat && i.lng).map(i => i.category))]
+    .map(c => `<button data-cat="${c}"><i style="background:${color(c)}"></i>${cap(c)}</button>`).join('');
+  mf.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const c = btn.dataset.cat;
+    if (btn.classList.toggle('off')) catOff.add(c); else catOff.delete(c);
+    applyMarkerFilters();
+  }));
+}
+
+// ─── card↔marker sync + gallery interactions (re-wired after each render) ────
+// Card↔marker sync (both directions) only runs in split view — in article mode the map is off-screen.
+const isSplit = () => document.body.classList.contains('split');
+function focusCard(id){
+  if (!isSplit()) return;
+  document.querySelectorAll('[data-id]').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+  const el = document.querySelector(`[data-id="${id}"]`); if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function wire(){
+  document.querySelectorAll('.car').forEach(car => {
+    const imgs = GALLERIES[+car.dataset.gid], main = car.querySelector('.car-main'),
+          dots = car.querySelectorAll('.car-dots i'), live = car.querySelector('.car-live');
+    let idx = 0;
+    const set = d => { idx = (idx + d + imgs.length) % imgs.length; const im = imgs[idx];
+      main.src = im.url; main.alt = im.label;
+      if (live) live.textContent = `${idx+1} of ${imgs.length}: ${im.label||''}`;
+      dots.forEach((x,i) => x.classList.toggle('active', i === idx)); };   // labels show in the lightbox, not on the card
+    car.querySelector('.next')?.addEventListener('click', e => { e.stopPropagation(); set(1); });
+    car.querySelector('.prev')?.addEventListener('click', e => { e.stopPropagation(); set(-1); });
+    main.addEventListener('click', () => openLB(imgs, idx));
+    main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
+  });
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+}
+
+// Image attribution — machine-injected into #attribution-data by inject-attribution.mjs, keyed by image URL.
+const ATTRIBUTION = JSON.parse(document.getElementById('attribution-data').textContent || '{}');
+document.querySelectorAll('.credit[data-src]').forEach(el => {
+  const attr = ATTRIBUTION[el.dataset.src];
+  if (attr) el.textContent = attr.credit ? `${attr.credit} · ${attr.siteName}` : attr.siteName || '';
+  else if (el.dataset.src) try { el.textContent = new URL(el.dataset.src).hostname.replace('www.',''); } catch{}
+});
+
+// ─── cycling lightbox: ← → / arrow buttons / Esc; counter ────────────────────
+const lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'),
+      lbCap = lb.querySelector('.cap'), lbCount = lb.querySelector('.count');
+let lbImgs = [], lbI = 0;
+function openLB(imgs, start){ lbImgs = imgs; lbI = start || 0; drawLB(); lb.showModal(); }
+function drawLB(){ const im = lbImgs[lbI]; lbImg.src = im.url; lbImg.alt = im.label;
+  const attr = ATTRIBUTION[im.url] || {};
+  const siteName = attr.siteName || (attr.sourcePage ? new URL(attr.sourcePage).hostname.replace('www.','') : '');
+  const person = im.credit || attr.credit || '';
+  const site = attr.sourcePage ? `<a href="${attr.sourcePage}" target="_blank" rel="noopener">${siteName}</a>` : siteName;
+  const lic = attr.license && attr.licenseUrl ? ` · <a href="${attr.licenseUrl}" target="_blank" rel="noopener">${attr.license}</a>` : '';
+  const parts = [person, site].filter(Boolean).join(' · ');
+  lbCap.innerHTML = `${im.label}<span class="cr">${parts}${lic}</span>`;
+  lbCount.textContent = lbImgs.length > 1 ? `${lbI+1} / ${lbImgs.length}` : '';
+  lb.querySelectorAll('.arw').forEach(a => a.style.display = lbImgs.length > 1 ? '' : 'none'); }
+function stepLB(d){ lbI = (lbI + d + lbImgs.length) % lbImgs.length; drawLB(); }
+lb.querySelector('.next').addEventListener('click', e => { e.stopPropagation(); stepLB(1); });
+lb.querySelector('.prev').addEventListener('click', e => { e.stopPropagation(); stepLB(-1); });
+lb.querySelector('.x').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+document.addEventListener('keydown', e => { if (!lb.open) return;       // <dialog> handles Esc natively
+  if (e.key === 'ArrowRight') stepLB(1); if (e.key === 'ArrowLeft') stepLB(-1); });
+// ─── content images: any <img data-lightbox> opens in lightbox with attribution ──
+document.addEventListener('click', e => {
+  const img = e.target.closest('img[data-lightbox]');
+  if (!img) return;
+  const group = img.dataset.lightbox;
+  const all = group ? [...document.querySelectorAll(`img[data-lightbox="${group}"]`)] : [img];
+  const imgs = all.map(i => { const attr = ATTRIBUTION[i.src]||{}; return {url:i.src, label:i.alt||'', credit:attr.credit||''}; });
+  openLB(imgs, all.indexOf(img));
+});
+
+// ─── Map split view toggle (call invalidateSize after layout change) ───────────
+document.getElementById('toggle').addEventListener('click', e => {
+  const split = document.body.classList.toggle('split');
+  e.target.textContent = split ? 'Close ▸' : '◂ Map';
+  setTimeout(() => map.invalidateSize(), 200);
+});
+
+// ─── export: GPX from ITEMS ──────────────────────────────────────────────────
+const exportDialog = document.getElementById('export-dialog');
+document.getElementById('export-btn').addEventListener('click', () => exportDialog.showModal());
+exportDialog.querySelector('.close').addEventListener('click', () => exportDialog.close());
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+document.getElementById('download-gpx').addEventListener('click', () => {
+  const checked = [...exportDialog.querySelectorAll('.cats input:checked')].map(c => c.value);
+  const mapped = ITEMS.filter(i => i.lat && i.lng && checked.includes(i.category));
+  const title = document.title;
+  const wpts = mapped.map(i => `<wpt lat="${i.lat}" lon="${i.lng}"><name>${esc(i.name)}</name><desc>${esc(i.blurb||'')}</desc></wpt>`).join('\n');
+  const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="travel-guide"><metadata><name>${esc(title)}</name></metadata>\n${wpts}\n</gpx>`], {type:'application/gpx+xml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'guide-places.gpx';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  exportDialog.close();
+});
+
+// SEASONAL guides only: add a setSeason() switcher here
+
+render();   // initial paint (non-seasonal: activeSeason stays null → everything shows)
+</script></body></html>
