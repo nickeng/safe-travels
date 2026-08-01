@@ -24,17 +24,15 @@ Real asks, and the guides that came back:
 
 | The ask | The guide |
 |---|---|
-| _"New York City in October, I've been 100 times, show me the side the locals love"_ | [guide](https://nickeng.github.io/safe-travels/samples/new-york-city.html) |
-| _"Annapurna circuit, it's my first major trek"_ | [guide](https://nickeng.github.io/safe-travels/samples/annapurna.html) |
-| _"I want to see Antarctica. When is the best time to go? How do I even get there?"_ | [guide](https://nickeng.github.io/safe-travels/samples/antarctica.html) |
-| _"I want to see a puffin"_ | [guide](https://nickeng.github.io/safe-travels/samples/puffin.html) |
-| _"RV family road trip, plan a drive from Sea-Tac to Whistlers Campground. I have 2 daughters in high school who won't take a hike more than 30 min without complaining to high hell."_ | [guide](https://nickeng.github.io/safe-travels/samples/seattle-jasper.html)|
-| _"Visiting Chengdu in August with our 1 year old"_ | [guide](https://nickeng.github.io/safe-travels/samples/chengdu.html) |
-| _"I want to do a garden tour in the Netherlands, April or May"_ | [guide](https://nickeng.github.io/safe-travels/samples/netherlands.html) |
-| _"Going to see the Augusta Masters with friends"_ | [guide](https://nickeng.github.io/safe-travels/samples/augusta-masters.html) |
-| _"I want to walk the Camino de Santiago, the last 100km"_ | [guide](https://nickeng.github.io/safe-travels/samples/camino.html) |
-| _"Sahara desert from Marrakech, I want the real desert experience, no glamping"_ | [guide](https://nickeng.github.io/safe-travels/samples/sahara.html) |
-| _"Around the world in 80 days, just like Phileas Fogg"_ | [guide](https://nickeng.github.io/safe-travels/samples/80-days.html) |
+| _"New York City in October, I've been 100 times, show me the side the locals love"_ | [![guide](./docs/assets/new-york-city.jpg)](https://nickeng.github.io/safe-travels/samples/new-york-city.html) |
+| _"Annapurna circuit, it's my first major trek"_ | [![guide](./docs/assets/annapurna.jpg)](https://nickeng.github.io/safe-travels/samples/annapurna.html) |
+| _"I want to see Antarctica. When is the best time to go? How do I even get there?"_ | [![guide](./docs/assets/antarctica.jpg)](https://nickeng.github.io/safe-travels/samples/antarctica.html) |
+| _"I want to see a puffin"_ | [![guide](./docs/assets/puffin.jpg)](https://nickeng.github.io/safe-travels/samples/puffin.html) |
+| _"RV family road trip, plan a drive from Sea-Tac to Whistlers Campground. I have 2 daughters in high school who won't take a hike more than 30 min without complaining to high hell."_ | [![guide](./docs/assets/seattle-jasper.jpg)](https://nickeng.github.io/safe-travels/samples/seattle-jasper.html) |
+| _"Visiting Chengdu in August with our 1 year old"_ | [![guide](./docs/assets/chengdu.jpg)](https://nickeng.github.io/safe-travels/samples/chengdu.html) |
+| _"I want to do a garden tour in the Netherlands, April or May"_ | [![guide](./docs/assets/netherlands.jpg)](https://nickeng.github.io/safe-travels/samples/netherlands.html) |
+| _"I want to walk the Camino de Santiago, the last 100km"_ | [![guide](./docs/assets/camino.jpg)](https://nickeng.github.io/safe-travels/samples/camino.html) |
+| _"Around the world in 80 days, just like Phileas Fogg"_ | [![guide](./docs/assets/80-days.jpg)](https://nickeng.github.io/safe-travels/samples/80-days.html) |
 
 
 ## Install
