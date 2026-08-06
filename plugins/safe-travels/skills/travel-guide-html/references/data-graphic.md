@@ -50,7 +50,7 @@ One primitive covers bloom calendars, foliage turn, route access, or a single da
 **labeled rows sharing one axis**, each bar spanning start→end positioned by `left`/`width`  as a %
 of the range (a Gantt chart, when that range is time).
 
-**One coordinate system, or the chart lies.** The tracks and the axis must be the same width — so
+**ONE coordinate system.** The tracks and the axis must be the same width — so
 bars, overlays, and ticks are all percentages of the SAME width. Two layouts do that: each row's
 label above its track with the axis below them, or a label gutter
 (`grid-template-columns:110px 1fr`) with the axis in the same grid column as the tracks. Labels
@@ -64,19 +64,20 @@ above also get the full width on a phone, no media query needed.
 .ranges .axis span{position:absolute;transform:translateX(-50%)}
 ```
 
-**Position by arithmetic, never by eye.** Fix the range first (say Oct 2 → Dec 21 = 80 days), then write
+**Position by arithmetic.** Fix the range first (say Oct 2 → Dec 21 = 80 days), then write
 every position — bars, ticks, overlays — as the same expression: `left:calc(100% * 12/80)` 
 for a date 12 days in, `width:calc(100% * 10/80)` for a 10-day window. The day counts stay
 readable in the markup and CSS does the division. Never lay the axis out with flex
 `space-between`: it spaces the labels evenly whatever the real intervals are, and pins the edge
 labels to the container edges instead of their tick positions.
 
+- Limit the chart to 8 rows; if you have more, keep the 8 that matter most to the trip.
+- Center any bar label or tick with `transform:translateX(-50%)`.
 - **Two things in one row** (e.g. maples vs ginkgo): give the track two bars in different
   accent tints.
 - **A transition rather than a hard span** (foliage turning, building to peak): fill the bar with a
   `linear-gradient` between the two states; use a muted hatch (`repeating-linear-gradient`) for a
   "past peak / not applicable" stretch.
-- Center any bar label or tick with `transform:translateX(-50%)`.
 - **Daylight** — a band on a midnight-to-midnight track, placed at the real sunrise/sunset (not a fill from the left), so the lit hours sit where they actually fall.
 
 ### Overlays (timeline)
@@ -108,7 +109,7 @@ of `.plot`, so the tracks must span its FULL width — the row label goes above 
 
 - **Labels** go inside the overlay — one coordinate, so a label can't drift from the line it
   names. Sit it above the line's top end (give `.plot` a `margin-top` to open the space) or
-  offset it to one side — never centred on the line, where the rule cuts through the text.
+  offset it to one side.
 
 ## Accessibility
 

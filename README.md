@@ -34,10 +34,15 @@ Real asks, and the guides that came back:
 | _"I want to walk the Camino de Santiago, the last 100km"_ | [![guide](./docs/assets/camino.jpg)](https://nickeng.github.io/safe-travels/samples/camino.html) |
 | _"Around the world in 80 days, just like Phileas Fogg"_ | [![guide](./docs/assets/80-days.jpg)](https://nickeng.github.io/safe-travels/samples/80-days.html) |
 
+[See more guides →](https://nickeng.github.io/safe-travels/)
 
 ## Install
 
 Temporary instructions before the inevitable agent store.
+
+**Using the Claude desktop app?** Follow the [app install guide](./docs/INSTALL.md) — it walks through adding the plugin from the UI.
+
+**Using Claude Code in the terminal?** Follow the CLI steps below.
 
 1. Set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 2 in the env in `~/.claude/settings.json`. This is required for the research team to fan out.
 2. Install the plugin:
@@ -45,6 +50,11 @@ Temporary instructions before the inevitable agent store.
 /plugin marketplace add nickeng/safe-travels
 /plugin install safe-travels@safe-travels
 ```
+
+## Token usage
+
+Guides take 30-60mins to complete and typically consume around 2 million tokens each.
+Even a single guide can consume the session limits on Pro accounts — you have been warned.
 
 ## A note on accuracy
 

@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paris in June — A Babymoon Among the Water Lilies</title>
+<meta name="description" content="A gentle, art-led five-day babymoon in Paris in June 2027 — Monet's Nymphéas, Van Gogh at the Orsay, Giverny and Auvers-sur-Oise, pregnancy-safe eating, and where to rest.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   PARIS · JUNE 2027 — design concept: "Nymphéas"
+   The page is the surface of Monet's pond seen in Paris light: an unprimed
+   canvas ground stippled with broken-colour dabs, section breaks painted as
+   a band of water and floating lily pads, headings set in the Didone letter
+   the Didots cut in Paris, and every place hung on the wall in a thin gilt
+   frame with a museum placard beneath it.
+   ══════════════════════════════════════════════════════════════════════ */
+:root{
+  /* map / category tokens */
+  --c-art:#46578f; --c-do:#5c8265; --c-food:#b8556b; --c-stay:#7a6a55; --c-daytrip:#c9832b;
+  /* role tokens */
+  --bg:#f4efe4; --paper:#fbf8f1; --ink:#241f2b; --text:#3a3441; --muted:#6b6376;
+  --line:#ddd0b9; --accent:#46578f; --gold:#a37f30; --rose:#b8556b; --leaf:#5c8265;
+  --card:290px;
+  --serif:'EB Garamond',Garamond,Georgia,serif;
+  --display:'Bodoni Moda',Didot,'Times New Roman',serif;
+  --label:'Jost',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);font-weight:400;color:var(--text);background:var(--bg);line-height:1.68;font-size:19.5px;-webkit-font-smoothing:antialiased}
+@media(max-width:600px){body{font-size:18px}}
+img{max-width:100%}
+a{color:var(--accent)}
+
+/* ── broken-colour dab field: the canvas ground ─────────────────────── */
+#content{width:100%;transition:width .4s ease;position:relative;
+  background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='%23eae1cd'%3E%3Cellipse cx='12' cy='9' rx='8' ry='3' transform='rotate(-28 12 9)'/%3E%3Cellipse cx='47' cy='17' rx='7.5' ry='2.8' transform='rotate(34 47 17)'/%3E%3Cellipse cx='76' cy='6' rx='7' ry='3' transform='rotate(-12 76 6)'/%3E%3Cellipse cx='28' cy='34' rx='8.5' ry='3' transform='rotate(62 28 34)'/%3E%3Cellipse cx='63' cy='40' rx='7' ry='2.6' transform='rotate(-48 63 40)'/%3E%3Cellipse cx='6' cy='52' rx='7.5' ry='2.9' transform='rotate(18 6 52)'/%3E%3Cellipse cx='40' cy='60' rx='8' ry='3' transform='rotate(-36 40 60)'/%3E%3Cellipse cx='82' cy='58' rx='7.5' ry='2.7' transform='rotate(52 82 58)'/%3E%3Cellipse cx='19' cy='78' rx='8' ry='3' transform='rotate(-8 19 78)'/%3E%3Cellipse cx='55' cy='83' rx='7' ry='2.8' transform='rotate(41 55 83)'/%3E%3Cellipse cx='88' cy='79' rx='6.5' ry='2.6' transform='rotate(-24 88 79)'/%3E%3C/g%3E%3Cg fill='%23efe8d8'%3E%3Cellipse cx='33' cy='6' rx='6' ry='2.4' transform='rotate(48 33 6)'/%3E%3Cellipse cx='69' cy='25' rx='6.5' ry='2.5' transform='rotate(-40 69 25)'/%3E%3Cellipse cx='12' cy='30' rx='6' ry='2.3' transform='rotate(70 12 30)'/%3E%3Cellipse cx='51' cy='47' rx='6.5' ry='2.5' transform='rotate(-16 51 47)'/%3E%3Cellipse cx='24' cy='66' rx='6' ry='2.4' transform='rotate(30 24 66)'/%3E%3Cellipse cx='72' cy='70' rx='6.5' ry='2.5' transform='rotate(-58 72 70)'/%3E%3C/g%3E%3C/svg%3E") repeat;}
+
+/* ── nav ────────────────────────────────────────────────────────────── */
+nav{position:sticky;top:0;z-index:10000;display:flex;align-items:center;gap:.85rem;
+  padding:.5rem clamp(.8rem,3vw,2rem);background:rgba(250,247,239,.94);backdrop-filter:blur(9px);
+  border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(163,127,48,.25)}
+nav .pad{flex:none;width:22px;height:22px}
+nav .wordmark{font-family:var(--display);font-size:1.25rem;letter-spacing:.02em;color:var(--ink);line-height:1}
+nav .when{font-family:var(--label);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);padding-top:.2rem}
+nav .links{display:flex;gap:1.05rem;margin-left:auto;align-items:center}
+nav .links a{font-family:var(--label);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+nav .links a:hover{color:var(--accent)}
+@media(max-width:900px){nav .links a{display:none}}
+#toggle{font-family:var(--label);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  background:none;border:1px solid var(--line);color:var(--ink);padding:.4rem .75rem;border-radius:2px;cursor:pointer;white-space:nowrap}
+#toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── hero ───────────────────────────────────────────────────────────── */
+.hero{position:relative;height:min(80vh,660px);overflow:hidden;background:#2c3355}
+.hero>img{width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.92}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,26,48,.5) 0,rgba(24,26,48,.12) 38%,rgba(20,22,40,.82) 100%)}
+.hero .inner{position:absolute;inset:auto 0 0 0;padding:0 clamp(1.1rem,5vw,3.4rem) clamp(1.6rem,4vw,3rem);max-width:1180px;margin:0 auto}
+.hero .kicker{font-family:var(--label);font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:#e6cd8c;margin-bottom:.7rem}
+.hero h1{font-family:var(--display);font-weight:400;color:#fdfbf6;line-height:.94;letter-spacing:-.015em;
+  font-size:clamp(2.6rem,8.4vw,6.1rem);text-shadow:0 2px 28px rgba(10,12,26,.5)}
+.hero h1 em{font-style:italic;color:#cbd6f0}
+.hero .sub{color:#e8e3d8;font-size:clamp(.95rem,1.9vw,1.15rem);max-width:46ch;margin-top:.85rem;font-weight:400}
+.hero .credit{position:absolute;bottom:.45rem;right:.9rem;font-family:var(--label);font-size:.58rem;letter-spacing:.06em;color:rgba(255,255,255,.5)}
+
+/* ── layout ─────────────────────────────────────────────────────────── */
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.1rem,5vw,3.4rem)}
+.reading{max-width:70ch}
+section{padding:clamp(2.6rem,6vw,4.6rem) 0 0}
+p+p{margin-top:.9rem}
+.lead p:first-of-type::first-letter{font-family:var(--display);float:left;font-size:4.5rem;line-height:.78;
+  padding:.14em .1em 0 0;color:var(--accent);font-weight:400}
+
+/* ── section headings: the gallery placard ──────────────────────────── */
+.salle{display:flex;align-items:center;gap:.9rem;margin-bottom:.55rem}
+.salle .num{font-family:var(--label);font-size:.63rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.salle .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,5.4vw,3.5rem);line-height:1.02;
+  letter-spacing:-.02em;color:var(--ink);margin-bottom:.9rem}
+h2 em{font-style:italic;color:var(--accent)}
+h3{font-family:var(--display);font-weight:500;font-size:clamp(1.25rem,2.6vw,1.62rem);color:var(--ink);
+  letter-spacing:-.01em;margin:2.6rem 0 .5rem;display:flex;align-items:baseline;gap:.6rem}
+h3::before{content:"";flex:none;width:16px;height:7px;border-radius:60% 40% 55% 45%;
+  background:var(--accent);transform:rotate(-14deg);opacity:.85}
+h4{font-family:var(--label);font-weight:600;font-size:.86rem;letter-spacing:.05em;color:var(--ink);margin-bottom:.2rem}
+.dek{font-size:1.06rem;color:var(--muted);font-style:italic;margin-bottom:1.1rem;max-width:60ch}
+
+/* ── the Nymphéas band: signature separator ─────────────────────────── */
+.pond{height:58px;margin:clamp(2.6rem,6vw,4.4rem) 0 0;position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 15px 5px at 9% 30%,#f0dfe6 0 62%,transparent 63%),
+    radial-gradient(ellipse 13px 4px at 61% 22%,#f3e2e8 0 62%,transparent 63%),
+    radial-gradient(ellipse 12px 4px at 84% 68%,#eedbe3 0 62%,transparent 63%),
+    radial-gradient(ellipse 26px 8px at 16% 62%,#7ba077 0 70%,transparent 71%),
+    radial-gradient(ellipse 22px 7px at 35% 34%,#688f6a 0 70%,transparent 71%),
+    radial-gradient(ellipse 30px 9px at 57% 74%,#7ea87c 0 70%,transparent 71%),
+    radial-gradient(ellipse 20px 6px at 73% 40%,#5f8767 0 70%,transparent 71%),
+    radial-gradient(ellipse 27px 8px at 92% 26%,#749c74 0 70%,transparent 71%),
+    repeating-linear-gradient(96deg,rgba(255,255,255,.11) 0 3px,transparent 3px 17px),
+    repeating-linear-gradient(84deg,rgba(38,30,66,.16) 0 2px,transparent 2px 21px),
+    linear-gradient(176deg,#7b86b4 0%,#5a6a9f 26%,#46578f 52%,#3d5f7e 74%,#3a6b66 100%);}
+.pond.tall{height:84px}
+
+/* ── cards: a framed canvas with its placard ────────────────────────── */
+.cards{display:block;margin-top:1.6rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card),1fr));gap:1.5rem;list-style:none;margin:0;padding:0}
+.grid>li{display:contents}
+.cards.rail{min-width:0}
+.cards.rail>.grid{display:flex;flex-wrap:nowrap;overflow:auto hidden;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scrollbar-width:thin;padding-block:.6rem 1.3rem;gap:1.5rem}
+.cards.rail .card{flex:0 0 var(--card);scroll-snap-align:start}
+.card{background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;position:relative;
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 34px -20px rgba(36,31,43,.5);border-color:var(--gold)}
+.card.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(70,87,143,.3)}
+.card .car{margin:11px 11px 0;box-shadow:0 0 0 4px #fff,0 0 0 5px rgba(163,127,48,.55)}
+.card .body{padding:1.15rem 1.05rem 1rem;flex:1;display:flex;flex-direction:column}
+.card-title{font-family:var(--display);font-weight:500;font-size:1.1rem;line-height:1.2;color:var(--ink);letter-spacing:-.01em}
+.card .meta{font-family:var(--label);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-top:.35rem}
+.card .desc{font-size:.9rem;color:var(--text);margin-top:.6rem}
+.card-sources{font-family:var(--label);font-size:.6rem;letter-spacing:.06em;color:var(--muted);margin-top:auto;padding-top:.85rem}
+.card-sources a{color:inherit;text-decoration:underline;text-decoration-color:var(--line)}
+.no-img{height:66px;display:flex;align-items:center;justify-content:center;margin:11px 11px 0;
+  background:rgba(70,87,143,.06);border:1px dashed var(--line);
+  font-family:var(--label);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+/* carousel */
+.car{position:relative;margin:0}
+.car-main{width:100%;height:196px;object-fit:cover;display:block;background:#e6ddc9;cursor:pointer}
+.car-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(30,26,44,.55);color:#fff;border:0;
+  width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.95rem;line-height:1}
+.car-nav.prev{left:8px}.car-nav.next{right:8px}
+.car-dots{position:absolute;bottom:9px;left:0;right:0;display:flex;gap:5px;justify-content:center}
+.car-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.55)}
+.car-dots i.active{background:#fff}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;margin:-1px;padding:0}
+/* feature card */
+.grid .card.feature{grid-column:1/-1;flex-direction:row;min-height:340px}
+.grid .card.feature .car{width:56%;flex:none;position:relative;margin:11px 0 11px 11px;box-shadow:0 0 0 4px #fff,0 0 0 5px rgba(163,127,48,.6)}
+.grid .card.feature .car-main{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.grid .card.feature .body{justify-content:center;padding:1.8rem 1.7rem}
+.grid .card.feature .card-title{font-size:1.65rem}
+.grid .card.feature .desc{font-size:.98rem}
+@media(max-width:700px){.grid .card.feature{flex-direction:column;min-height:0}
+  .grid .card.feature .car{width:auto;position:static;margin:11px 11px 0}
+  .grid .card.feature .car-main{position:static;height:200px}}
+
+/* ── feature band: standing inside the oval room ────────────────────── */
+.nympheas{--text:#e7e4ef;--muted:#b3aec6;--line:rgba(255,255,255,.2);--paper:rgba(255,255,255,.055);
+  --ink:#fdfbf6;--gold:#dcc07c;--accent:#a9bde8;
+  color:var(--text);margin-top:clamp(2.6rem,6vw,4.4rem);padding:clamp(2.4rem,5vw,4rem) 0 clamp(2.6rem,6vw,4.2rem);
+  background:
+    radial-gradient(ellipse 60px 20px at 12% 18%,rgba(196,140,166,.3) 0 68%,transparent 69%),
+    radial-gradient(ellipse 90px 28px at 78% 12%,rgba(126,168,124,.26) 0 70%,transparent 71%),
+    radial-gradient(ellipse 120px 34px at 30% 84%,rgba(126,168,124,.2) 0 70%,transparent 71%),
+    radial-gradient(ellipse 70px 22px at 90% 72%,rgba(196,140,166,.22) 0 68%,transparent 69%),
+    repeating-linear-gradient(94deg,rgba(255,255,255,.045) 0 3px,transparent 3px 20px),
+    linear-gradient(168deg,#2f3a63 0%,#39406e 30%,#3d4a72 55%,#34526a 80%,#2e4f56 100%);}
+.nympheas h2,.nympheas h3{color:var(--ink)}
+.nympheas h2 em{color:#bfd0f2}
+.nympheas h3::before{background:#8fb38c}
+.nympheas .dek{color:#c8c3d6}
+.nympheas .card{background:rgba(253,251,246,.075);border-color:rgba(255,255,255,.22);backdrop-filter:blur(3px)}
+.nympheas .card:hover{border-color:var(--gold);box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}
+.nympheas .card .car{box-shadow:0 0 0 4px rgba(253,251,246,.9),0 0 0 5px rgba(220,192,124,.6)}
+.nympheas .card-title{color:#fdfbf6}
+.nympheas .card .desc{color:#ded9e8}
+.nympheas .card .meta{color:var(--gold)}
+.nympheas .callout{background:rgba(0,0,0,.16);border-left-color:var(--gold)}
+.nympheas .callout strong{color:#fdfbf6}
+
+/* ── callout & sidebar ──────────────────────────────────────────────── */
+.callout{margin:1.5rem 0;padding:1rem 1.25rem;background:rgba(70,87,143,.055);
+  border-left:3px solid var(--accent);font-size:.95rem}
+.callout .tag{display:block;font-family:var(--label);font-size:.6rem;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:.35rem}
+.callout.warn{background:rgba(184,85,107,.07);border-left-color:var(--rose)}
+.callout.warn .tag{color:var(--rose)}
+.callout.leaf{background:rgba(92,130,101,.075);border-left-color:var(--leaf)}
+.callout.leaf .tag{color:#476b50}
+.two-col{display:grid;grid-template-columns:1.35fr .95fr;gap:clamp(1.4rem,3vw,2.6rem);align-items:start;margin-top:1.3rem}
+@media(max-width:840px){.two-col{grid-template-columns:1fr}}
+.sidebar{background:var(--paper);border:1px solid var(--line);padding:1.25rem 1.3rem;font-size:.9rem}
+.sidebar h4{font-family:var(--display);font-weight:500;font-size:1.12rem;letter-spacing:0;text-transform:none;margin-bottom:.7rem;color:var(--ink)}
+.sidebar ul{list-style:none;padding:0;margin:0}
+.sidebar li{padding:.55rem 0;border-bottom:1px dotted var(--line)}
+.sidebar li:last-child{border-bottom:0;padding-bottom:0}
+.sidebar .fr{font-family:var(--serif);font-style:italic;color:var(--accent);display:block}
+.sidebar .en{font-size:.83rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:1.2rem}
+th,td{text-align:left;padding:.62rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--label);font-size:.62rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+td strong{font-family:var(--display);font-weight:500;font-size:1rem;color:var(--ink)}
+.gloss{border-bottom:1px dotted var(--gold);cursor:help;position:relative;font-style:italic}
+.gloss:hover::after,.gloss:focus::after{content:attr(data-def);position:absolute;left:0;bottom:132%;
+  white-space:nowrap;background:var(--ink);color:#fbf8f1;font-family:var(--label);font-style:normal;font-size:.72rem;
+  padding:.34rem .6rem;border-radius:3px;box-shadow:0 5px 16px rgba(0,0,0,.3);z-index:60}
+
+/* ── itinerary ──────────────────────────────────────────────────────── */
+.days{list-style:none;padding:0;margin:1.4rem 0 0;counter-reset:d}
+.days li{display:grid;grid-template-columns:auto 1fr;gap:0 1.3rem;padding:1.05rem 0;border-top:1px solid var(--line)}
+.days li:last-child{border-bottom:1px solid var(--line)}
+.days .n{font-family:var(--display);font-size:1.9rem;line-height:1;color:var(--gold);font-weight:400;min-width:2.6rem}
+.days .n small{display:block;font-family:var(--label);font-size:.54rem;letter-spacing:.2em;color:var(--muted);margin-top:.2rem}
+.days h4{font-family:var(--display);font-weight:500;font-size:1.16rem;letter-spacing:0;text-transform:none}
+.days p{font-size:.93rem;color:var(--text);margin-top:.15rem}
+
+/* ── stop list ──────────────────────────────────────────────────────── */
+.stops{list-style:none;margin:1.4rem 0 0;padding:0}
+.stop{display:grid;gap:0 1rem;padding:.95rem 0;border-bottom:1px solid var(--line);align-items:start;
+  grid-template-columns:auto 108px 1fr}
+.stop:not(:has(img)){grid-template-columns:auto 1fr}
+.stop .num{font-family:var(--display);font-size:1.35rem;font-weight:400;color:var(--gold);line-height:1.1}
+.stop img{width:108px;height:78px;object-fit:cover;cursor:pointer;box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(163,127,48,.5)}
+.stop h4{font-family:var(--display);font-weight:500;font-size:1.03rem;letter-spacing:0;text-transform:none}
+.stop p{font-size:.88rem;color:var(--muted);margin-top:.1rem}
+.stop .detail{font-family:var(--label);font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-top:.35rem}
+
+/* ── data graphics ──────────────────────────────────────────────────── */
+figure{margin:1.7rem 0 0}
+figcaption{font-family:var(--label);font-size:.66rem;letter-spacing:.1em;color:var(--muted);margin-top:.9rem;text-transform:uppercase}
+.chartbox{background:var(--paper);border:1px solid var(--line);padding:1.35rem 1.3rem 1.1rem}
+.chart-t{font-family:var(--label);font-size:.63rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem}
+.bars{display:flex;align-items:flex-end;gap:.36rem;height:152px}
+.bars .col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%}
+.bars .track{flex:1;width:82%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.bars .bar{width:100%;background:color-mix(in srgb,var(--accent) 24%,transparent);position:relative;border-radius:1px 1px 0 0}
+.bars .col.on .bar{background:var(--accent)}
+.bars .bar b{position:absolute;bottom:calc(100% + .22rem);left:50%;transform:translateX(-50%);
+  font-family:var(--label);font-size:.6rem;font-weight:500;color:var(--muted)}
+.bars .col.on .bar b{color:var(--accent);font-weight:600}
+.bars .lbl{font-family:var(--label);font-size:.58rem;letter-spacing:.04em;color:var(--muted);margin-top:.42rem;text-transform:uppercase}
+.bars .col.on .lbl{color:var(--accent);font-weight:600}
+.ranges{margin-top:.2rem}
+.ranges .row{margin-bottom:.85rem}
+.ranges .rl{font-family:var(--label);font-size:.7rem;color:var(--text);margin-bottom:5px;letter-spacing:.02em}
+.ranges .rl span{color:var(--muted);font-size:.64rem;letter-spacing:.08em}
+.ranges .track{position:relative;height:11px;border-radius:6px;background:rgba(70,87,143,.1)}
+.ranges .bar{position:absolute;top:0;bottom:0;border-radius:6px;background:var(--accent)}
+.ranges .bar.leaf{background:var(--leaf)}
+.ranges .bar.rose{background:var(--rose)}
+.ranges .bar.gold{background:var(--gold)}
+.ranges .bar.peak{background:linear-gradient(90deg,color-mix(in srgb,var(--leaf) 45%,transparent),var(--leaf) 55%,color-mix(in srgb,var(--leaf) 40%,transparent))}
+.ranges .bar.faint{background:repeating-linear-gradient(45deg,rgba(92,130,101,.4) 0 4px,rgba(92,130,101,.14) 4px 8px)}
+.ranges .plot{position:relative;padding-top:1.5rem}
+.ranges .band{position:absolute;top:0;bottom:0;z-index:0;pointer-events:none;background:rgba(201,131,43,.16);border-left:1px solid var(--c-daytrip);border-right:1px solid var(--c-daytrip)}
+.ranges .band b{position:absolute;top:-.15rem;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--label);font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#96601a}
+.ranges .axis{position:relative;height:1.1rem;margin-top:.3rem}
+.ranges .axis span{position:absolute;transform:translateX(-50%);font-family:var(--label);font-size:.6rem;color:var(--muted)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:.3rem}
+.cal .hd{font-family:var(--label);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:.2rem}
+.cal .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:3px;
+  font-family:var(--label);font-size:.72rem;color:var(--muted);background:rgba(70,87,143,.05)}
+.cal .cell.empty{background:none}
+.cal .cell.peak{background:var(--accent);color:#fff;font-weight:600}
+.cal .cell.lead{background:rgba(70,87,143,.2);color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-top:.9rem}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:.35rem;vertical-align:-1px}
+.legend span{font-family:var(--label);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* ── editorial add-on ───────────────────────────────────────────────── */
+.addon{border:1px solid var(--line);background:var(--paper);padding:clamp(1.3rem,3vw,2.1rem);margin-top:1.6rem}
+.addon .kick{font-family:var(--label);font-size:.6rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--c-daytrip)}
+.addon h3{margin:.35rem 0 .2rem}
+.addon h3::before{background:var(--c-daytrip)}
+.addon .logi{font-family:var(--label);font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);background:rgba(201,131,43,.14);display:inline-block;padding:.32rem .6rem;margin-bottom:.9rem}
+.addon .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin-top:1.2rem}
+.addon .shots img{width:100%;height:150px;object-fit:cover;cursor:pointer;box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(163,127,48,.45)}
+.tip{margin-top:1rem;font-size:.9rem;font-style:italic;color:var(--muted)}
+
+/* ── map ────────────────────────────────────────────────────────────── */
+.mapfilter{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.1rem 0}
+.mapfilter button{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--label);font-size:.63rem;
+  letter-spacing:.14em;text-transform:uppercase;background:var(--paper);border:1px solid var(--line);
+  padding:.4rem .7rem;cursor:pointer;color:var(--ink)}
+.mapfilter button i{width:9px;height:9px;border-radius:50%}
+.mapfilter button.off{opacity:.4}
+.map-container{margin-top:1.2rem}
+.map-container #map{height:470px;border:1px solid var(--line)}
+body.split #content{width:50%}
+body.split .map-section>.salle,body.split .map-section>h2,body.split .map-section>.dek,body.split .export-row{display:none}
+body.split .map-container{position:fixed;top:0;right:0;width:50vw;height:100vh;margin:0;z-index:50}
+body.split .map-container #map{height:100vh!important;margin:0!important;border:0}
+body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;z-index:60;margin:0;max-width:min(60vw,340px);
+  background:rgba(251,248,241,.94);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:4px;
+  padding:.55rem .6rem;box-shadow:0 8px 24px -10px rgba(0,0,0,.35)}
+@media(max-width:900px){body.split #content{width:auto;margin-top:33vh}
+  body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:33vh;z-index:50}
+  body.split .map-container #map{height:33vh!important}
+  body.split nav{top:33vh}}
+.export-row{margin:.9rem 0 0}
+.export-btn{font-family:var(--label);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  background:none;border:1px solid var(--line);padding:.45rem .85rem;cursor:pointer}
+.export-btn:hover{color:var(--accent);border-color:var(--accent)}
+dialog.export-dialog{border:0;padding:2rem 2.2rem;max-width:390px;width:90vw;background:var(--paper);color:var(--text);
+  box-shadow:0 24px 60px -12px rgba(0,0,0,.4);margin:auto;font-family:var(--serif)}
+dialog.export-dialog::backdrop{background:rgba(24,22,38,.55)}
+dialog.export-dialog h3{font-size:1.3rem;margin:0 0 .3rem}
+dialog.export-dialog h3::before{display:none}
+dialog.export-dialog p{font-size:.86rem;color:var(--muted);margin-bottom:1.1rem}
+dialog.export-dialog .cats{display:flex;flex-wrap:wrap;gap:.5rem .9rem;margin-bottom:1.1rem}
+dialog.export-dialog .cats label{display:flex;align-items:center;gap:.4rem;font-size:.8rem;cursor:pointer}
+dialog.export-dialog .opt{display:flex;align-items:center;gap:.8rem;padding:.75rem .9rem;border:1px solid var(--line);
+  cursor:pointer;background:none;text-align:left;width:100%;font-family:inherit;color:inherit}
+dialog.export-dialog .opt:hover{border-color:var(--accent)}
+dialog.export-dialog .opt .label{font-weight:600;font-size:.86rem;font-family:var(--label)}
+dialog.export-dialog .opt .desc{font-size:.72rem;color:var(--muted)}
+dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:none;border:0;font-size:1.3rem;color:var(--muted);cursor:pointer}
+.export-attribution{font-size:.68rem!important;margin:1rem 0 0!important}
+
+/* ── lightbox ───────────────────────────────────────────────────────── */
+.lightbox{border:0;padding:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:rgba(20,18,32,.95)}
+.lightbox::backdrop{background:rgba(20,18,32,.95)}
+.lightbox[open]{display:flex;align-items:center;justify-content:center}
+.lightbox img{max-width:90vw;max-height:76vh;object-fit:contain}
+.lightbox .cap{position:fixed;bottom:4.5vh;left:0;right:0;text-align:center;color:#f2eee4;font-size:.92rem;padding:0 2rem}
+.lightbox .cap .cr{display:block;color:#a9a2b8;font-family:var(--label);font-size:.68rem;letter-spacing:.06em;margin-top:.3rem}
+.lightbox .cap .cr a{color:#a9a2b8;text-decoration:underline}
+.lightbox .count{position:fixed;top:4.5vh;left:0;right:0;text-align:center;color:#a9a2b8;font-family:var(--label);font-size:.7rem;letter-spacing:.2em;pointer-events:none}
+.lightbox .arw{position:fixed;top:50%;transform:translateY(-50%);font-size:2.1rem;color:#fff;background:none;border:0;cursor:pointer;padding:1rem}
+.lightbox .arw.prev{left:1.5vw}.lightbox .arw.next{right:1.5vw}
+.lightbox .x{position:fixed;top:2.6vh;right:3.4vw;font-size:1.4rem;color:#fff;background:none;border:0;cursor:pointer}
+
+/* ── credits ────────────────────────────────────────────────────────── */
+.credits{font-size:.85rem;color:var(--muted);padding-bottom:3.5rem}
+.credits h3{margin-top:1.8rem}
+.credits ul{list-style:none;padding:0;margin:.7rem 0 0;columns:2;column-gap:2.2rem}
+@media(max-width:760px){.credits ul{columns:1}}
+.credits li{padding:.24rem 0;break-inside:avoid;font-size:.79rem}
+.credits a{color:var(--muted)}
+.signoff{font-family:var(--display);font-size:1.7rem;color:var(--accent);margin-top:2.4rem;font-style:italic}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+<div id="content">
+<nav>
+  <svg class="pad" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5c6.1 0 11 4.9 11 11s-4.9 11-11 11S5 22.1 5 16c0-1.1.2-2.2.5-3.2L15 16l1.6-11c-.2 0-.4 0-.6 0z" fill="#5c8265"/><ellipse cx="16" cy="16" rx="3.1" ry="2.2" fill="#b8556b" transform="rotate(-18 16 16)"/></svg>
+  <span class="wordmark">Paris</span><span class="when">Juin 2027</span>
+  <span class="links">
+    <a href="#planning">Planning</a><a href="#nympheas">Nymphéas</a><a href="#slow">Slow Paris</a>
+    <a href="#table">The Table</a><a href="#giverny">Giverny</a><a href="#auvers">Auvers</a><a href="#stay">Stay</a><a href="#map-section">Map</a>
+  </span>
+  <button id="toggle">◂ Map</button>
+</nav>
+
+<header class="hero">
+  <img src="https://cdn.mediatheque.epmoo.fr/link/3c9igq/gjl1bx2lwcbo2g0.jpg" alt="Inside the oval Water Lilies rooms at the Musée de l'Orangerie, Paris">
+  <span class="veil"></span>
+  <div class="inner">
+    <p class="kicker">A babymoon · five slow days · June 2027</p>
+    <h1>Standing inside<br><em>the water</em></h1>
+    <p class="sub">Paris arranged around benches, oval rooms and long gold evenings — Monet's <em>Nymphéas</em>, Van Gogh's last summers, and two villages where the paintings were made.</p>
+  </div>
+  <span class="credit" data-src="https://cdn.mediatheque.epmoo.fr/link/3c9igq/gjl1bx2lwcbo2g0.jpg"></span>
+</header>
+
+<main class="wrap">
+
+<!-- ══════════════════ THE OPENING ══════════════════ -->
+<section id="planning">
+  <div class="lead reading">
+    <p>Monet spent the last decades of his life trying to paint a surface with no horizon — water, sky, willow and lily collapsed into one shimmering plane you were meant to stand inside rather than look at. In two oval rooms at the western tip of the Tuileries, he got his wish, and in June there is a particular pleasure in it: outside, Paris is 23°C and loud with terrace chatter; inside, it is cool, hushed, curved, and there is <strong>a bench in the middle of each room</strong>, because the panels were designed to be received sitting down. For a trip built around not being on your feet all day, that is close to a mission statement.</p>
+    <p>This is a five-day, art-led babymoon shaped around three things: the Impressionist collections that make Paris unrepeatable, a pace that assumes you will want to sit down every forty minutes, and the two villages — <strong>Giverny</strong> for Monet, <strong>Auvers-sur-Oise</strong> for Van Gogh — where the paintings you have just stood in front of were actually made. Everything below flags where the stairs are, where the benches are, and which of the classic French dishes you can order without a second thought.</p>
+  </div>
+
+  <h3>The weather that shapes the trip</h3>
+  <div class="two-col">
+    <div>
+      <p>June is the best month to be pregnant in Paris. Daytime highs sit around <strong>21–23°C</strong> with lows near 12–13°C, warm enough for terraces and cool enough that a morning in a gallery doesn't feel like an escape from the heat. There are typically <strong>10–12 rainy days</strong> scattered across the month, usually brief — a compact umbrella and one light layer covers it. Museums have no crowd-pressure days off in June, but they also haven't yet hit the July–August crush, and restaurants are still fully open before the August shutters come down.</p>
+      <p>The real gift is the light. At the solstice the sun comes up before six and doesn't set until nearly ten, which changes how you can build a day: front-load the museums into cool, quiet mornings, take a genuine two-hour lunch and a lie-down, then go back out at seven when the light on the Seine is at its best and the city has stopped rushing. You will see more, on far fewer steps.</p>
+      <figure>
+        <div class="chartbox">
+          <p class="chart-t">Average daily high, Paris</p>
+          <div class="bars" role="img" aria-label="Average daily high temperature in Paris by month, in Celsius: January 7, February 8, March 12, April 16, May 20, June 23, July 25, August 25, September 21, October 16, November 11, December 8. June, the month of this trip, is 23 degrees.">
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 7/26)"><b>7</b></div></div><span class="lbl">J</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 8/26)"><b>8</b></div></div><span class="lbl">F</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 12/26)"><b>12</b></div></div><span class="lbl">M</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 16/26)"><b>16</b></div></div><span class="lbl">A</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 20/26)"><b>20</b></div></div><span class="lbl">M</span></div>
+            <div class="col on"><div class="track"><div class="bar" style="height:calc(100% * 23/26)"><b>23</b></div></div><span class="lbl">Jun</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 25/26)"><b>25</b></div></div><span class="lbl">J</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 25/26)"><b>25</b></div></div><span class="lbl">A</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 21/26)"><b>21</b></div></div><span class="lbl">S</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 16/26)"><b>16</b></div></div><span class="lbl">O</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 11/26)"><b>11</b></div></div><span class="lbl">N</span></div>
+            <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 8/26)"><b>8</b></div></div><span class="lbl">D</span></div>
+          </div>
+        </div>
+        <figcaption>Degrees Celsius. June: warm days, cool mornings, no August heat.</figcaption>
+      </figure>
+    </div>
+    <aside class="sidebar">
+      <h4>What to know before you book</h4>
+      <ul>
+        <li><strong>Flying window.</strong> The second trimester (weeks 14–28) is widely described as the lowest-risk time to travel. Confirm with your own provider and your carrier before you book.</li>
+        <li><strong>Skip the Métro where you can.</strong> Older stations are stair-heavy with no lifts. Lean on <strong>buses</strong>, the fully step-free <strong>line 14</strong>, the RER, and taxis for cross-town hops — the fare after a long museum day is money well spent.</li>
+        <li><strong>Every museum here lends a folding seat.</strong> The Orsay, Orangerie and Marmottan all loan wheelchairs, folding stools and canes free at the cloakroom, no reservation, just ID. A folding stool means you are never stuck standing in a queue.</li>
+        <li><strong>Book timed slots 1–2 days ahead</strong> for the Orsay and Orangerie, and further out for Giverny and Marmottan — the point is to never stand in a ticket line.</li>
+        <li><strong>Time it around 21 June if you can.</strong> The <em>Fête de la Musique</em> turns the whole city into a free concert (see below).</li>
+        <li><strong>Money.</strong> Euro; cards accepted essentially everywhere, including the Giverny shuttle bus.</li>
+      </ul>
+    </aside>
+  </div>
+
+  <h3>Five days, paced for two and a half people</h3>
+  <p class="reading">Three days in Paris, two out in the villages. The shape assumes one real sit-down meal and one lie-down every day, one museum per day rather than two, and nothing booked before 9:30am. If energy dips, <strong>Day 5 is the one to trade</strong> — Auvers involves hills, and a slow Paris day in its place costs you nothing.</p>
+  <ol class="days">
+    <li><span class="n">1<small>Sat</small></span><div>
+      <h4>Arrive · the Tuileries and the oval rooms</h4>
+      <p>Settle in, then walk the flat gravel of the <strong>Jardin des Tuileries</strong> to a late-afternoon slot at the <strong>Musée de l'Orangerie</strong> — 60–90 minutes, entirely seated if you want it to be. Dinner within walking distance of the hotel; don't be ambitious on night one.</p></div></li>
+    <li><span class="n">2<small>Sun</small></span><div>
+      <h4>Van Gogh at the Orsay, then the river</h4>
+      <p><strong>Musée d'Orsay</strong> from opening — the redesigned Van Gogh rooms and Monet's Rouen cathedrals, with a long lunch in the museum's Belle Époque dining room so you never leave the building. Afternoon rest, then a seated <strong>Seine cruise</strong> and <strong>Pont Alexandre III</strong> at golden hour.</p></div></li>
+    <li><span class="n">3<small>Mon</small></span><div>
+      <h4>Giverny — the pond itself</h4>
+      <p>Out to Normandy on the 10am gates: the <strong>Clos Normand</strong>, the step-free tunnel to the water garden, the Japanese bridge with the lilies at their annual peak. A long seated lunch at the old artists' inn, the Impressionism museum, and back to Paris by early evening.</p></div></li>
+    <li><span class="n">4<small>Tue</small></span><div>
+      <h4>Marmottan, a garden, and a room made of light</h4>
+      <p>The quietest of the great Monet collections, <strong>Musée Marmottan Monet</strong>, in a residential mansion in Passy, with the <em>Jardin du Ranelagh</em> next door for a bench afterwards. <em>Goûter</em> at four. In the evening, the <strong>Atelier des Lumières</strong> — sit or stand wherever you like while the paintings move across the walls.</p></div></li>
+    <li><span class="n">5<small>Wed</small></span><div>
+      <h4>Auvers-sur-Oise — Van Gogh's last village · <em>or</em> a slow Paris day</h4>
+      <p>The flat-valley version of Auvers: his room at the <strong>Auberge Ravoux</strong>, Dr Gachet's garden, Daubigny's painted studio, with a taxi up to the graves instead of the climb. Or stay put: the <strong>Musée Rodin</strong> garden, the <strong>Jardin du Luxembourg</strong>, and Montmartre by funicular at sunset.</p></div></li>
+  </ol>
+  <div class="callout">
+    <span class="tag">One booking that changes the trip</span>
+    Buy the <strong>Marmottan + Giverny combined ticket (€27)</strong> or the <strong>Giverny + Musée des Impressionnismes ticket (€25)</strong> — both are sold on site rather than online, and they turn two separate visits into one continuous Monet argument: the pond in paint, then the pond itself.
+  </div>
+</section>
+
+<!-- ══════════════════ SPECIAL DAYS ══════════════════ -->
+<section id="fete">
+  <div class="salle"><span class="num">Salle I</span><span class="rule"></span></div>
+  <h2>The night the city <em>plays</em></h2>
+  <p class="dek">21 June 2027 · Fête de la Musique · free, everywhere, all evening</p>
+  <div class="two-col">
+    <div class="reading">
+      <p>On the longest evening of the year, France stops charging for music. Since 1982, every 21 June, the whole country plays outdoors and free — string quartets in courtyards, a jazz trio on a pharmacy step, a choir on the cathedral forecourt, teenagers with amps in a square, all of it at once and none of it ticketed. In Paris it starts in the late afternoon and runs past midnight. There is no programme to follow; you simply walk and let the next thing find you, which is exactly the right way to experience a city on a night like this when you are seven months into something more important.</p>
+      <p>The move for this trip is to <strong>go early and leave early</strong>. Between roughly 6pm and 9pm the crowds are relaxed and the light is still gold — wander the Tuileries, your own arrondissement, or the quieter Left Bank squares, catch two or three sets, then go home. After 10pm the density rises sharply in the music-heavy quarters (Bastille, Canal Saint-Martin, the Marais), and that is the part to skip rather than push through.</p>
+      <p>Because 21 June 2027 falls on a <strong>Monday</strong>, it dovetails neatly with the itinerary above — many museums close Mondays anyway, so it makes a natural Giverny day with the festival waiting when you get back. <strong>Book dinner ahead</strong> if you want a table that night; restaurants fill and service runs late.</p>
+      <p class="tip">Programmes are published only weeks in advance — check <a href="https://parisjetaime.com/eng/article/fete-de-la-musique-a989" target="_blank" rel="noopener">the city's own listing</a> once you have dates.</p>
+    </div>
+    <div>
+      <figure>
+        <div class="chartbox">
+          <p class="chart-t">June 2027</p>
+          <div class="cal" role="img" aria-label="June 2027 calendar. The Fête de la Musique falls on Monday 21 June, the summer solstice. The suggested five-day trip window runs Saturday 19 June to Wednesday 23 June.">
+            <span class="hd">M</span><span class="hd">T</span><span class="hd">W</span><span class="hd">T</span><span class="hd">F</span><span class="hd">S</span><span class="hd">S</span>
+            <span class="cell empty"></span>
+            <span class="cell">1</span><span class="cell">2</span><span class="cell">3</span><span class="cell">4</span><span class="cell">5</span><span class="cell">6</span>
+            <span class="cell">7</span><span class="cell">8</span><span class="cell">9</span><span class="cell">10</span><span class="cell">11</span><span class="cell">12</span><span class="cell">13</span>
+            <span class="cell">14</span><span class="cell">15</span><span class="cell">16</span><span class="cell">17</span><span class="cell">18</span><span class="cell lead">19</span><span class="cell lead">20</span>
+            <span class="cell peak">21</span><span class="cell lead">22</span><span class="cell lead">23</span><span class="cell">24</span><span class="cell">25</span><span class="cell">26</span><span class="cell">27</span>
+            <span class="cell">28</span><span class="cell">29</span><span class="cell">30</span>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--accent)"></i>Fête de la Musique &amp; solstice</span>
+            <span><i style="background:rgba(70,87,143,.2)"></i>A five-day window around it</span>
+          </div>
+        </div>
+        <figcaption>Land the trip on 19–23 June and the festival sits mid-stay.</figcaption>
+      </figure>
+      <div class="callout leaf">
+        <span class="tag">Also on in June</span>
+        Out at Versailles, the <strong>Grandes Eaux Musicales</strong> run the fountains to baroque music on weekends and most Tuesdays, with illuminated <strong>Grandes Eaux Nocturnes</strong> on Saturday evenings from early June. Exact 2027 dates are published roughly six to nine months out — worth a check if you add the Versailles day at the end of this guide.
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ══════════════════ FEATURE BAND: THE NYMPHÉAS CIRCUIT ══════════════════ -->
+<div class="nympheas" id="nympheas">
+  <div class="wrap">
+    <div class="salle"><span class="num">Salle II · the reason you came</span><span class="rule"></span></div>
+    <h2>Three rooms, one <em>obsession</em></h2>
+    <p class="dek">Monet and Van Gogh in Paris — and all three collections are step-free, bench-lined and lend you a stool.</p>
+    <div class="reading">
+      <p>Paris holds the Impressionists in a way no other city can, because this is where they were argued over first. The name itself was coined as an insult in 1874 by a critic looking at a small canvas of a harbour at dawn — <em>Impression, soleil levant</em> — and that painting now hangs in a quiet mansion in the 16th, about twenty minutes from the room where Monet's final, wall-sized water lilies wrap around you. Between them sits the Orsay, a Belle Époque railway station converted into the greatest single hoard of Impressionist and Post-Impressionist painting anywhere, with Van Gogh given his own redesigned suite of rooms.</p>
+      <p>Three museums, three days, one per day. Together they run the whole arc: the word being invented, the movement at full strength, and one man's forty-year attempt to paint the same pond until it stopped being a pond.</p>
+    </div>
+    <div class="cards" data-section="art-core"></div>
+    <div class="callout">
+      <span class="tag">How to visit these three without tiring</span>
+      Each is a <strong>60–90 minute</strong> visit except the Orsay, which deserves a half-day — so pair the Orsay with lunch inside the building rather than trying to add a second sight. All three <strong>lend folding seats and wheelchairs free</strong> at the cloakroom (ID, no reservation). The Orangerie's oval rooms have <strong>a bench in the centre of each</strong>; the Orsay has benches through the galleries and lifts to every floor; the Marmottan's Monet collection sits in a level basement rotunda, with the first floor reachable by lift. Book timed entry for all three and you will not stand in a single line.
+    </div>
+    <h3>The one painting to sit down in front of</h3>
+    <div class="two-col">
+      <div class="reading">
+        <p>In the Orangerie's second oval room, walk to the far curve and sit. The <em>Nymphéas</em> panels were installed to Monet's own specification in 1927, months after his death: no frames, no horizon line, curved walls so the water closes around your peripheral vision. He wanted the viewer to have "the illusion of an endless whole, of a wave with no horizon and no shore." The trick only works from the bench, at a distance, without moving — the painting resolves and then dissolves as your eye travels, which is the entire point and is impossible to catch while walking past.</p>
+        <p>Downstairs, the Walter-Guillaume collection adds Renoir, Cézanne, Modigliani and Soutine in ordinary-sized rooms — a good, quick counterweight when you want to look at paintings that behave normally again.</p>
+      </div>
+      <aside class="sidebar">
+        <h4>Van Gogh, room by room</h4>
+        <ul>
+          <li><span class="fr">Starry Night Over the Rhône</span><span class="en">Arles, 1888. Gaslight on water — the one to see before Auvers.</span></li>
+          <li><span class="fr">La Salle de danse à Arles</span><span class="en">Flat, crowded, almost a poster; the boldest colour in the room.</span></li>
+          <li><span class="fr">The Church at Auvers</span><span class="en">Painted in June 1890, weeks before he died. You can stand where he stood on Day 5.</span></li>
+          <li><span class="fr">Rooms 36–37</span><span class="en">Van Gogh's redesigned space, opened 2024, tracing Paris → Arles → Auvers.</span></li>
+          <li><span class="fr">Monet's Rouen cathedrals</span><span class="en">The same façade in different light, hung together — the argument for Giverny in miniature.</span></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ══════════════════ SLOW PARIS ══════════════════ -->
+<section id="slow">
+  <div class="salle"><span class="num">Salle III</span><span class="rule"></span></div>
+  <h2>Slow <em>Paris</em></h2>
+  <p class="dek">Everything else in the city, chosen for benches, shade, step-free access and a good view from a sitting position.</p>
+  <p class="reading">Paris is built for exactly this kind of trip and doesn't get enough credit for it. Half the great pleasures here are stationary: a chair dragged around a pond, an hour on a boat, a bridge at the moment the gold statues catch the light. What follows is organised not by district but by how much effort it asks of you — gardens where you sit, water where you're carried, and evenings where the city does the work.</p>
+
+  <h3>Gardens, and the chairs in them</h3>
+  <p class="reading">The Parisian garden is a public institution with a specific rule: the chairs are free and you may move them. All four below are flat, gravel-pathed, thick with benches and — crucially for June — properly shaded. Two of them sit within a few minutes of the museums on your list, which makes them the natural half of each museum day.</p>
+  <div class="cards" data-section="slow-gardens"></div>
+
+  <h3>Seen from the water and the bridges</h3>
+  <p class="reading">An hour on the Seine is the single most efficient sightseeing in Paris measured in monuments per step: the Eiffel Tower, Notre-Dame, the Louvre and the Orsay all arrive at your seat. Boarding at the river-level docks is step-free via installed ramps, and the boats are wheelchair-adapted (capped at four wheelchairs per boat). Do it in the late afternoon and step off in time for the bridges at golden hour — the gilded <em>Fame</em> statues on Pont Alexandre III were designed for exactly this light.</p>
+  <div class="cards" data-section="slow-water"></div>
+  <div class="callout leaf">
+    <span class="tag">The Eiffel Tower without the climb</span>
+    You don't need to go up it, and the best photographs aren't taken from it. The frontal postcard view is from the <strong>Trocadéro terrace</strong>, which is step-free straight off the Métro — the grand staircase down to the gardens is optional. For the cinematic version, the iron double-decker arches of <strong>Pont de Bir-Hakeim</strong> are flat and a station's length away. Both are dramatically quieter at sunrise, and about 30% quieter on a Tuesday or Wednesday than a Saturday.
+  </div>
+
+  <h3>Evenings, and the indoor hours</h3>
+  <p class="reading">June's late light means an "evening" outing can start at half past seven and still be in daylight. Two of these are indoor and weather-proof, which makes them the reserves to hold back for the day it rains.</p>
+  <div class="cards" data-section="slow-evening"></div>
+  <div class="callout warn">
+    <span class="tag">Montmartre: take the funicular</span>
+    Montmartre is a genuinely steep hill and the direct route is a staircase of roughly <strong>222 steps</strong>. The <strong>funicular</strong> runs 6am–12:45am on an ordinary Métro ticket and climbs it in under two minutes — use it in both directions. The separate <strong>dome climb</strong> inside Sacré-Cœur is about 300 winding steps up a narrow spiral: not recommended, and the view from the forecourt is the one on the postcards anyway.
+  </div>
+</section>
+
+<div class="pond tall" role="presentation"></div>
+
+<!-- ══════════════════ THE TABLE ══════════════════ -->
+<section id="table">
+  <div class="salle"><span class="num">Salle IV</span><span class="rule"></span></div>
+  <h2>The table, <em>navigated</em></h2>
+  <p class="dek">Good news: French cooking is mostly braised, baked and sauced — which means most of it is already safe.</p>
+  <div class="reading">
+    <p>Paris eats on ritual rather than convenience, and the ritual happens to work in your favour. The defining cuisine here is <span class="gloss" tabindex="0" data-def="small family-run neighbourhood restaurant, short blackboard menu">bistro</span> cooking: tougher cuts cooked slowly in wine until they fall apart, gratins, roast chicken, tarts. <strong>Bœuf bourguignon</strong> — beef braised for hours in red Burgundy with lardons, pearl onions and mushrooms, first written down in the 1860s — is the emblem, and the same logic repeats through cassoulet, coq au vin and daube. Long, gentle cooking is exactly what makes bistro food land at the low-risk end of pregnancy dining. There is a short list of classics to sidestep, and one phrase to learn properly. That's the whole problem.</p>
+      <p>The other great Parisian format is the <span class="gloss" tabindex="0" data-def="19th-century workers' canteen, named for the clear broth it was built around">bouillon</span> — late-1800s canteens for factory and market workers, serving a handful of dishes fast and cheap. <strong>Bouillon Chartier</strong> has traded since 1896 in its original Belle Époque room of brass hooks, mirrors and a century-old ticket system, and the 2010s revival (Bouillon Pigalle and others) brought back €10–15 mains of <em>poireaux vinaigrette</em>, <em>œuf mayo</em> and <em>pot-au-feu</em>. No reservation, fast service, and an old-fashioned menu that is easy to steer toward the safe end — a very good pre-museum lunch.</p>
+  </div>
+
+  <h3>What to order, and what to skip</h3>
+  <p class="reading">France's own food-safety agency (ANSES) and health portal (Santé.fr) are more specific than most English-language advice, and their guidance is what the verdicts below follow. The one genuine trap: <strong>"bien cuit" is not "well done."</strong> French kitchens routinely send out a <em>bien cuit</em> steak with a warm pink centre. The phrase that actually works is <em>sans aucune partie rosée</em> — no pink at all.</p>
+  <table>
+    <thead><tr><th>The dish</th><th>What it is</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Bœuf bourguignon</strong></td><td>Beef shin braised for hours in red Burgundy with lardons, pearl onions, carrots, mushrooms. The bistro's signature.</td><td>Safe — braised well past any pink. Ask for it piping hot.</td></tr>
+      <tr><td><strong>Soupe à l'oignon gratinée</strong></td><td>Caramelised onions in beef broth under toasted bread and melted Gruyère; a market-workers' late-night dish.</td><td>Safe — cooked broth, cooked cheese.</td></tr>
+      <tr><td><strong>Croque monsieur</strong></td><td>Ham and Gruyère on <em>pain de mie</em>, gratinéed under the broiler. Invented around 1910 on the Boulevard des Capucines.</td><td>Safe. The <em>croque madame</em> adds an egg — order it <em>bien cuit</em>, fully set, no runny yolk.</td></tr>
+      <tr><td><strong>Viennoiserie</strong></td><td>Croissant, pain au chocolat, kouign-amann — laminated butter dough, best the morning it's baked.</td><td>Safe, and non-negotiable.</td></tr>
+      <tr><td><strong>Steak frites</strong></td><td>Seared steak, classically <em>saignant</em> or <em>à point</em>, with a mountain of thin fries.</td><td>Risky as served. Say <em>"sans aucune partie rosée"</em> or <em>"cuisson à cœur"</em> and ask the server to confirm.</td></tr>
+      <tr><td><strong>Plateau de fromages</strong></td><td>Three to five cheeses after the main, before dessert.</td><td>Depends entirely. Stick to <em>pâte pressée cuite</em> — Comté, Gruyère, Emmental, aged Beaufort. See below.</td></tr>
+      <tr><td><strong>Charcuterie, tartare, oysters</strong></td><td>Saucisson, jambon cru, rillettes, pâté; steak tartare and carpaccio; oysters and raw shellfish; smoked salmon.</td><td>Skip. All are on France's own avoid list during pregnancy.</td></tr>
+      <tr><td><strong>Œuf mayo, tiramisu</strong></td><td>The bouillon classic, and the dessert — both traditionally built on raw egg.</td><td>Skip unless the mayonnaise is confirmed commercial/pasteurised.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="two-col">
+    <div>
+      <h3>The cheese question, answered properly</h3>
+      <p>This is the one place where the standard advice is wrong in a way that matters. ANSES's position: pregnant women should avoid <strong>raw-milk cheeses</strong> — "with the exception of hard pressed cheeses such as Gruyère and Comté." The highest-risk group is the soft bloomy-rind family (Camembert, Brie, <em>crottin</em>), then short-ripened uncooked pressed cheeses (Morbier, Reblochon, Saint-Nectaire), then washed-rind (Munster, Maroilles).</p>
+      <p><strong>Cutting the rind off does not make a raw-milk cheese safe</strong> — the bacteria are throughout, not just on the surface. What <em>does</em> make it safe is cooking it through: a cheese baked into a gratin or a tart is no longer a risk. So the way to eat France's most famous cheeses while pregnant is hot, not cold. That's worth remembering in Normandy on the Giverny day, where the four great local cheeses are all raw-milk and bloomy — and where two restaurants serve them baked.</p>
+      <p>At the table, one question settles it: <em>"Ce fromage, il est au lait pasteurisé ou cru ?"</em></p>
+    </div>
+    <aside class="sidebar">
+      <h4>Say this, get that</h4>
+      <ul>
+        <li><span class="fr">« Je suis enceinte, je voudrais la viande bien cuite, sans aucune partie rosée. »</span><span class="en">I'm pregnant — I'd like the meat well done, with no pink at all. The clause after the comma is the one that works.</span></li>
+        <li><span class="fr">« Ce fromage, il est au lait pasteurisé ou cru ? »</span><span class="en">Is this cheese pasteurised or raw-milk?</span></li>
+        <li><span class="fr">« Est-ce cuit à cœur ? »</span><span class="en">Is it cooked all the way through? — for any baked cheese dish.</span></li>
+        <li><span class="fr">« Je ne bois pas d'alcool — qu'est-ce que vous avez sans alcool ? »</span><span class="en">I don't drink — what do you have without alcohol? Draws zero social friction here.</span></li>
+        <li><span class="fr">« Un apéritif sans alcool, s'il vous plaît. »</span><span class="en">A non-alcoholic apéritif, please. Completely unremarkable to order.</span></li>
+        <li><span class="fr">« French Bloom »</span><span class="en">An alcohol-free sparkling wine from organic Chardonnay and Pinot Noir, now on serious wine lists — ask for it by name when there's a toast.</span></li>
+      </ul>
+    </aside>
+  </div>
+
+  <h3>When Parisians actually eat</h3>
+  <p class="reading">Kitchens here keep hours, and arriving outside them means no hot food rather than a late lunch. The window that matters most on this trip is the one in the middle of the afternoon.</p>
+  <table>
+    <thead><tr><th>Occasion</th><th>When</th><th>What happens</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Petit-déjeuner</strong></td><td>7:00–9:00</td><td>Light and fast — a coffee and a viennoiserie or a <em>tartine</em> at the counter. Never the day's event.</td></tr>
+      <tr><td><strong>Déjeuner</strong></td><td>12:30–14:30</td><td>Historically the main meal, and still a full sit-down. Most kitchens close after — arrive at 3pm and there's no hot food. Book even for lunch at popular bistros.</td></tr>
+      <tr><td><strong>Goûter</strong></td><td>16:00–17:00</td><td>The sweet afternoon pause. Officially for children; universally indulged. <strong>This is your rest stop</strong> — a pâtisserie counter or a proper tea salon between galleries.</td></tr>
+      <tr><td><strong>Apéro</strong></td><td>18:30–20:00</td><td>Drinks and small salty things on a terrace before dinner. Not a meal — a social warm-up.</td></tr>
+      <tr><td><strong>Dîner</strong></td><td>20:00–22:00</td><td>Later than visitors expect; kitchens rarely open before 19:30 and the real hour is 20:30–21:00. Ask if the table has a time limit if you want to linger.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <span class="tag">Two things to check before you go</span>
+    <strong>Many restaurants close Mondays</strong>, and a good number of chef-driven places close Sunday too — never make one of those days your only shot at a place you care about. And <strong>June sits just before the July–August shutdown</strong>, when much of the city closes for weeks: you get fuller reservation availability than midsummer, which is one more argument for these dates.
+  </div>
+
+  <h3>Where to eat</h3>
+  <p class="reading">Weighted toward the museums on your list and toward rooms you can linger in — a century-old bistro with lace curtains, a revived workers' canteen, the last true steak-frites specialists. Prices are rough bands, not quotes; several of these need a reservation a day or more ahead.</p>
+  <div class="cards rail" data-section="food-table"></div>
+
+  <div class="two-col">
+    <div>
+      <h3>The four o'clock pause</h3>
+      <p><em>Goûter</em> is the most useful institution in France for a pregnant traveller, because it makes a mid-afternoon sit-down with cake entirely normal. Two of the best versions are inside the museums themselves. <strong>Café Richelieu</strong>, tucked into the Louvre's Richelieu wing, is run by Angelina — the tearoom famous for its thick hot chocolate and the <em>Mont-Blanc</em>, a chestnut-and-meringue pastry with no raw egg in it. The <strong>Musée d'Orsay's restaurant</strong> is a listed Historic Monument in its own right: painted ceilings and chandeliers left over from the building's 1900 life as the Hôtel d'Orsay, with a lighter café alongside doing seasonal salads and ice-cream sundaes. Eating there means not leaving the building at all on Orsay day, which is the point.</p>
+      <p>Outside the museums, <strong>Du Pain et des Idées</strong> near the Canal Saint-Martin is worth the detour for its <em>escargot</em> pastries — pistachio-chocolate spirals, best in the morning before they sell out.</p>
+    </div>
+    <aside class="sidebar">
+      <h4>Zero-proof, taken seriously</h4>
+      <p style="font-size:.88rem;margin-bottom:.8rem">Paris's bar scene has moved decisively — the good places now build non-alcoholic drinks rather than tolerate them.</p>
+      <ul>
+        <li><strong>Ritz Bar</strong> <span class="en">Several signatures are made to be served identically with or without alcohol — "same name, same glass, same experience." The <em>Racine</em> (ginger, vetiver, turmeric, liquorice) and <em>Feuille</em> (mint, blue spirulina, blackcurrant bud) are the zero-proof standouts. 1st.</span></li>
+        <li><strong>Cravan</strong> <span class="en">Part literary salon, part <em>hôtel particulier</em>, across three floors in Saint-Germain — plant-forward pours like the <em>Royal Tagète</em>, marigold with French Bloom. 6th.</span></li>
+        <li><strong>Little Red Door</strong> <span class="en">A top-ranked Marais speakeasy that will build most of its farm-to-glass list alcohol-free on request, rather than running a lesser second menu. 3rd.</span></li>
+        <li><strong>Danico</strong> <span class="en">Hidden behind Daroco, with purpose-built non-alcoholic creations — <em>Tarte Tatin Zero</em>, <em>Terminal Zero</em>. 2nd.</span></li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<div class="pond tall" role="presentation"></div>
+
+<!-- ══════════════════ GIVERNY ══════════════════ -->
+<section id="giverny">
+  <div class="salle"><span class="num">Salle V · day trip</span><span class="rule"></span></div>
+  <h2>Giverny — <em>the pond itself</em></h2>
+  <p class="dek">Train + shuttle · about 1h15 each way · a full, unhurried day · and June is the week the lilies open</p>
+  <div class="reading">
+    <p>Monet arrived in this one-street Norman village in 1883 and stayed 43 years, and the second half of that time he spent essentially painting his own garden — first the flower beds he laid out in front of the pink house, then the pond he dug behind it, diverting a stream and planting willows, bamboo and water lilies until the water became the only subject he needed. The gardens are not a museum of his work; they <em>are</em> the work, replanted each year to his scheme. Coming here after the Orangerie closes the loop with unusual force: you have stood inside the panels, and now here is the bridge, the willow, the exact green.</p>
+      <p>For this trip it is also the gentler of the two art pilgrimages. The core sights sit within an 800-metre stretch of the flat <strong>Rue Claude Monet</strong>; the paths are level gravel and packed earth; the two halves of the garden are joined by the <strong>pedestrian tunnel Monet built under the road in 1895</strong>, so there are no steps between them; and there are benches under the willows all round the pond loop. The one exception is the house interior, which has narrow rope-lined corridors and a staircase to the upper floor with no lift — see the ground floor's yellow dining room and blue kitchen and treat the rest as optional.</p>
+  </div>
+
+  <figure>
+    <div class="chartbox">
+      <p class="chart-t">What is in bloom at Giverny, and when</p>
+      <div class="ranges" role="img" aria-label="Bloom calendar at Giverny: tulips 1 April to 10 May; wisteria on the Japanese bridge April through June; irises 10 May to 20 June; poppies through June; Clos Normand roses June and July; water lilies begin late May and run to the end of June, peaking in the second and third weeks of June, then reach full bloom July and August. The trip window is June.">
+        <div class="plot">
+          <div class="band" style="left:calc(100% * 61/153);width:calc(100% * 29/153)"><b>Your June window</b></div>
+          <div class="row"><p class="rl">Water lilies <span>· late May → end June, peak 2nd–3rd week</span></p>
+            <div class="track"><div class="bar peak" style="left:calc(100% * 54/153);width:calc(100% * 37/153)"></div><div class="bar faint" style="left:calc(100% * 91/153);width:calc(100% * 62/153)"></div></div></div>
+          <div class="row"><p class="rl">Wisteria on the Japanese bridge <span>· April → June</span></p>
+            <div class="track"><div class="bar" style="left:calc(100% * 0/153);width:calc(100% * 90/153)"></div></div></div>
+          <div class="row"><p class="rl">Clos Normand roses on the arches <span>· June → July</span></p>
+            <div class="track"><div class="bar rose" style="left:calc(100% * 61/153);width:calc(100% * 61/153)"></div></div></div>
+          <div class="row"><p class="rl">Irises <span>· mid-May → 20 June</span></p>
+            <div class="track"><div class="bar" style="left:calc(100% * 39/153);width:calc(100% * 41/153)"></div></div></div>
+          <div class="row"><p class="rl">Poppies <span>· June</span></p>
+            <div class="track"><div class="bar rose" style="left:calc(100% * 61/153);width:calc(100% * 29/153)"></div></div></div>
+          <div class="row"><p class="rl">Tulips <span>· April → early May</span></p>
+            <div class="track"><div class="bar gold" style="left:calc(100% * 0/153);width:calc(100% * 39/153)"></div></div></div>
+        </div>
+        <div class="axis">
+          <span style="left:calc(100% * 0/153)">1 Apr</span><span style="left:calc(100% * 30/153)">1 May</span>
+          <span style="left:calc(100% * 61/153)">1 Jun</span><span style="left:calc(100% * 91/153)">1 Jul</span>
+          <span style="left:calc(100% * 122/153)">1 Aug</span><span style="left:calc(100% * 152/153)">31 Aug</span>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--leaf)"></i>Water-lily peak</span>
+        <span><i style="background:repeating-linear-gradient(45deg,rgba(92,130,101,.5) 0 3px,rgba(92,130,101,.15) 3px 6px)"></i>Lilies at full bloom, but hotter and busier</span>
+        <span><i style="background:var(--c-daytrip)"></i>Your dates</span>
+      </div>
+    </div>
+    <figcaption>June is the narrow overlap: tail-end wisteria on the bridge, roses and poppies in the Clos Normand, and the first big flush of lilies.</figcaption>
+  </figure>
+  <p class="reading" style="margin-top:1.4rem">Accounts differ slightly on the lilies — one visitor reports "many blooming water lilies" in early June, while another dates the true peak to July and August. The consensus across sources is that they begin in late May, build through June with the strongest showing in the second and third weeks, and reach full mass in high summer. June buys you the flowers on the bridge and in the beds as well, plus cooler air and lighter crowds than July. It is the better week to be here pregnant.</p>
+
+  <h3>The day, in order</h3>
+  <ol class="stops" role="list">
+    <li class="stop" data-id="giverny-gardens">
+      <div class="num">1</div>
+      <img src="https://www.dangerous-business.com/wp-content/uploads/2024/10/DSC00362-1536x1024.jpg" alt="Monet's water garden at Giverny with the wisteria-draped Japanese bridge" data-lightbox="giverny-day">
+      <div><h4>Through the gates at 10:00 — the Clos Normand, then the water garden</h4>
+      <p>Go straight down the Grande Allée under the rose arches, then take the tunnel to the pond and walk the loop before the coaches land. The first hour is the quietest of the whole day.</p>
+      <div class="detail">€13 · 1h30–2h · book a timed slot online</div></div></li>
+    <li class="stop" data-id="giverny-baudy">
+      <div class="num">2</div>
+      <img src="https://www.madaboutmacarons.com/wp-content/uploads/2012/08/hotel-baudy-terrace-restaurant.jpg" alt="The shaded summer terrace with red umbrellas at the Ancien Hôtel Baudy in Giverny" data-lightbox="giverny-day">
+      <div><h4>Long lunch at the Ancien Hôtel Baudy</h4>
+      <p>The grocery-turned-inn where Cézanne, Renoir, Sisley, Rodin and Mary Cassatt gathered from 1887. Shaded terrace, proper chairs, an 1887 artist's studio and a rose garden out back. Deliberately timed to fall in the 11am–3pm coach window.</p>
+      <div class="detail">€€ · 1h30 · book ahead at weekends</div></div></li>
+    <li class="stop" data-id="giverny-mdig">
+      <div class="num">3</div>
+      <img src="https://www.mdig.fr/wp-content/uploads/2020/03/jardin-musee-giverny-2-scaled-1535x2048.jpg" alt="The garden of the Musée des impressionnismes in Giverny" data-lightbox="giverny-day">
+      <div><h4>Musée des impressionnismes, and its own garden</h4>
+      <p>The lowest-effort stop of the day and the most reliably accessible — the entire museum including the toilets is step-free, and it lends wheelchairs and pushchairs on request. Its own 2.5-hectare garden is quieter than Monet's, with the poppy field that inspired <em>Champs de coquelicots</em>.</p>
+      <div class="detail">€12 · 1h · combined ticket with Monet's house €25 on site</div></div></li>
+    <li class="stop" data-id="giverny-grave">
+      <div class="num">4</div>
+      <img src="http://giverny-impression.com/gallery/giverny/monet-grave.jpg" alt="The Monet family tomb, planted with flowers, behind the church at Giverny" data-lightbox="giverny-day">
+      <div><h4>Église Sainte-Radegonde and Monet's grave, late afternoon</h4>
+      <p>A flat ten-minute walk along the village street to the 11th-century church where Monet was married; the family tomb is behind it, third from the right, marked with a white cross and usually covered in flowers. The churchyard ground is old and uneven — take it slowly.</p>
+      <div class="detail">Free · 15–20 min · a dolmen stands in the same churchyard</div></div></li>
+  </ol>
+
+  <div class="callout leaf">
+    <span class="tag">Timing is the whole trick</span>
+    Giverny is the second most-visited site in Normandy after Mont-Saint-Michel, and <strong>11am–3pm is the coach window</strong> — the paths around the bridge bottleneck badly. Two clear stretches: <strong>10:00–11:00</strong> at the gates, and <strong>after 16:00</strong>, when the light is also lower and better on the water. The itinerary above deliberately puts lunch and the museum in the crowded middle.
+  </div>
+
+  <h3>Getting there without wearing yourself out</h3>
+  <p class="reading">There is <strong>no direct train to Giverny</strong> — every route goes through Vernon. Two sensible options:</p>
+  <table>
+    <thead><tr><th>Route</th><th>How it works</th><th>Trade-off</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Train + shuttle</strong><br>2 transfers</td><td>SNCF TER from <strong>Paris Saint-Lazare</strong> direct to <strong>Vernon–Giverny</strong> (fastest services under 45 min; allow 45 min–1h30). At Vernon, the pedestrian underpass then the <strong>Giverny shuttle bus</strong>, which meets arriving trains — €5 single, €10 return, paid on board, under 15 minutes. Then a flat 10-minute walk from the car park into the village.</td><td>Cheapest and most flexible; you control the day. Involves a station underpass and a short standing wait for the shuttle.</td></tr>
+      <tr><td><strong>Private or small-group tour</strong><br>1 transfer</td><td>Door-to-door minibus or private van from Paris — one seat, one vehicle, tickets and timing handled.</td><td>Most comfortable by a distance, and worth the money on a babymoon: no station navigation, no queues, no shuttle timing. Fixed group schedule, higher price.</td></tr>
+    </tbody>
+  </table>
+  <p class="tip">💡 Some visitors walk (~1 hour) or cycle the Seine-à-Vélo path from Vernon instead of the shuttle. Scenic, and not for this trip — there's little shade and nowhere to sit along it.</p>
+
+  <h3>Lunch in the village</h3>
+  <p class="reading">Normandy is dairy-and-orchard country, which means cream and butter in almost everything and four raw-milk protected-origin cheeses within an hour's drive. Two of these kitchens serve the region's signature <strong>Camembert baked</strong> — a tart, or roasted whole — which is precisely the pregnancy-safe way to eat it. Cider and <em>Calvados</em> stand in for wine here, including the mid-meal <span class="gloss" tabindex="0" data-def="a small glass or sorbet of Calvados taken mid-meal to 'make a hole' for the next course">trou normand</span>; ask instead for <em>jus de pomme pétillant</em>, sparkling apple juice made by the same producers without the fermentation.</p>
+  <div class="cards rail" data-section="giverny-eat"></div>
+
+  <div class="addon" style="margin-top:2.2rem">
+    <p class="kick">Built into the same journey</p>
+    <h3 data-id="vernon">Vernon, the town you change trains in</h3>
+    <p class="logi">No extra transport · 15–40 min · flat, and indoors when you want it</p>
+    <p>Every route to Giverny already stops here, which makes Vernon the easiest add-on in this guide — a half-timbered river town rather than a platform. Turn left out of the station and the Seine path takes you in a few minutes to the <strong>Vieux Moulin</strong>, the timbered mill hung improbably over a broken bridge arch that Monet painted as <em>Houses on the Old Bridge at Vernon</em>. If the weather turns or the legs have had enough, the <strong>Musée de Vernon</strong> is a small, cool, seated-friendly room holding Impressionist works including paintings by Blanche Hoschedé-Monet, Monet's step-daughter, and one of only four circular <em>tondo</em> water-lily canvases in the world — a startling thing to find in a town museum. The <strong>Collégiale Notre-Dame</strong>, 11th–17th century with good glass, is a flat stop near the station.</p>
+    <div class="shots">
+      <img src="https://www.normandie-tourisme.fr/app/uploads/2021/07/vernon-vieux-moulin-MA-Thierry-1200x792.jpg" alt="The Vieux Moulin, a half-timbered mill over the Seine at Vernon" data-lightbox="vernon">
+      <img src="https://www.normandie-tourisme.fr/app/uploads/2023/06/Musee-Vernon-Thomas-Le-Floc-H-1200x798.jpg" alt="The Musée de Vernon" data-lightbox="vernon">
+    </div>
+    <p class="tip">💡 Build it into the gap on the way <em>back</em>, not the way out — protect the 10am opening at the gardens.</p>
+  </div>
+</section>
+
+<div class="pond tall" role="presentation"></div>
+
+<!-- ══════════════════ AUVERS-SUR-OISE ══════════════════ -->
+<section id="auvers">
+  <div class="salle"><span class="num">Salle VI · day trip</span><span class="rule"></span></div>
+  <h2>Auvers-sur-Oise — <em>seventy days</em></h2>
+  <p class="dek">Train from Gare du Nord · about 1 hour · half to full day · flat village, steep plateau — this guide splits them</p>
+  <div class="reading">
+    <p>Van Gogh got off the train here on 20 May 1890, rented an attic room above a café for 3.50 francs a week, and in the seventy days before he died painted roughly eighty canvases — the church with its buckled roofline, the town hall with bunting up for 14 July, Dr Gachet's garden, and the wheat on the plateau above the village. He is buried at the top of that plateau beside his brother Theo, the two graves joined under a single sheet of ivy that Dr Gachet is said to have planted. If you have just stood in front of <em>The Church at Auvers</em> at the Orsay, this is a strange and moving hour: the building is still there, still leaning, on the same rise above the same lane.</p>
+    <p>In June the wheat is green-going-gold rather than the harvest colour of <em>Wheatfield with Crows</em>, which he painted in July — closer to his <em>Green Wheat Fields</em>. Sunset is near ten, so a late-afternoon arrival still gives hours of light.</p>
+  </div>
+
+  <div class="callout warn">
+    <span class="tag">Read this before you plan the day</span>
+    Auvers sits in the Oise valley and the sights are on two levels. The station, the town-hall square and Van Gogh's inn are low and flat — the village's own trail data puts the low point at <strong>27 m</strong>. The church is partway up a slope; the cemetery, the wheatfields and the château sit at <strong>105 m</strong>, a rise of roughly 75 m over 700 m–1 km of paved street. One first-hand account calls the cemetery climb simply "quite steep," and there are <strong>no confirmed benches or toilets at the church or the cemetery</strong>. There is no shuttle in the village.<br><br><strong>The fix is cheap and obvious:</strong> Uber operates in Auvers, and cars reach the cemetery gate by a one-way loop. Take a taxi <em>up</em> from the town-hall square, spend as long as you want at the graves, and walk <em>down</em>. Downhill is the easy part. The château likewise has its own car park at the Chemin des Berthelées, so a taxi drops you at the entrance and skips the climb entirely.
+  </div>
+
+  <h3>The flat village — the whole day, if you want it</h3>
+  <p class="reading">You can have a full, genuinely satisfying Auvers day without leaving the valley floor: his room, his doctor's house and garden, the painted studio of the painter who drew the whole colony here in the first place, and an absinthe museum with a garden and a bar to sit in. It's about 450 flat metres from the station to the town-hall square, and everything below is within a few minutes of that.</p>
+  <div class="cards" data-section="auvers-flat"></div>
+
+  <h3>Up on the plateau — worth a taxi</h3>
+  <p class="reading">Everything in this group sits at the top of the climb described above. Take them by car or taxi, in whatever combination you have energy for; the graves are the one most people would not want to miss. The <strong>"Racines" (Tree Roots) site</strong> behind the church — identified in 2020 as the subject of his last painting — can only be visited with a guide, and the ground is uneven; skip it unless it means a great deal to you.</p>
+  <div class="cards" data-section="auvers-climb"></div>
+
+  <div class="two-col">
+    <div>
+      <h3>Practicalities that actually matter here</h3>
+      <p><strong>Getting there:</strong> Transilien <strong>line H from Gare du Nord</strong>, roughly 45 minutes to just over an hour. On weekends and holidays from April to October a seasonal direct <em>Train des Impressionnistes</em> runs with no change at all — in a recent year departing Paris Nord 09:38, arriving Auvers 10:22, returning 18:15. On other days you change at Valmondois or Pontoise. A Navigo or Mobilis pass covering zone 5 includes the trip. Confirm the 2027 direct-service dates before you commit — it's the single biggest comfort difference of the day.</p>
+      <p><strong>At the station:</strong> the platforms are <em>quais non rehaussés</em> — no awkward high step up into the train, which is better than many French stations. A pedestrian underpass links the two platforms and it is <strong>not confirmed step-free</strong>: ask the agent which platform serves your return before you cross. The ticket window is staffed weekdays 07:30–14:40 only, so on a weekend there's no help on site. There is a free toilet by the ticket hall.</p>
+      <p><strong>Toilets and benches:</strong> confirmed at the station, on the town-hall square, and in the Musée de l'Absinthe's garden bar. Beyond that, use the paid attractions. Not confirmed at the church or cemetery.</p>
+    </div>
+    <aside class="sidebar">
+      <h4>The low-exertion route</h4>
+      <p style="font-size:.88rem;margin-bottom:.8rem">Valley floor only, in order, all flat:</p>
+      <ul>
+        <li><strong>1 · Station → town-hall square</strong> <span class="en">450 m, paved, ~6 min at a slow pace. Benches on the square.</span></li>
+        <li><strong>2 · Maison de Van Gogh</strong> <span class="en">Room No. 5 and the film. Ground-floor restaurant and shop are step-free; the room itself is up a narrow period stair.</span></li>
+        <li><strong>3 · Maison du Docteur Gachet</strong> <span class="en">Recently restored, free, flat, with its garden.</span></li>
+        <li><strong>4 · Musée de l'Absinthe</strong> <span class="en">Belle Époque café interiors, an herb garden, and the <em>À l'Heure Verte</em> bar — the day's proper sit-down break, with non-alcoholic options.</span></li>
+        <li><strong>5 · Maison-Atelier Daubigny</strong> <span class="en">200 m² of walls painted by Daubigny with Corot and Daumier. Weekends only. Van Gogh painted this garden.</span></li>
+        <li><strong>+ Taxi to the graves</strong> <span class="en">Then walk back down. The one splurge worth making.</span></li>
+      </ul>
+    </aside>
+  </div>
+  <p class="tip">Prices and hours in this section come from 2022–2025 sources — reconfirm before you travel. The <strong>Musée Daubigny</strong> moved to temporary premises at the Maison de l'Isle, Rue Marcel Martin, for a two-year renovation from October 2025, so it may still be there in June 2027; the <strong>Maison-Atelier Daubigny</strong> opens weekends only. Book the Auberge Ravoux room slot ahead — it runs as small timed groups and photography inside is forbidden.</p>
+</section>
+
+<div class="pond tall" role="presentation"></div>
+
+<!-- ══════════════════ STAY ══════════════════ -->
+<section id="stay">
+  <div class="salle"><span class="num">Salle VII</span><span class="rule"></span></div>
+  <h2>Where to <em>rest</em></h2>
+  <p class="dek">Two Left Bank quarters, chosen on one criterion: how little you have to walk to the paintings.</p>
+  <p class="reading">On a trip where the Métro is the enemy, the address does more work than the room does. Both quarters below put you on the Left Bank within a flat walk of the Musée d'Orsay, and both cross to the Orangerie and the Louvre by bridge rather than by train. Pick between them on what you want at the end of the day: café life on the doorstep, or genuine quiet.</p>
+  <table>
+    <thead><tr><th>Quarter</th><th>Best for</th><th>On your doorstep</th><th>Getting to the art</th><th>The catch</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Saint-Germain-des-Prés</strong><br>6th</td>
+        <td>Café terraces, galleries and bakeries within a block; polished, composed, still calm in the mornings.</td>
+        <td>The Seine and Pont des Arts, Jardin du Luxembourg, Café de Flore and Les Deux Magots, small commercial galleries, Le Bon Marché.</td>
+        <td>Orsay is a flat 15 minutes across the Pont Royal — no Métro. The Louvre is 15–20 minutes along the river. Lines 4 and 10; RER C for Versailles.</td>
+        <td>The most sought-after — and priced — stretch of the Left Bank. Heavy tourist footfall around the famous cafés at midday.</td>
+      </tr>
+      <tr>
+        <td><strong>Invalides &amp; the 7th</strong></td>
+        <td>Residential quiet and short flat distances; wide avenues and a market street rather than nightlife.</td>
+        <td>Musée d'Orsay, Musée Rodin and its bench-filled sculpture garden, the Invalides lawns, Rue Cler for bakeries and produce, the Eiffel Tower.</td>
+        <td>Orsay and Rodin are both flat short walks. RER C direct from Invalides or Pont de l'Alma. Lines 8 and 13 for the rest.</td>
+        <td>Quieter after dark — restful, but fewer options right outside the door. Further from the Louvre and Marais (20+ minutes).</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="cards rail" data-section="stay"></div>
+  <div class="callout">
+    <span class="tag">Three questions to ask before you book</span>
+    Listings don't cover the things that matter most in June. Ask each property directly about: <strong>air conditioning in the room</strong> (far from universal in period Paris buildings, and material at 23°C with a bump); <strong>a lift all the way to your floor</strong> (many <em>hôtels particuliers</em> have a half-flight before the lift starts); and, if you're booking for the spa, <strong>which treatments are available during pregnancy</strong> — several of the properties below were chosen for spa access that a pregnant guest may be restricted from using. Prices shown are calibrated on a representative 14–19 June 2027 window from a single source, before taxes: treat them as ballpark, not quotes.
+  </div>
+</section>
+
+<!-- ══════════════════ OPTIONAL ADD-ONS ══════════════════ -->
+<section id="more">
+  <div class="salle"><span class="num">Salle VIII · if you want more</span><span class="rule"></span></div>
+  <h2>Three <em>extensions</em></h2>
+  <p class="dek">None of these are in the five days above. Each is a swap, not an addition.</p>
+
+  <div class="addon">
+    <p class="kick">The obvious swap for Auvers on a low-energy day</p>
+    <h3>Versailles, done sitting down</h3>
+    <p class="logi">RER C · 35–40 min · 10-minute walk from the station · half to full day</p>
+    <p>Versailles is the least pregnancy-friendly great sight near Paris — 2,300 rooms, 800 hectares, and a "quick visit" that quietly becomes 8–12 km on foot — and it is also entirely manageable if you plan it around one fact. <strong>The estate's own little train, the standard way visitors cross the long distance to the Trianon palaces, carries an explicit official warning that pregnant women are advised not to ride it.</strong> Discover that at the kiosk and the day falls apart; plan around it and it doesn't.</p>
+    <p>The answer is the <strong>small electric vehicles</strong> hired from the north terrace of the Water Parterre — self-driven four-to-five seaters with GPS and an audio guide, €42 for the first hour, no such advisory because you set the pace and stop where you like. With one of those, do the art in the morning and drive the rest: the <strong data-id="versailles-palace">Hall of Mirrors</strong>, 73 metres and 357 mirrors, will be the most crowded room of your trip, so budget patience rather than lingering; then turn south to the <strong>Gallery of Great Battles</strong>, thirty monumental canvases running almost the length of the south wing, and the <strong>Coronation Room</strong> with David's <em>Coronation of Napoleon</em> — both far quieter than the royal apartments. Lifts serve every visitor level, and a step-free <strong>priority pedestrian walkway</strong> crosses the Honour Courtyard: ask the gate staff about it even without a mobility card. Then drive out to the <strong data-id="petit-trianon">Petit Trianon</strong>, which one visitor found "not filled to the brim with people, so we were able to peruse the palace at our own pace" — note its first floor isn't accessible, with a ground-floor multimedia room standing in — and stop for a long lunch on the shaded terrace of <strong data-id="petite-venise">La Petite Venise</strong> on the Grand Canal. Free toilets, changing tables and water points are scattered across the estate.</p>
+    <p>Take <strong>RER C to Versailles Château Rive Gauche</strong>: not the fastest train but by far the shortest walk at the far end, 10 minutes against 17–20 from the other two stations. A Paris <em>t+</em> ticket is <em>not</em> valid — buy singles or use a Navigo/Mobilis covering zones 1–4. On any weekend or most Tuesdays in June the gardens charge separately for the <strong>Grandes Eaux Musicales</strong>; a Passport ticket covers it.</p>
+    <div class="shots">
+      <img src="https://live.staticflickr.com/3216/2963248234_d0c6956973_b.jpg" alt="The Hall of Mirrors at the Palace of Versailles" data-lightbox="versailles">
+      <img src="https://live.staticflickr.com/1410/4723119959_22073c9048_b.jpg" alt="Mirrors and chandeliers in the Galerie des Glaces" data-lightbox="versailles">
+      <img src="https://www.versailles-tourisme.com/medias/images/prestataires/multitailles/800x600_156473-musee_lambinet_facade_copyright_musee_lambinet.jpg" alt="The façade of the Musée Lambinet in Versailles town" data-lightbox="versailles">
+    </div>
+    <p class="tip">💡 If the palace sounds like too much altogether, the <strong data-id="musee-lambinet">Musée Lambinet</strong> in Versailles town is the antidote: an 18th-century mansion of paintings and decorative arts, five minutes from Rive Droite station, €7, and almost empty. Reserved mobility parking sits directly outside.</p>
+  </div>
+
+  <div class="addon">
+    <p class="kick">Add a day, or trade Auvers for it</p>
+    <h3>Rouen — the cathedral, thirty times over</h3>
+    <p class="logi">Direct from Paris Saint-Lazare · 1h10–1h30 · a full day</p>
+    <p>Monet rented rooms across the square from Rouen cathedral and painted its façade more than thirty times in different light, several of which you will have seen hanging together at the Orsay. The Gothic old town is flat and compact, and the <strong>Musée des Beaux-Arts</strong> holds a strong Impressionist collection of its own. It's a direct train — no transfers at all, which is more than Giverny or Auvers can offer. Don't try to bolt it onto the Giverny day: Rouen sits 65 km beyond Giverny in the wrong direction, and stringing them together means three train legs.</p>
+  </div>
+
+  <div class="addon">
+    <p class="kick">Only if you have a car</p>
+    <h3>Château de La Roche-Guyon</h3>
+    <p class="logi">5 minutes from Giverny by road · no public transport link · half day</p>
+    <p>A château built into a chalk cliff above the Seine, on the stretch of river Monet, Renoir and Pissarro all painted, with a kitchen garden along the water and a clifftop keep. It is physically the closest thing to Giverny in this guide and the hardest to reach without a car — and doing two ticketed sites in one day works against everything else here. Treat it as an alternative half-day rather than a same-day pairing. Open daily 1 April–1 November, 10am–6pm.</p>
+  </div>
+</section>
+
+<!-- ══════════════════ MAP ══════════════════ -->
+<section class="map-section" id="map-section">
+  <div class="salle"><span class="num">Salle IX</span><span class="rule"></span></div>
+  <h2>Everything, <em>mapped</em></h2>
+  <p class="dek">Toggle ◂ Map in the bar above to read the guide beside the map. Filter by colour; export what you want to your phone.</p>
+  <div class="mapfilter" id="mapfilter"></div>
+  <div class="map-container"><div id="map"></div></div>
+  <div class="export-row"><button class="export-btn" id="export-btn">⤓ Save map to file</button></div>
+</section>
+
+<!-- ══════════════════ CREDITS ══════════════════ -->
+<section class="credits" id="credits">
+  <div class="salle"><span class="num">Sources &amp; credits</span><span class="rule"></span></div>
+  <h2>Where this <em>came from</em></h2>
+  <p style="max-width:70ch">Every claim above traces back to one of the pages below — museum and estate sites for access, hours and prices; France's own food-safety agency and health portal for the pregnancy guidance; and first-hand travel writers, credited by name, for the things only a visitor knows. Photographs are hotlinked from those same sources and remain the property of their photographers; per-image credit appears in the caption when you click any picture to enlarge it. A few images come from Creative Commons photographers on Flickr where no first-hand photograph of a place could be found.</p>
+  <p style="max-width:70ch;margin-top:.9rem"><strong>Please double-check anything you're relying on.</strong> This trip is more than a year out: 2027 opening hours, ticket prices, train and shuttle timetables, the Versailles fountain calendar, the Atelier des Lumières programme and the Auvers direct-train dates were all published for earlier seasons and will shift. Hotel prices are calibrated on a single provider for a representative 14–19 June 2027 window, before taxes. A handful of map pins are placed at street or square level rather than on the doorway — notably Van Gogh's Auberge Ravoux, pinned on the town-hall square it faces.</p>
+
+  <h3>Museums, estates &amp; official sources</h3>
+  <ul>
+    <li><a href="https://www.musee-orsay.fr/en/articles/motor-disabilities-214984" target="_blank" rel="noopener">Musée d'Orsay — accessibility</a></li>
+    <li><a href="https://www.musee-orsay.fr/fr/articles/van-gogh-nouvelle-presentation-des-oeuvres-de-lartiste-au-musee-dorsay-277393" target="_blank" rel="noopener">Musée d'Orsay — the new Van Gogh rooms</a></li>
+    <li><a href="https://www.musee-orsay.fr/en/visit/restaurants%20and%20caf%C3%A9s" target="_blank" rel="noopener">Musée d'Orsay — restaurants &amp; cafés</a></li>
+    <li><a href="https://www.musee-orangerie.fr/en/visit-orangerie" target="_blank" rel="noopener">Musée de l'Orangerie — visiting</a></li>
+    <li><a href="https://www.musee-orangerie.fr/en/node/197502" target="_blank" rel="noopener">Musée de l'Orangerie — the Water Lilies</a></li>
+    <li><a href="https://www.marmottan.fr/en/prepare-your-visit/practical-information/" target="_blank" rel="noopener">Musée Marmottan Monet — practical information</a></li>
+    <li><a href="https://www.atelier-lumieres.com/en/frequently-asked-questions" target="_blank" rel="noopener">Atelier des Lumières — FAQ &amp; accessibility</a></li>
+    <li><a href="https://claudemonetgiverny.fr/en/useful-information/" target="_blank" rel="noopener">Fondation Claude Monet, Giverny — useful information</a></li>
+    <li><a href="https://claudemonetgiverny.fr/en/decouvrir/water-lily-pond/" target="_blank" rel="noopener">Fondation Claude Monet — the water lily pond</a></li>
+    <li><a href="https://www.mdig.fr/en/opening-times-and-access-2/" target="_blank" rel="noopener">Musée des impressionnismes Giverny — access</a></li>
+    <li><a href="https://www.mdig.fr/en/the-garden/" target="_blank" rel="noopener">Musée des impressionnismes Giverny — the garden</a></li>
+    <li><a href="https://www.mdig.fr/en/restaurant/" target="_blank" rel="noopener">Musée des impressionnismes Giverny — Oscar restaurant</a></li>
+    <li><a href="https://www.giverny.org/transpor/" target="_blank" rel="noopener">How to get to Giverny</a></li>
+    <li><a href="https://en.normandie-tourisme.fr/discover/culture/impressionism/impressionism-in-giverny/" target="_blank" rel="noopener">Normandy Tourism — Impressionism in Giverny</a></li>
+    <li><a href="https://en.normandie-tourisme.fr/restaurants/ancien-hotel-baudy-restaurant/" target="_blank" rel="noopener">Normandy Tourism — Ancien Hôtel Baudy</a></li>
+    <li><a href="https://en.normandie-tourisme.fr/restaurants/restaurant-la-parenthese/" target="_blank" rel="noopener">Normandy Tourism — Restaurant La Parenthèse</a></li>
+    <li><a href="https://tourisme-auverssuroise.fr/activites-loisirs/sur-les-pas-des-impressionnistes/" target="_blank" rel="noopener">Auvers-sur-Oise tourism — the painters' path</a></li>
+    <li><a href="https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/" target="_blank" rel="noopener">Auvers-sur-Oise tourism — heritage &amp; museums</a></li>
+    <li><a href="https://maisondevangogh.fr/en/auvers.php" target="_blank" rel="noopener">Maison de Van Gogh, Auberge Ravoux</a></li>
+    <li><a href="https://musee-absinthe.com/notre-lieu/" target="_blank" rel="noopener">Musée de l'Absinthe, Auvers-sur-Oise</a></li>
+    <li><a href="https://www.chateau-auvers.fr/" target="_blank" rel="noopener">Château d'Auvers-sur-Oise</a></li>
+    <li><a href="https://fr.wikipedia.org/wiki/Gare_d%27Auvers-sur-Oise" target="_blank" rel="noopener">Gare d'Auvers-sur-Oise — platform access</a></li>
+    <li><a href="https://www.visorando.com/randonnee-les-trois-fermes-d-auvers-sur-oise/" target="_blank" rel="noopener">Auvers trail elevation data (27 m → 105 m)</a></li>
+    <li><a href="https://en.chateauversailles.fr/plan-your-visit/facilities/little-train" target="_blank" rel="noopener">Versailles — the little train (pregnancy advisory)</a></li>
+    <li><a href="https://en.chateauversailles.fr/plan-your-visit/facilities/small-electric-vehicles" target="_blank" rel="noopener">Versailles — small electric vehicles</a></li>
+    <li><a href="https://en.chateauversailles.fr/visitors-reduced-mobility" target="_blank" rel="noopener">Versailles — visitors with reduced mobility</a></li>
+    <li><a href="https://en.chateauversailles.fr/news/shows/fountains-shows-and-musical-gardens" target="_blank" rel="noopener">Versailles — Musical Fountains &amp; Musical Gardens</a></li>
+    <li><a href="https://en.versailles-tourisme.com/lambinet-museum.html" target="_blank" rel="noopener">Musée Lambinet, Versailles</a></li>
+    <li><a href="https://www.chateaudelarocheguyon.fr/" target="_blank" rel="noopener">Château de La Roche-Guyon</a></li>
+    <li><a href="https://parisjetaime.com/eng/article/fete-de-la-musique-a989" target="_blank" rel="noopener">Paris je t'aime — Fête de la Musique</a></li>
+    <li><a href="https://parisjetaime.com/eng/activity/bateaux-parisiens-p3817" target="_blank" rel="noopener">Paris je t'aime — Seine cruises &amp; wheelchair access</a></li>
+    <li><a href="https://www.paris.fr/lieux/marches-specialises/tous-les-horaires" target="_blank" rel="noopener">Ville de Paris — market schedules</a></li>
+  </ul>
+
+  <h3>Pregnancy, food safety &amp; travel health</h3>
+  <ul>
+    <li><a href="https://www.anses.fr/en/content/raw-milk-cheeses-what-are-associated-health-risks-and-what-preventive-measures-can-be-taken" target="_blank" rel="noopener">ANSES — raw-milk cheeses: risks &amp; precautions</a></li>
+    <li><a href="https://www.sante.fr/grossesse-les-aliments-autorises-deconseilles-et-interdits" target="_blank" rel="noopener">Santé.fr — foods permitted and forbidden in pregnancy</a></li>
+    <li><a href="https://www.journaldesfemmes.fr/maman/guide-grossesse/2697891-enceinte-et-charcuterie/" target="_blank" rel="noopener">Charcuterie during pregnancy — what's safe</a></li>
+    <li><a href="https://www.femmeactuelle.fr/enfant/grossesse/grossesse-que-peut-on-manger-au-restaurant-quand-on-est-enceinte-2084211" target="_blank" rel="noopener">Eating out while pregnant in France</a></li>
+    <li><a href="https://wwws.airfrance.fr/en/information/passagers/femme-enceinte" target="_blank" rel="noopener">Air France — flying while pregnant</a></li>
+    <li><a href="https://www.mayoclinic.org/healthy-lifestyle/pregnancy-week-by-week/expert-answers/air-travel-during-pregnancy/faq-20058087" target="_blank" rel="noopener">Mayo Clinic — air travel during pregnancy</a></li>
+    <li><a href="https://www.hopkinsmedicine.org/health/conditions-and-diseases/traveling-while-pregnant-or-breastfeeding" target="_blank" rel="noopener">Johns Hopkins — travelling while pregnant</a></li>
+    <li><a href="https://www.parisenunclic.fr/en/blog/wheelchair-accessibility-at-bateaux-parisiens-what-you-need-to-know-before-boarding" target="_blank" rel="noopener">Bateaux Parisiens — step-free boarding</a></li>
+    <li><a href="https://en.climate-data.org/europe/france/ile-de-france/paris-44/t/june-6/" target="_blank" rel="noopener">Climate-Data.org — Paris in June (temperature chart source)</a></li>
+  </ul>
+
+  <h3>Food &amp; drink writing</h3>
+  <ul>
+    <li><a href="https://www.eater.com/maps/best-restaurants-paris-france" target="_blank" rel="noopener">Eater — The Best Restaurants in Paris</a></li>
+    <li><a href="https://www.eater.com/maps/best-pastries-paris-france-patisseries" target="_blank" rel="noopener">Eater — The Best Patisseries in Paris</a></li>
+    <li><a href="https://www.eater.com/24168220/french-restaurant-etiquette-how-to-make-a-reservation-paris" target="_blank" rel="noopener">Eater — Paris restaurant etiquette</a></li>
+    <li><a href="https://www.theinfatuation.com/paris/guides/where-to-eat-near-major-paris-museums" target="_blank" rel="noopener">The Infatuation — Where to eat near the major Paris museums</a></li>
+    <li><a href="https://www.theinfatuation.com/paris/guides/paris-restaurants-open-mondays" target="_blank" rel="noopener">The Infatuation — Paris restaurants open Mondays</a></li>
+    <li><a href="https://www.cntraveler.com/story/best-bars-in-paris-for-zero-proof-craft-cocktails" target="_blank" rel="noopener">Condé Nast Traveler — zero-proof craft cocktails in Paris</a></li>
+    <li><a href="https://www.bbc.com/travel/article/20240424-paris-most-authentic-and-delicious-bistros-and-the-best-dishes-they-offer" target="_blank" rel="noopener">BBC Travel — Paris's most authentic bistros</a></li>
+    <li><a href="https://www.bouillon-chartier.com/en/" target="_blank" rel="noopener">Bouillon Chartier</a></li>
+    <li><a href="https://www.hoteledouard7-paris.com/guide/articles/7-best-museum-cafes-to-discover-in-paris-67946" target="_blank" rel="noopener">Museum cafés in Paris (Café Richelieu)</a></li>
+    <li><a href="https://normandielovers.fr/en/best-restaurants-giverny-eating/" target="_blank" rel="noopener">Normandie Lovers — best restaurants in Giverny</a></li>
+    <li><a href="https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/" target="_blank" rel="noopener">Jill Colonna — where to eat at Giverny</a></li>
+    <li><a href="https://normandielovers.fr/en/specialities-food-normandy/" target="_blank" rel="noopener">Normandie Lovers — Normandy food specialities</a></li>
+    <li><a href="https://guide.michelin.com/en/normandie/giverny/restaurant/le-jardin-des-plumes" target="_blank" rel="noopener">Michelin Guide — Le Jardin des Plumes</a></li>
+  </ul>
+
+  <h3>First-hand travel writing &amp; photography</h3>
+  <ul>
+    <li><a href="https://www.artsy-traveler.com/musee-dorsay-in-paris/" target="_blank" rel="noopener">Carol Cram — Musée d'Orsay</a></li>
+    <li><a href="https://www.salutfromparis.com/musee-marmottan-monet/" target="_blank" rel="noopener">Lena — Musée Marmottan Monet</a></li>
+    <li><a href="https://impressionistarts.com/musee-marmottan-monet-paris/" target="_blank" rel="noopener">Impressionist Arts — Musée Marmottan Monet</a></li>
+    <li><a href="https://www.getlostinwanderlust.com/babymoon-in-paris/" target="_blank" rel="noopener">Amber — planning a babymoon in Paris</a></li>
+    <li><a href="https://misadventureswithandi.com/luxembourg-gardens-in-paris/" target="_blank" rel="noopener">Andi Fisher — the Luxembourg Gardens</a></li>
+    <li><a href="https://www.sarahfreia.com/blog/2019/3/6/jardin-du-palais-royal-paris-garden-spotlight" target="_blank" rel="noopener">Sarah Freia — Jardin du Palais Royal &amp; the Buren columns</a></li>
+    <li><a href="https://www.sarahfreia.com/blog/auvers-sur-oise" target="_blank" rel="noopener">Sarah Freia — Auvers-sur-Oise</a></li>
+    <li><a href="https://www.solosophie.com/funiculaire-de-montmartre-montmartre-funicular/" target="_blank" rel="noopener">Sophie Nadeau — the Montmartre funicular</a></li>
+    <li><a href="https://www.solosophie.com/rue-cremieux-cute-street-paris/" target="_blank" rel="noopener">Sophie Nadeau — Rue Crémieux</a></li>
+    <li><a href="https://www.solosophie.com/quick-guide-to-auvers-sur-oise-van-gogh/" target="_blank" rel="noopener">Sophie Nadeau — Auvers-sur-Oise</a></li>
+    <li><a href="https://theparisialite.com/pont-alexandre-iii-paris/" target="_blank" rel="noopener">Pamela — Pont Alexandre III</a></li>
+    <li><a href="https://lorenzigo.com/eiffel-tower-photography-spots/" target="_blank" rel="noopener">Gabriel Lorenzi — Eiffel Tower photography spots</a></li>
+    <li><a href="https://roamandthrive.com/eiffel-tower-photo-spots/" target="_blank" rel="noopener">Alex Wieteska — the best Eiffel Tower photo spots</a></li>
+    <li><a href="https://www.thewanderinglens.com/paris-places-photograph-eiffel-tower/" target="_blank" rel="noopener">Lisa Michele Burns — places to photograph the Eiffel Tower</a></li>
+    <li><a href="https://www.dangerous-business.com/giverny-day-trip-from-paris/" target="_blank" rel="noopener">Amanda Williams — a Giverny day trip from Paris</a></li>
+    <li><a href="https://mustloveroses.com/monets-garden/" target="_blank" rel="noopener">Pansy — Monet's garden</a></li>
+    <li><a href="https://mustloveroses.com/giverny/" target="_blank" rel="noopener">Pansy — exploring Giverny village</a></li>
+    <li><a href="https://www.frenchviews.com.au/my-journal/monets-garden-in-springtime" target="_blank" rel="noopener">Chris Handel — Monet's garden in springtime</a></li>
+    <li><a href="https://normandielovers.fr/en/visit-musee-des-impressionnismes-giverny/" target="_blank" rel="noopener">Claire &amp; Manu — Musée des impressionnismes</a></li>
+    <li><a href="http://giverny-impression.com/monets-grave/" target="_blank" rel="noopener">Ariane — Monet's grave</a></li>
+    <li><a href="https://www.mywanderlustylife.com/day-trip-to-giverny/" target="_blank" rel="noopener">Ashley Smith — day trip to Giverny</a></li>
+    <li><a href="https://www.maptrotting.com/monet-garden-tips-for-visiting/" target="_blank" rel="noopener">Maptrotting — tips for visiting Monet's garden</a></li>
+    <li><a href="https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/" target="_blank" rel="noopener">Pat Hallam — art and absinthe, a walk around Auvers</a></li>
+    <li><a href="https://www.travelawaits.com/2494210/auvers-sur-oise-france/" target="_blank" rel="noopener">Sage Scott — a day in Auvers-sur-Oise</a></li>
+    <li><a href="https://lukemckernan.com/2024/09/11/visiting-van-gogh/" target="_blank" rel="noopener">Luke McKernan — visiting Van Gogh</a></li>
+    <li><a href="https://hellonicolette.substack.com/p/what-van-gogh-and-standing-alone" target="_blank" rel="noopener">Nicolette Daskalakis — standing alone in a French wheat field</a></li>
+    <li><a href="https://www.atlasobscura.com/places/grave-of-vincent-and-theo-van-gogh" target="_blank" rel="noopener">Atlas Obscura — grave of Vincent and Theo van Gogh</a></li>
+    <li><a href="https://bookishwayfarer.com/blog/visiting-versailles-from-paris" target="_blank" rel="noopener">Julia Martin — visiting Versailles from Paris</a></li>
+    <li><a href="https://www.sortiraparis.com/en/where-to-eat-in-paris/hotel/articles/305504-villa-des-pres-the-5-hotel-and-intimate-spa-in-saint-germain-des-pres" target="_blank" rel="noopener">Sortir à Paris — Villa des Prés</a></li>
+    <li><a href="https://www.parisinsidersguide.com/paris-neighborhoods.html" target="_blank" rel="noopener">Paris Insiders Guide — choosing a neighbourhood</a></li>
+  </ul>
+
+  <h3>Maps &amp; data</h3>
+  <ul>
+    <li>Coordinates geocoded from OpenStreetMap via Photon. Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, ODbL. Basemap tiles © CARTO.</li>
+    <li>Temperature chart: long-run monthly averages for Paris, June figure cross-checked against Climate-Data.org. Daylight figures: Paris at the June solstice.</li>
+    <li>Creative Commons photography via Flickr — individual photographers and licences are credited in each image's caption.</li>
+  </ul>
+
+  <p class="signoff">Safe travels!</p>
+</section>
+
+<dialog class="export-dialog" id="export-dialog">
+  <button class="close" aria-label="Close">×</button>
+  <h3>Save these places</h3>
+  <p>Download as a .gpx file to import into your maps app.</p>
+  <div class="cats">
+    <label><input type="checkbox" value="art" checked> Art</label>
+    <label><input type="checkbox" value="do" checked> Slow Paris</label>
+    <label><input type="checkbox" value="food" checked> Food</label>
+    <label><input type="checkbox" value="stay" checked> Stay</label>
+    <label><input type="checkbox" value="daytrip" checked> Day trips</label>
+  </div>
+  <div class="opts">
+    <button class="opt" id="download-gpx"><span class="icon">⤓</span><span><span class="label">Download .gpx</span><br><span class="desc">Works with OsmAnd, Maps.me, Gaia GPS, Garmin and others.</span></span></button>
+  </div>
+  <p class="export-attribution">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, provided under the ODbL licence.</p>
+</dialog>
+</main>
+</div><!-- /#content -->
+<dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="application/json" id="guide-data">
+{
+  "items": [
+    { "id":"orangerie", "category":"art", "section":"art-core", "feature":true,
+      "name":"Musée de l'Orangerie", "blurb":"Monet's Nymphéas · 60–90 min · benches in both rooms",
+      "description":"Two purpose-built oval rooms hold Monet's monumental Water Lilies panels, installed to his own specification in 1927: no frames, no horizon, curved walls so you stand inside the pond. Downstairs, Renoir, Cézanne, Modigliani and Soutine. Lift, accessible toilets, and free loan of wheelchairs, folding seats and canes.",
+      "sources":[{"url":"https://www.musee-orangerie.fr/en/visit-orangerie","title":"Musée de l'Orangerie"}],
+      "lat":48.86535, "lng":2.32266,
+      "images":[
+        {"url":"https://cdn.mediatheque.epmoo.fr/link/3c9igq/opr1c3jddqo717k.jpg","label":"Monet, Reflets verts — one of the museum's Water Lilies-era panels","credit":"Musée de l'Orangerie / RMN-Grand Palais / Patrice Schmidt"},
+        {"url":"https://live.staticflickr.com/65535/50173775627_ca38e81964_b.jpg","label":"Inside one of the oval Nymphéas rooms","credit":"Joanbrebo"},
+        {"url":"https://live.staticflickr.com/65535/50263330362_f0fd24fce9_b.jpg","label":"The curved wall of water lilies, seen from the central bench","credit":"Joanbrebo"} ] },
+
+    { "id":"orsay", "category":"art", "section":"art-core",
+      "name":"Musée d'Orsay", "blurb":"Van Gogh &amp; the Impressionists · half a day · fully step-free",
+      "description":"A Belle Époque railway station holding the largest collection of Impressionist and Post-Impressionist painting in the world, with Van Gogh given a redesigned suite (rooms 36–37) in 2024. Lifts and ramps make the entire circuit — galleries, exhibitions, cafés — accessible to strollers and reduced mobility.",
+      "sources":[{"url":"https://www.musee-orsay.fr/en/articles/motor-disabilities-214984","title":"Musée d'Orsay"},{"url":"https://www.artsy-traveler.com/musee-dorsay-in-paris/","title":"Carol Cram"}],
+      "lat":48.85992, "lng":2.32658,
+      "images":[
+        {"url":"https://www.artsy-traveler.com/wp-content/uploads/2023/10/Van-Gogh-Starry-Night-1536x1256.jpg","label":"Van Gogh, Starry Night Over the Rhône","credit":"Carol Cram"},
+        {"url":"https://www.artsy-traveler.com/wp-content/uploads/2023/10/Orsay-Interio-1536x1152.jpg","label":"The great arched atrium of the former station","credit":"Carol Cram"},
+        {"url":"https://live.staticflickr.com/935/42928338425_17dc13823f_b.jpg","label":"Paris seen through the station's glass clock","credit":"Joe Shlabotnik"},
+        {"url":"https://www.artsy-traveler.com/wp-content/uploads/2023/10/rouen1-1404x2048.jpg","label":"One of Monet's Rouen Cathedral canvases","credit":"Carol Cram"} ] },
+
+    { "id":"marmottan", "category":"art", "section":"art-core",
+      "name":"Musée Marmottan Monet", "blurb":"The largest Monet collection · 60–90 min · Thu to 21:00",
+      "description":"A quiet 16th-arrondissement mansion holding the world's largest Monet collection — including Impression, soleil levant, the painting that named the movement — plus Berthe Morisot, Renoir and Caillebotte. The Monet rooms sit in a level basement rotunda; the first floor is reached by lift. Far fewer crowds than the Orsay.",
+      "sources":[{"url":"https://www.marmottan.fr/en/prepare-your-visit/practical-information/","title":"Musée Marmottan Monet"},{"url":"https://www.salutfromparis.com/musee-marmottan-monet/","title":"Lena"}],
+      "lat":48.85941, "lng":2.26726,
+      "images":[
+        {"url":"https://www.salutfromparis.com/wp-content/uploads/2025/05/Musee-Marmottan-Monet-landscape.jpg","label":"The Water Lilies gallery — curved walls and visitor benches","credit":"Lena (Salut from Paris)"},
+        {"url":"https://impressionistarts.com/assets/impression-sunrise-basement-musee-marmottan-monet.jpg","label":"Impression, soleil levant in the basement gallery","credit":"Impressionist Arts"},
+        {"url":"https://impressionistarts.com/assets/water-lilies-musee-marmottan-monet.jpg","label":"The circular Water Lilies rotunda","credit":"Impressionist Arts"},
+        {"url":"https://www.salutfromparis.com/wp-content/uploads/2025/05/Berthe-Morisot-collection.jpg","label":"The Berthe Morisot gallery wall","credit":"Lena (Salut from Paris)"} ] },
+
+    { "id":"tuileries", "category":"do", "section":"slow-gardens",
+      "name":"Jardin des Tuileries", "blurb":"Free · flat gravel · the walk-in approach to the Orangerie",
+      "description":"The formal garden linking the Louvre to the Place de la Concorde, and the first royal garden opened to the public, in 1667. Flat gravel paths, café kiosks, dozens of benches and the shade of the tree-covered Grand Couvert. The Orangerie sits at its western tip.",
+      "sources":[{"url":"https://en.wikipedia.org/wiki/Tuileries_Garden","title":"Tuileries Garden"}],
+      "lat":48.8639, "lng":2.3261,
+      "images":[
+        {"url":"https://live.staticflickr.com/65535/50767076257_f5b6117135_b.jpg","label":"The Tuileries basin and its moveable chairs","credit":"stanze"},
+        {"url":"https://live.staticflickr.com/4588/39522554892_493ab8dce8_b.jpg","label":"The garden's symmetrical central axis","credit":"blavandmaster"},
+        {"url":"https://live.staticflickr.com/7916/39666769373_b52449c378_b.jpg","label":"Shaded side paths in the Grand Couvert","credit":"byb64"} ] },
+
+    { "id":"luxembourg", "category":"do", "section":"slow-gardens",
+      "name":"Jardin du Luxembourg", "blurb":"Free · step-free · the green chairs, the sailboats",
+      "description":"The Left Bank's great garden: an octagonal basin where children sail hired wooden boats, the Medici Fountain under plane trees, rose beds, greenhouses and hundreds of the movable green chairs. Flat gravel throughout, abundant benches and mature shade.",
+      "sources":[{"url":"https://misadventureswithandi.com/luxembourg-gardens-in-paris/","title":"Andi Fisher"},{"url":"https://www.getlostinwanderlust.com/babymoon-in-paris/","title":"Amber"}],
+      "lat":48.84889, "lng":2.33848,
+      "images":[
+        {"url":"https://misadventureswithandi.com/wp-content/uploads/2022/02/sailboat-in-the-luxembourg-garden-in-Paris.jpg","label":"A hired sailboat on the Grand Bassin","credit":"Andi Fisher"},
+        {"url":"https://misadventureswithandi.com/wp-content/uploads/2022/02/Paris-6th-arrondissement-Jardin-du-Luxembourg-Marie-de-Medicis-Fountain-2-1.jpg","label":"The Medici Fountain","credit":"Andi Fisher"},
+        {"url":"https://www.getlostinwanderlust.com/wp-content/uploads/2024/03/Latin-Quarter-3.jpg","label":"The gardens on a summer afternoon","credit":"Amber"} ] },
+
+    { "id":"palais-royal", "category":"do", "section":"slow-gardens",
+      "name":"Jardin du Palais Royal", "blurb":"Free · enclosed and quiet · the Buren columns",
+      "description":"An enclosed, flat garden behind the Comédie-Française, with lime-tree avenues, benches and — in the courtyard beside it — Daniel Buren's field of black-and-white striped columns set against the 17th-century arcades. Early morning or just before sunset for it to yourself.",
+      "sources":[{"url":"https://www.sarahfreia.com/blog/2019/3/6/jardin-du-palais-royal-paris-garden-spotlight","title":"Sarah Freia"}],
+      "lat":48.86491, "lng":2.33776,
+      "images":[
+        {"url":"https://images.squarespace-cdn.com/content/v1/5c705ecb51f4d4c18997db3f/1551912825616-SDO1NU4GJGV99CPRDUL5/IMG_8389.jpeg?format=1500w","label":"Buren's striped columns among the palace arcades","credit":"Sarah Freia"},
+        {"url":"https://images.squarespace-cdn.com/content/v1/5c705ecb51f4d4c18997db3f/1551911492759-D9IW1M9729EM0A335N8C/IMG_2603.jpeg?format=1500w","label":"The tranquil garden behind the Palais Royal","credit":"Sarah Freia"} ] },
+
+    { "id":"rodin", "category":"do", "section":"slow-gardens",
+      "name":"Musée Rodin &amp; its sculpture garden", "blurb":"7th · benches under the trees · a garden you can visit alone",
+      "description":"An 18th-century mansion in the quiet 7th whose real draw for this trip is outside: a walled sculpture garden of roses, clipped hedges and bronzes — The Thinker, The Gates of Hell — with benches everywhere. A garden ticket alone is enough, and it is a flat walk from the Orsay.",
+      "sources":[{"url":"https://www.parisinsidersguide.com/paris-neighborhoods.html","title":"Paris Insiders Guide"}],
+      "lat":48.85475, "lng":2.31587,
+      "images":[
+        {"url":"https://live.staticflickr.com/6173/6177233722_a3f873fc18_b.jpg","label":"Sculptures in the garden of the Musée Rodin","credit":"Mark B. Schlemmer"},
+        {"url":"https://live.staticflickr.com/1234/1385065404_9238976222_b.jpg","label":"The Thinker in the garden","credit":"wallyg"},
+        {"url":"https://live.staticflickr.com/5521/10418623013_9f2d0e1850_b.jpg","label":"The mansion and its grounds","credit":"proper dave"} ] },
+
+    { "id":"seine-cruise", "category":"do", "section":"slow-water",
+      "name":"A Seine cruise", "blurb":"From ~€17 · 1 hour · seated throughout, step-free boarding",
+      "description":"An hour of sitting down while the Eiffel Tower, Notre-Dame, the Louvre and the Orsay pass your seat. The Port de la Bourdonnais dock has installed ramps down to the pontoon — a gentle, non-slip slope with no stairs — and several operators run wheelchair-adapted boats, capped at four wheelchairs each.",
+      "sources":[{"url":"https://www.parisenunclic.fr/en/blog/wheelchair-accessibility-at-bateaux-parisiens-what-you-need-to-know-before-boarding","title":"Paris en un clic"},{"url":"https://parisjetaime.com/eng/activity/bateaux-parisiens-p3817","title":"Paris je t'aime"}],
+      "lat":48.86050, "lng":2.29399,
+      "images":[
+        {"url":"https://live.staticflickr.com/7301/9175648464_808e5fd4e4_b.jpg","label":"A Bateaux Parisiens boat at the Port de la Bourdonnais","credit":"David McKelvey"},
+        {"url":"https://www.getlostinwanderlust.com/wp-content/uploads/2024/05/Get-Lost-in-Wanderlust-2024-05-06T152624.534.jpg","label":"A hop-on hop-off boat on the Seine","credit":"Amber"},
+        {"url":"https://live.staticflickr.com/7388/9152323912_e1ee787cfd_b.jpg","label":"The city from the water","credit":"David McKelvey"} ] },
+
+    { "id":"pont-alexandre", "category":"do", "section":"slow-water",
+      "name":"Pont Alexandre III", "blurb":"Free · flat bridge deck · golden hour",
+      "description":"The most extravagant bridge in Paris — Belle Époque lamp posts and gilded Fame statues, with the Eiffel Tower and the Invalides dome both in view from the middle. No bridge in the city takes the golden-hour light quite like it. Flat deck, short walk from Invalides.",
+      "sources":[{"url":"https://theparisialite.com/pont-alexandre-iii-paris/","title":"The Parisialite"},{"url":"https://roamandthrive.com/eiffel-tower-photo-spots/","title":"Alex Wieteska"}],
+      "lat":48.86347, "lng":2.31352,
+      "images":[
+        {"url":"https://i0.wp.com/theparisialite.com/wp-content/uploads/2025/04/pont-alexandre-iii-eiffel-background.jpg?resize=800%2C533&ssl=1","label":"The bridge with the Eiffel Tower behind","credit":"Pamela"},
+        {"url":"https://i0.wp.com/theparisialite.com/wp-content/uploads/2025/04/fame-statue-clear-sky.jpg?resize=749%2C1200&ssl=1","label":"A gilded Fame statue against the sky","credit":"Pamela"},
+        {"url":"https://i0.wp.com/roamandthrive.com/wp-content/uploads/2022/10/DSC05207.jpg","label":"Gold ornament from the right bank","credit":"Alex Wieteska"} ] },
+
+    { "id":"bir-hakeim", "category":"do", "section":"slow-water",
+      "name":"Pont de Bir-Hakeim", "blurb":"Free · step-free off the Métro · early morning",
+      "description":"The double-decker iron bridge whose columns frame the Eiffel Tower in a corridor of receding arches — strong verticals, cinematic depth, and the reason it turns up in films. The Métro station sits at the foot of it; the walkway is flat. Watch the cycle lane in the middle.",
+      "sources":[{"url":"https://lorenzigo.com/eiffel-tower-photography-spots/","title":"Gabriel Lorenzi"},{"url":"https://www.thewanderinglens.com/paris-places-photograph-eiffel-tower/","title":"Lisa Michele Burns"}],
+      "lat":48.85573, "lng":2.28755,
+      "images":[
+        {"url":"https://uploads.grupodicas.com/2026/02/ponte.jpg","label":"Iron arches framing the Eiffel Tower","credit":"Gabriel Lorenzi"},
+        {"url":"https://www.thewanderinglens.com/wp-content/uploads/2018/01/Paris-and-Eiffel-Tower-Photo-Spots-for-the-best-view-of-the-Eiffel-Tower-2.jpg","label":"Looking toward the tower with houseboats below","credit":"Lisa Michele Burns"},
+        {"url":"https://i0.wp.com/roamandthrive.com/wp-content/uploads/2022/10/DSC04981.jpg","label":"From the north side of the bridge","credit":"Alex Wieteska"} ] },
+
+    { "id":"trocadero", "category":"do", "section":"slow-water",
+      "name":"Place du Trocadéro", "blurb":"Free · step-free terrace · sunrise, or a Tuesday",
+      "description":"The widest, most postcard-perfect frontal view of the Eiffel Tower, straight off the Métro onto a broad flat plaza — the grand staircase down to the gardens is optional, not required for the view. Crowds build fast from about 9am and it is roughly 30% quieter midweek than on a Saturday.",
+      "sources":[{"url":"https://lorenzigo.com/eiffel-tower-photography-spots/","title":"Gabriel Lorenzi"},{"url":"https://www.getlostinwanderlust.com/babymoon-in-paris/","title":"Amber"}],
+      "lat":48.8626979, "lng":2.2849277,
+      "images":[
+        {"url":"https://uploads.grupodicas.com/2026/02/trocadero.jpeg","label":"The Trocadéro terrace with the tower behind","credit":"Gabriel Lorenzi"},
+        {"url":"https://i0.wp.com/roamandthrive.com/wp-content/uploads/2022/10/DSC04459-2.jpeg","label":"The wide daytime view across the Seine","credit":"Alex Wieteska"},
+        {"url":"https://www.thewanderinglens.com/wp-content/uploads/2018/01/Paris-and-Eiffel-Tower-Photo-Spots-for-the-best-view-of-the-Eiffel-Tower-13.jpg","label":"The view framed through the Trocadéro gardens","credit":"Lisa Michele Burns"} ] },
+
+    { "id":"champ-de-mars", "category":"do", "section":"slow-water",
+      "name":"Champ de Mars", "blurb":"Free · flat park · benches and shade along the sides",
+      "description":"The long lawn running from the foot of the tower toward the École Militaire, with the tower rising out of ordinary Parisian park life — picnics, joggers, prams. Big enough to always find space, and the tree-lined side paths have the benches and the shade.",
+      "sources":[{"url":"https://lorenzigo.com/eiffel-tower-photography-spots/","title":"Gabriel Lorenzi"}],
+      "lat":48.85608, "lng":2.28947,
+      "images":[
+        {"url":"https://uploads.grupodicas.com/2026/02/Champ-de-Mars-Paris-1366x768.webp","label":"The lawn stretching toward the tower","credit":"Gabriel Lorenzi"},
+        {"url":"https://uploads.grupodicas.com/2026/02/563346637-1477722795-FA-champs-de-mars-park-1-original.avif","label":"Tree-lined side paths, quieter than the central axis","credit":"Gabriel Lorenzi"} ] },
+
+    { "id":"atelier-lumieres", "category":"do", "section":"slow-evening",
+      "name":"Atelier des Lumières", "blurb":"From €12.50 · 45–55 min · sit or stand anywhere",
+      "description":"A 19th-century steel foundry in the 11th turned into a walk-through digital art space: monumental projections wash across walls, floor and columns to an original score. Fully accessible with a lift to the mezzanine, and — the point here — visitors move freely, sitting or standing wherever they like.",
+      "sources":[{"url":"https://www.atelier-lumieres.com/en/frequently-asked-questions","title":"Atelier des Lumières"},{"url":"https://news.artprice.com/en/15290/van-gogh-at-the-atelier-des-lumieres-an-unmissable-immersive-exhibition-in-paris","title":"Artprice"}],
+      "lat":48.861615, "lng":2.380813,
+      "images":[
+        {"url":"https://live.staticflickr.com/1867/29342620527_ed07d7dab8_b.jpg","label":"Projections filling the old foundry hall","credit":"K_rho"},
+        {"url":"https://live.staticflickr.com/65535/48160317217_d5e52d69eb_b.jpg","label":"Animated paint tubes across the walls","credit":"Katell Ar Gow"},
+        {"url":"https://live.staticflickr.com/1880/44230044172_0f511de2da_b.jpg","label":"Visitors sitting inside the projection","credit":"K_rho"} ] },
+
+    { "id":"sacre-coeur", "category":"do", "section":"slow-evening",
+      "name":"Sacré-Cœur &amp; the Montmartre funicular", "blurb":"Métro ticket · sunset · take the funicular both ways",
+      "description":"The panorama over the rooftops from the basilica forecourt, best at golden hour. The hill is genuinely steep, so use the funicular — an ordinary Métro ticket, running 6am to 12:45am, under two minutes — instead of the 222-step staircase. Skip the separate 300-step dome climb.",
+      "sources":[{"url":"https://www.solosophie.com/funiculaire-de-montmartre-montmartre-funicular/","title":"Sophie Nadeau"},{"url":"https://www.thewanderinglens.com/paris-places-photograph-eiffel-tower/","title":"Lisa Michele Burns"}],
+      "lat":48.88711, "lng":2.34349,
+      "images":[
+        {"url":"https://www.solosophie.com/wp-content/uploads/2017/01/funiculaire_de_montmartre-1536x1024.jpg","label":"Riding the funicular up to Sacré-Cœur","credit":"Sophie Nadeau"},
+        {"url":"https://www.solosophie.com/wp-content/uploads/2022/01/view-from-the-top-of-montmartre-1536x2048.jpg","label":"The view from the top of Montmartre","credit":"Sophie Nadeau"},
+        {"url":"https://www.getlostinwanderlust.com/wp-content/uploads/2024/03/Latin-Quarter-2.jpg","label":"The basilica from the forecourt","credit":"Amber"} ] },
+
+    { "id":"rue-cremieux", "category":"do", "section":"slow-evening",
+      "name":"Rue Crémieux", "blurb":"Free · pedestrianised and flat · go early, stay quiet",
+      "description":"One block of pastel row houses — pink, mint, sky blue, buttercup — on a flat cobbled lane near Bastille, fully pedestrianised. It is also somebody's street: several residents have put up no-photography signs. Come early, keep your voice down, and don't linger under a window.",
+      "sources":[{"url":"https://www.solosophie.com/rue-cremieux-cute-street-paris/","title":"Sophie Nadeau"}],
+      "lat":48.84688, "lng":2.37087,
+      "images":[
+        {"url":"https://www.solosophie.com/wp-content/uploads/2018/01/rue_cremieux-1536x1024.jpg","label":"Pastel façades on Rue Crémieux","credit":"Sophie Nadeau"},
+        {"url":"https://www.solosophie.com/wp-content/uploads/2018/01/cute_street_rue_cremieux-1536x1024.jpg","label":"The cobbled lane of coloured houses","credit":"Sophie Nadeau"} ] },
+
+    { "id":"cafe-des-musees", "category":"food", "section":"food-table",
+      "name":"Café des Musées", "blurb":"Bistro · €€ · Marais, 7 min from the Musée Picasso",
+      "description":"A quaint, properly old-fashioned Marais bistro built around one dish: the bœuf bourguignon. Naturally safe — hours of braising, nothing raw — just ask for it served piping hot.",
+      "sources":[{"url":"https://www.theinfatuation.com/paris/guides/where-to-eat-near-major-paris-museums","title":"The Infatuation"}],
+      "lat":48.85807, "lng":2.36433,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/CaféDesMusées_BoeufBourguignon_WenkangShan_Paris_V5_nsw2gk","label":"The bœuf bourguignon","credit":"Wenkang Shan"}] },
+
+    { "id":"bistrot-tournelles", "category":"food", "section":"food-table",
+      "name":"Bistrot des Tournelles", "blurb":"Bistro · €€€ · dinner · near Place des Vosges",
+      "description":"A narrow, popular throwback bistro with a marble-topped bar, a few minutes from Place des Vosges. Blackboard classics; book ahead for dinner.",
+      "sources":[{"url":"https://www.eater.com/maps/best-restaurants-paris-france","title":"Eater"}],
+      "lat":48.854123, "lng":2.367541,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/2025/03/095f8756d874fa84cc934231f8fa91fd.jpg","label":"The narrow dining room","credit":"Eater"}] },
+
+    { "id":"josephine-dumonet", "category":"food", "section":"food-table",
+      "name":"Joséphine Chez Dumonet", "blurb":"Bistro · €€€ · lunch &amp; dinner · Saint-Germain",
+      "description":"A century-old bistro of lace curtains, cut-glass dividers and bentwood chairs — the reason people put up with the hunt for a table. Bourguignon and steak frites are the house classics; specify no pink for the steak.",
+      "sources":[{"url":"https://www.eater.com/maps/best-restaurants-paris-france","title":"Eater"}],
+      "lat":48.845798, "lng":2.31979,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/13675225/eater_selects_pgk_0001.jpg","label":"Lace curtains and bentwood chairs","credit":"Eater"}] },
+
+    { "id":"le-severo", "category":"food", "section":"food-table",
+      "name":"Le Severo", "blurb":"Steak specialist · €€€ · 14th",
+      "description":"A tiny steak-frites specialist where the beef is the entire proposition. Which makes it the place to deploy the phrase properly: sans aucune partie rosée, and ask the server to confirm.",
+      "sources":[{"url":"https://www.eater.com/maps/best-restaurants-paris-france","title":"Eater"}],
+      "lat":48.8321, "lng":2.32474,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25469985/le_severo.jpeg","label":"Steak frites","credit":"Eater"}] },
+
+    { "id":"bouillon-pigalle", "category":"food", "section":"food-table",
+      "name":"Bouillon Pigalle", "blurb":"Bouillon · € · no reservations, walk in",
+      "description":"A neo-bouillon that brings back the effervescence of the old working-class canteens: €10–15 plates, fast service, no booking. Easy to steer safely — leeks vinaigrette, onion soup, roast chicken, pot-au-feu.",
+      "sources":[{"url":"https://www.theinfatuation.com/paris/guides/where-to-eat-near-major-paris-museums","title":"The Infatuation"}],
+      "lat":48.88262, "lng":2.33741,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/20220328_-_The_Travel_Buds_x_Bouillon04_rhtzrt","label":"The dining room","credit":"The Infatuation"}] },
+
+    { "id":"mary-celeste", "category":"food", "section":"food-table",
+      "name":"Le Mary Celeste", "blurb":"Wine bar · €€ · Marais · noon–2am, continuous",
+      "description":"Continuous service until 2am, near the Musée Picasso — useful at odd hours. But note the caution: the signatures are deviled eggs, oysters and beef tartare, all off-limits. Come for a non-alcoholic drink and ask what's available cooked through.",
+      "sources":[{"url":"https://www.theinfatuation.com/paris/guides/where-to-eat-near-major-paris-museums","title":"The Infatuation"}],
+      "lat":48.86208, "lng":2.36620,
+      "images":[{"url":"https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/Le_Mary_Celeste_Paris_Ilya_KAGAN_ilyafoodstories_inenfu","label":"Small plates at the bar","credit":"Ilya Kagan"}] },
+
+    { "id":"stohrer", "category":"food", "section":"food-table",
+      "name":"Stohrer", "blurb":"Pâtisserie, est. 1730 · Rue Montorgueil",
+      "description":"Paris's oldest pâtisserie, trading since 1730. Come for the kouign-amann — and the baba, which this house is credited with inventing. Pure goûter territory.",
+      "sources":[{"url":"https://www.eater.com/maps/best-pastries-paris-france-patisseries","title":"Eater"}],
+      "lat":48.865265, "lng":2.346815,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23625074/Baba_chantilly_Stohrer__GeraldineMartens.jpg","label":"Baba au chantilly","credit":"Geraldine Martens"}] },
+
+    { "id":"pierre-herme", "category":"food", "section":"food-table",
+      "name":"Pierre Hermé", "blurb":"Pâtisserie · Saint-Germain, Rue Bonaparte",
+      "description":"Long considered the guardian of modern French pastry, and a few minutes from the Orsay–Louvre axis. Order the Ispahan — rose, lychee and raspberry — as the house classic.",
+      "sources":[{"url":"https://www.eater.com/maps/best-pastries-paris-france-patisseries","title":"Eater"}],
+      "lat":48.851567, "lng":2.332704,
+      "images":[{"url":"https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23613066/AH20_MAC_INF_YUZU_AMB_1_BD__1_.jpg","label":"Macarons","credit":"Eater"}] },
+
+    { "id":"giverny-gardens", "category":"daytrip",
+      "name":"Monet's House &amp; Gardens, Giverny", "blurb":"€13 · 1h30–2h · gardens step-free, house is not",
+      "lat":49.0751593, "lng":1.5337474 },
+    { "id":"giverny-baudy", "category":"food",
+      "name":"Ancien Hôtel Baudy", "blurb":"The Impressionists' own inn · shaded terrace · €€",
+      "lat":49.0768155, "lng":1.5278794 },
+    { "id":"giverny-mdig", "category":"daytrip",
+      "name":"Musée des impressionnismes Giverny", "blurb":"€12 · fully step-free, incl. toilets · own garden",
+      "lat":49.07635, "lng":1.53133 },
+    { "id":"giverny-grave", "category":"daytrip",
+      "name":"Église Sainte-Radegonde &amp; Monet's grave", "blurb":"Free · 15–20 min · flat walk, uneven churchyard",
+      "lat":49.07755, "lng":1.52359 },
+    { "id":"vernon", "category":"daytrip",
+      "name":"Vernon — the Vieux Moulin &amp; town museum", "blurb":"Built into the Giverny journey · flat riverside",
+      "lat":49.09751, "lng":1.48812 },
+
+    { "id":"les-nympheas", "category":"food", "section":"giverny-eat",
+      "name":"Restaurant Les Nymphéas", "blurb":"Normandy terroir · €€ · open 9–18 non-stop",
+      "description":"Directly opposite Monet's gates, and open continuously — so no racing a lunch-service cutoff. Order the seasonal Salade Monet or the breaded camembert salad, and the tarte normande after. Skip the rabbit-in-cider unless the alcohol is confirmed cooked off.",
+      "sources":[{"url":"https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/","title":"Jill Colonna"},{"url":"https://normandielovers.fr/en/best-restaurants-giverny-eating/","title":"Normandie Lovers"}],
+      "lat":49.07561, "lng":1.53373,
+      "images":[
+        {"url":"https://www.madaboutmacarons.com/wp-content/uploads/2012/08/giverny-nympheas-restaurant.jpg","label":"The garden terrace","credit":"Jill Colonna"},
+        {"url":"https://www.madaboutmacarons.com/wp-content/uploads/2023/06/French-take-away-kiosk.jpg","label":"The rose-covered front facing Monet's house","credit":"Jill Colonna"},
+        {"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurant-Les-Nymph%C3%A9as/i-tJwxvjs/0/2971c190/L/restaurant-les-nympheas-giverny-14-L.jpg","label":"Dessert at Les Nymphéas","credit":"Normandie Lovers"} ] },
+
+    { "id":"la-parenthese", "category":"food", "section":"giverny-eat",
+      "name":"Restaurant La Parenthèse", "blurb":"Bistronomic · €€ · reservations required",
+      "description":"Quieter and smaller than the places on the visitor route, a few minutes' walk from the gardens. The Camembert PDO tart is the safe way to eat Normandy's signature cheese — baked through. Vegetarian options; the country terrine is charcuterie, so skip it.",
+      "sources":[{"url":"https://en.normandie-tourisme.fr/restaurants/restaurant-la-parenthese/","title":"Normandy Tourism"}],
+      "lat":49.0747605, "lng":1.5365239,
+      "images":[{"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-MDh8R5F/0/272c7212/L/restaurants-giverny-vernon-35-L.jpg","label":"The garden gate at La Parenthèse","credit":"Normandie Lovers"}] },
+
+    { "id":"la-capucine", "category":"food", "section":"giverny-eat",
+      "name":"La Capucine", "blurb":"Brasserie &amp; salon de thé · €–€€ · 10–18 non-stop",
+      "description":"A courtyard with roaming chickens and a flower-filled garden — the place to slow the day right down. Savoury galettes, and PDO roast camembert or breaded neufchâtel: ask for them well cooked through. Takeaway too.",
+      "sources":[{"url":"https://normandielovers.fr/en/best-restaurants-giverny-eating/","title":"Normandie Lovers"}],
+      "lat":49.07561, "lng":1.53209,
+      "images":[
+        {"url":"https://www.madaboutmacarons.com/wp-content/uploads/2023/06/la-capucine-pressoir-cafe-giverny.jpg","label":"Armchairs in the café","credit":"Jill Colonna"},
+        {"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-8hpG8mJ/0/b61e4c53/L/restaurants-giverny-vernon-44-L.jpg","label":"The stone entrance","credit":"Normandie Lovers"} ] },
+
+    { "id":"jardin-des-plumes", "category":"food", "section":"giverny-eat",
+      "name":"Le Jardin des Plumes", "blurb":"Michelin ★ · €85–150 · book well ahead",
+      "description":"David Gallienne's one-star room in a timbered Norman house — three, five or seven courses built entirely on Norman seasonal produce. About 25 seats, so a June weekend lunch needs booking a long way out.",
+      "sources":[{"url":"https://guide.michelin.com/en/normandie/giverny/restaurant/le-jardin-des-plumes","title":"Michelin Guide"}],
+      "lat":49.07553, "lng":1.52551,
+      "images":[
+        {"url":"https://www.madaboutmacarons.com/wp-content/uploads/2012/08/Jardin-des-plumes-restaurant-giverny.jpg","label":"The timbered house and its gardens","credit":"Jill Colonna"},
+        {"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Le-Jardin-des-plumes/i-pjdsXph/0/MD2GxvDgNprB7n8K95C727Tr28WTpKRjKGWjPdzLM/L/Jardin%20plumes-L.jpg","label":"Le Jardin des Plumes","credit":"Normandie Lovers"} ] },
+
+    { "id":"au-coin-du-paintre", "category":"food", "section":"giverny-eat",
+      "name":"Au Coin du Pain'tre", "blurb":"Bakery &amp; light plates · € · shaded terrace",
+      "description":"A pun of a bakery — pain for bread, said like peintre — doing pies, sandwiches, croque-monsieur and homemade viennoiseries, with a shaded terrace over Rue Claude Monet. The answer when a full sit-down lunch doesn't fit.",
+      "sources":[{"url":"https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/","title":"Jill Colonna"}],
+      "lat":49.07710, "lng":1.52654,
+      "images":[
+        {"url":"https://www.madaboutmacarons.com/wp-content/uploads/2023/06/bakery-giverny.jpg","label":"The bakery with outdoor seating","credit":"Jill Colonna"},
+        {"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-SLKqtZB/0/82cd5dd4/L/restaurants-giverny-L.jpg","label":"The shaded terrace on Rue Claude Monet","credit":"Normandie Lovers"} ] },
+
+    { "id":"lestampille", "category":"food", "section":"giverny-eat",
+      "name":"L'Estampille by Erisay", "blurb":"Bistronomic · €22–43 · Vernon, 10 min away",
+      "description":"In Vernon rather than Giverny — a refined lunch away from the garden crowds, if you're splitting the day between the two towns. Lobster ravioli with ricotta and Sauternes cream; quail with peach sauce. Skip the foie gras.",
+      "sources":[{"url":"https://en.normandie-tourisme.fr/restaurants/lestampille-by-erisay/","title":"Normandy Tourism"}],
+      "lat":49.0922932, "lng":1.48738179,
+      "images":[
+        {"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-w4Nz62L/0/7e355e9a/L/restaurants-giverny-vernon-07-L.jpg","label":"The front of L'Estampille in Vernon","credit":"Normandie Lovers"},
+        {"url":"https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-jrcnpJd/0/c78e6a06/L/restaurants-giverny-vernon-04-L.jpg","label":"Inside the dining room","credit":"Normandie Lovers"} ] },
+
+    { "id":"maison-van-gogh", "category":"daytrip", "section":"auvers-flat",
+      "name":"Maison de Van Gogh — Auberge Ravoux", "blurb":"~€6 · 20–30 min · flat approach, stairs to the room",
+      "description":"The inn where Van Gogh lived his last seventy days and died, upstairs in the small attic room No. 5 — left deliberately empty. A short film downstairs, and the town hall he painted stands directly across the square. Ground floor step-free; the room itself is up a narrow period stair, in small timed groups, no photography.",
+      "sources":[{"url":"https://maisondevangogh.fr/en/auvers.php","title":"Maison de Van Gogh"},{"url":"https://tourisme-auverssuroise.fr/activites-loisirs/sur-les-pas-des-impressionnistes/","title":"Auvers Tourism"}],
+      "lat":49.07052, "lng":2.17166,
+      "images":[
+        {"url":"https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/auberge-facade-1024x613.jpg?strip=info&w=1200&ssl=1","label":"The façade of the Auberge Ravoux","credit":"Auvers Tourisme"},
+        {"url":"https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/chambre-lucarne-1024x613.jpg?strip=info&w=1200&ssl=1","label":"Van Gogh's attic room and its skylight","credit":"Auvers Tourisme"},
+        {"url":"https://i0.wp.com/travelawaits.com/wp-content/uploads/2021/04/the-auvers-sur-oise-city-hall9f2bc2.jpg?resize=1024%2C731&ssl=1","label":"The town hall across the square, with a panel of Van Gogh's painting of it","credit":"Sage Scott"},
+        {"url":"https://bonjourparis.com/wp-content/uploads/2024/10/Van-Goghs-last-home.jpg","label":"Van Gogh's last home","credit":"Pat Hallam"} ] },
+
+    { "id":"maison-gachet", "category":"daytrip", "section":"auvers-flat",
+      "name":"Maison du Docteur Gachet", "blurb":"Free · flat, in-village · house and garden",
+      "description":"The home of the physician-artist who treated Van Gogh in his final months, and hosted Cézanne and Pissarro before him — recently restored by the Val d'Oise department. No original Van Goghs remain (they are at the Orsay), but the etching L'Homme à la Pipe is normally shown. One of the easiest stops of the day.",
+      "sources":[{"url":"https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/","title":"Auvers Tourism"},{"url":"https://broaden-horizons.fr/en/outside-paris/van-gogh-in-auvers-sur-oise-walking-tour/","title":"Van Gogh in Auvers walking tour"}],
+      "lat":49.07183, "lng":2.15614,
+      "images":[
+        {"url":"https://i1.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/15977_961_Auvers-Jardin-de-la-Maison-du-docteur-Gachet.jpg?strip=info&w=760&ssl=1","label":"The garden of Dr Gachet's house","credit":"Auvers Tourisme"},
+        {"url":"https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/20220613_112049-scaled.jpg?strip=info&w=1500&ssl=1","label":"The house and its grounds","credit":"Auvers Tourisme"} ] },
+
+    { "id":"musee-absinthe", "category":"daytrip", "section":"auvers-flat",
+      "name":"Musée de l'Absinthe", "blurb":"~€12 · flat · a garden and a bar to sit in",
+      "description":"A one-of-a-kind museum on the green fairy and Belle Époque café culture — the drink Van Gogh's circle favoured — with an herb garden growing wormwood, fennel and anise, and the À l'Heure Verte tea-room and bar, which serves non-alcoholic options too. The day's best proper rest stop.",
+      "sources":[{"url":"https://musee-absinthe.com/notre-lieu/","title":"Musée de l'Absinthe"},{"url":"https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/","title":"Pat Hallam"}],
+      "lat":49.07178, "lng":2.16794,
+      "images":[
+        {"url":"https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/musee-de-labsinthe-musee-2-1024x768.webp?strip=info&w=1200&ssl=1","label":"Inside the museum","credit":"Musée de l'Absinthe"},
+        {"url":"https://bonjourparis.com/wp-content/uploads/2024/10/Antique-absinthe-fountain.jpg","label":"An antique absinthe fountain","credit":"Pat Hallam"},
+        {"url":"https://bonjourparis.com/wp-content/uploads/2024/10/Wormwood-plant.jpg","label":"Wormwood growing in the museum garden","credit":"Pat Hallam"} ] },
+
+    { "id":"atelier-daubigny", "category":"daytrip", "section":"auvers-flat",
+      "name":"Maison-Atelier de Daubigny", "blurb":"Weekends only · flat · 200 m² of painted walls",
+      "description":"The studio-house of Charles-François Daubigny, the landscape painter who settled here first and drew everyone else after him. He and his friends — Corot, Daumier, Oudinot — painted roughly 200 m² of its walls themselves. Van Gogh painted this garden. A lived-in studio rather than a museum.",
+      "sources":[{"url":"https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/","title":"Auvers Tourism"},{"url":"https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/","title":"Pat Hallam"}],
+      "lat":49.07302, "lng":2.16991,
+      "images":[
+        {"url":"https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/FRA95-Auvers-sur-Oise-Gil-Giuglio-1137-1024x681.jpg?strip=info&w=1200&ssl=1","label":"The painted studio interior","credit":"Gil Giuglio"},
+        {"url":"https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/FRA95-Auvers-sur-Oise-Gil-Giuglio-1126-1024x681.jpg?strip=info&w=1200&ssl=1","label":"Wall decoration detail","credit":"Gil Giuglio"},
+        {"url":"https://bonjourparis.com/wp-content/uploads/2024/10/The-garden-at-Daubignys-house.jpg","label":"The garden at Daubigny's house","credit":"Pat Hallam"} ] },
+
+    { "id":"eglise-auvers", "category":"daytrip", "section":"auvers-climb",
+      "name":"Église Notre-Dame-de-l'Assomption", "blurb":"Free · partway up the slope · exterior is the subject",
+      "description":"The 12th-century church Van Gogh painted from the chevet in June 1890, one of his most colour-intense late works — built on a hillside promontory, contemporary with Notre-Dame de Paris. Roughly 400–500 m from the square on a steady paved incline. The doors are often locked; the exterior is the shot.",
+      "sources":[{"url":"https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/","title":"Auvers Tourism"},{"url":"https://lukemckernan.com/2024/09/11/visiting-van-gogh/","title":"Luke McKernan"}],
+      "lat":49.0700, "lng":2.1688,
+      "images":[
+        {"url":"https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2023/09/Eglise-Notre-Dame-de-lAssomption-%C2%A9-Auvers-Tourisme-768x1024.jpg?strip=info&w=1500&ssl=1","label":"The church from the angle Van Gogh painted","credit":"Auvers Tourisme"},
+        {"url":"https://live.staticflickr.com/1864/43645724695_a6b6752ee7_b.jpg","label":"Église Notre-Dame de l'Assomption","credit":"sottolestelle"},
+        {"url":"https://i1.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/10/eglise-auvers-sur-oise-la-nuit.jpg?strip=info&w=640&ssl=1","label":"The church at night","credit":"Auvers Tourisme"} ] },
+
+    { "id":"tombes-van-gogh", "category":"daytrip", "section":"auvers-climb",
+      "name":"Vincent &amp; Theo's graves", "blurb":"Free · the steep part · take a taxi up, walk down",
+      "description":"Two plain headstones side by side in a walled graveyard on the plateau, joined under one sheet of ivy said to have been planted by Dr Gachet, with the wheatfields beyond. 700–900 m uphill from the square, described first-hand as \"quite steep\", with no benches, shade or toilets at the top. Cars reach the gate by a one-way loop.",
+      "sources":[{"url":"https://www.tripadvisor.com/ShowUserReviews-g562716-d4340932-r206897521-Cimetiere_Auvers_su_Oise-Auvers_sur_Oise_Val_d_Oise_Ile_de_France.html","title":"Visitor review"},{"url":"https://www.atlasobscura.com/places/grave-of-vincent-and-theo-van-gogh","title":"Atlas Obscura"}],
+      "lat":49.07483, "lng":2.17908,
+      "images":[{"url":"https://i1.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2023/09/tombes_des_freres-Van_Gogh_%C2%A9Auvers_tourisme-rotated.jpg?strip=info&w=1500&ssl=1","label":"The joint grave of Vincent and Theo van Gogh","credit":"Auvers Tourisme"}] },
+
+    { "id":"wheatfield", "category":"daytrip", "section":"auvers-climb",
+      "name":"The wheatfields", "blurb":"Free · unpaved, no shade · view from the lane instead",
+      "description":"The working plateau fields that gave him Wheatfield with Crows and several of his last canvases. In June the wheat is green-going-gold, closer to his Green Wheat Fields. The plateau is flat once you're up, but the paths are farm track with no shade or seating — photograph it from the paved lane rather than walking in.",
+      "sources":[{"url":"https://hellonicolette.substack.com/p/what-van-gogh-and-standing-alone","title":"Nicolette Daskalakis"},{"url":"https://tourisme-auverssuroise.fr/activites-loisirs/sur-les-pas-des-impressionnistes/","title":"Auvers Tourism"}],
+      "lat":49.0751066, "lng":2.1781789,
+      "images":[
+        {"url":"https://substackcdn.com/image/fetch/$s_!w7UR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F51ab44a1-613b-44be-a6c1-2ddca7310bc4_2048x1365.jpeg","label":"A lone tree in the wheatfields above Auvers","credit":"Nicolette Daskalakis"},
+        {"url":"https://i0.wp.com/travelawaits.com/wp-content/uploads/2021/04/the-green-fields-of-auvers-sud8c9bd.jpg?resize=1024%2C683&ssl=1","label":"The green fields that inspired Van Gogh","credit":"Joao Paulo V Tinoco"},
+        {"url":"https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/04/Racines-1024x506.jpg?strip=info&w=1500&ssl=1","label":"The \"Van Gogh Roots\" path toward the fields","credit":"Auvers Tourisme"} ] },
+
+    { "id":"chateau-auvers", "category":"daytrip", "section":"auvers-climb",
+      "name":"Château d'Auvers-sur-Oise", "blurb":"Gardens free · exhibit ~€12 · taxi to its own car park",
+      "description":"A 16th–17th-century château on the plateau with an immersive multimedia journey through Impressionism, and 8 hectares of formal gardens whose roughly 23,000 irises bloom mid-May to mid-June — the same flower Van Gogh painted at Arles. Gardens flat and free, Tue–Fri 8–18 and weekends 9–18; the car park puts you at the door.",
+      "sources":[{"url":"https://www.chateau-auvers.fr/","title":"Château d'Auvers"},{"url":"https://parisjetaime.com/culture/chateau-d-auvers-p1051","title":"Paris je t'aime"}],
+      "lat":49.07193, "lng":2.16627,
+      "images":[
+        {"url":"https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2023/10/chateau-auvers-sur-oise-edited-1024x1024.jpg?strip=info&w=1428&ssl=1","label":"The château","credit":"Auvers Tourisme"},
+        {"url":"https://images.squarespace-cdn.com/content/v1/5c705ecb51f4d4c18997db3f/1595884285219-J2A26N6BZW24P1UE6XCO/IMG_5646.jpeg?format=1500w","label":"The garden and fountain in front","credit":"Sarah Freia"},
+        {"url":"https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/FRA-95-Auvers_sur_Oise-GilGiuglio_3487-1024x681.jpg?strip=info&w=1452&ssl=1","label":"The grounds on the plateau","credit":"Gil Giuglio"} ] },
+
+    { "id":"villa-des-pres", "category":"stay", "section":"stay",
+      "name":"Villa des Prés", "blurb":"5-star boutique &amp; spa · from ~€740 · Saint-Germain",
+      "description":"The only place here with its own heated indoor pool and sauna, open 7am–10pm, so a rest day needn't involve leaving the building. A period Haussmannian façade steps from the market bustle of Rue de Buci. Ask which spa treatments are available during pregnancy before you count on them.",
+      "sources":[{"url":"https://www.sortiraparis.com/en/where-to-eat-in-paris/hotel/articles/305504-villa-des-pres-the-5-hotel-and-intimate-spa-in-saint-germain-des-pres","title":"Sortir à Paris"}],
+      "lat":48.85355, "lng":2.33643,
+      "images":[] },
+
+    { "id":"cardinal-furstemberg", "category":"stay", "section":"stay",
+      "name":"Maison Cardinal Furstemberg", "blurb":"Boutique hotel · ~$1,879/night · Saint-Germain",
+      "description":"On Place de Furstemberg, one of the calmest small squares in the quarter — a genuinely quiet night's sleep a few minutes from the Seine and the bridge across to the Orangerie.",
+      "sources":[{"url":"https://www.booking.com/hotel/fr/maison-cardinal-furstemberg-paris.html","title":"Booking.com"}],
+      "lat":48.85457, "lng":2.33595,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/351615702.webp?k=431744ca295f1c6f43f29f0e7b152c64dc8b22c57321e39601af71b0d5a20558&o=","label":"Maison Cardinal Furstemberg","credit":"Booking.com"}] },
+
+    { "id":"orsay-apartment", "category":"stay", "section":"stay",
+      "name":"Prime Location — Orsay Chic Apartment", "blurb":"Serviced apartment · ~$531/night · beside the Orsay",
+      "description":"A private flat with a kitchen and sitting room right by the Musée d'Orsay — which on this itinerary means the shortest possible walk to the museum you'll spend longest in, and somewhere of your own to lie down in the middle of the day.",
+      "sources":[{"url":"https://www.booking.com/hotel/fr/prime-location-orsay-chic-apartment.html","title":"Booking.com"}],
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/790529435.webp?k=1b1a95bf0317262721f9f73a967b76bfef4de4193bea8d06de92ad66d872c320&o=","label":"The apartment","credit":"Booking.com"}] },
+
+    { "id":"sofitel-baltimore", "category":"stay", "section":"stay",
+      "name":"Sofitel Paris Baltimore Tour Eiffel", "blurb":"Full-service 4-star · ~$933/night · Kléber/Trocadéro",
+      "description":"A restored 1920s building where guests repeatedly describe the rooms as quiet and restful even on the higher floors — \"we found it quiet and relaxing; this was needed after a day of walking through Paris.\" Full-service comfort rather than an apartment, and a flat walk to the Seine and Trocadéro.",
+      "sources":[{"url":"https://www.tripadvisor.com/ShowUserReviews-g187147-d229450-r873666707-Sofitel_Paris_Baltimore_Tour_Eiffel-Paris_Ile_de_France.html","title":"TripAdvisor"}],
+      "lat":48.86655, "lng":2.28952,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/885878795.webp?k=073312bf6eed379f0cc1bfed38eb6abf1dde51b906049633d001e6ec91835036&o=","label":"The hotel","credit":"Booking.com"}] },
+
+    { "id":"hotel-inattendu", "category":"stay", "section":"stay",
+      "name":"Hôtel l'Inattendu", "blurb":"Boutique hotel · ~$359/night · Invalides, 7th",
+      "description":"The most affordable real hotel — not an apartment — in the quiet Invalides pocket, inside the flat walking radius of both the Orsay and the Rodin garden. The value pick of the six.",
+      "sources":[{"url":"https://www.booking.com/hotel/fr/hotel-inattendu.html","title":"Booking.com"}],
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/739999722.webp?k=dfdbee513e9c35d594db2ef2817546074d7737cdcff7d3f5ca4ee6be4ea7b3da&o=","label":"Hôtel l'Inattendu","credit":"Booking.com"}] },
+
+    { "id":"norman-paris", "category":"stay", "section":"stay",
+      "name":"Norman Paris Hôtel &amp; Spa", "blurb":"Hotel with spa · ~$643/night · Invalides, 7th",
+      "description":"A second spa option outside Saint-Germain, still in the calmer 7th and walkable to the Orsay and Rodin — an on-site rest-day without leaving the neighbourhood. Same question to ask: which treatments are open to you.",
+      "sources":[{"url":"https://www.booking.com/hotel/fr/norman-paris.html","title":"Booking.com"}],
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/547584207.webp?k=68f04680f3eee2e0537cca673ddfeda5e3e60e696fc05ec0e9e85df35100d94e&o=","label":"Norman Paris Hôtel &amp; Spa","credit":"Booking.com"}] },
+
+    { "id":"versailles-palace", "category":"daytrip",
+      "name":"Palace of Versailles", "blurb":"Hall of Mirrors, Gallery of Great Battles · lifts to every level",
+      "lat":48.80443, "lng":2.12029 },
+    { "id":"petit-trianon", "category":"daytrip",
+      "name":"Petit Trianon &amp; Marie-Antoinette's Estate", "blurb":"€15 · far calmer · reach it by electric vehicle",
+      "lat":48.81558, "lng":2.10972 },
+    { "id":"petite-venise", "category":"food",
+      "name":"La Petite Venise", "blurb":"Shaded terrace on the Grand Canal · Tue–Sun 11:45–18:00",
+      "lat":48.80872, "lng":2.11097 },
+    { "id":"musee-lambinet", "category":"daytrip",
+      "name":"Musée Lambinet, Versailles town", "blurb":"€7 · Wed–Sun · almost empty · 5 min from Rive Droite",
+      "lat":48.808966, "lng":2.130678 }
+  ],
+  "route": [],
+  "branches": []
+}
+</script>
+<!-- attribution: machine-injected by inject-attribution.mjs; leave as {} -->
+<script type="application/json" id="attribution-data">{
+  "https://cdn.mediatheque.epmoo.fr/link/3c9igq/opr1c3jddqo717k.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.musee-orangerie.fr/en/visit-orangerie"
+  },
+  "https://live.staticflickr.com/65535/50173775627_ca38e81964_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Joanbrebo",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/79805131@N08/50173775627"
+  },
+  "https://live.staticflickr.com/65535/50263330362_f0fd24fce9_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Joanbrebo",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/79805131@N08/50263330362"
+  },
+  "https://www.artsy-traveler.com/wp-content/uploads/2023/10/Van-Gogh-Starry-Night-1536x1256.jpg": {
+    "siteName": "Artsy Traveler",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.artsy-traveler.com/musee-dorsay-in-paris/"
+  },
+  "https://www.artsy-traveler.com/wp-content/uploads/2023/10/Orsay-Interio-1536x1152.jpg": {
+    "siteName": "Artsy Traveler",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.artsy-traveler.com/musee-dorsay-in-paris/"
+  },
+  "https://live.staticflickr.com/935/42928338425_17dc13823f_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Joe Shlabotnik",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/40646519@N00/42928338425"
+  },
+  "https://www.artsy-traveler.com/wp-content/uploads/2023/10/rouen1-1404x2048.jpg": {
+    "siteName": "Artsy Traveler",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.artsy-traveler.com/musee-dorsay-in-paris/"
+  },
+  "https://www.salutfromparis.com/wp-content/uploads/2025/05/Musee-Marmottan-Monet-landscape.jpg": {
+    "siteName": "Salut from Paris",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.salutfromparis.com/musee-marmottan-monet/"
+  },
+  "https://impressionistarts.com/assets/impression-sunrise-basement-musee-marmottan-monet.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://impressionistarts.com/musee-marmottan-monet-paris/"
+  },
+  "https://impressionistarts.com/assets/water-lilies-musee-marmottan-monet.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://impressionistarts.com/musee-marmottan-monet-paris/"
+  },
+  "https://www.salutfromparis.com/wp-content/uploads/2025/05/Berthe-Morisot-collection.jpg": {
+    "siteName": "Salut from Paris",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.salutfromparis.com/musee-marmottan-monet/"
+  },
+  "https://live.staticflickr.com/65535/50767076257_f5b6117135_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "stanze nearly back",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/92823399@N07/50767076257"
+  },
+  "https://live.staticflickr.com/4588/39522554892_493ab8dce8_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "blavandmaster",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/38134034@N04/39522554892"
+  },
+  "https://live.staticflickr.com/7916/39666769373_b52449c378_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "byb64",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/50879678@N03/39666769373"
+  },
+  "https://misadventureswithandi.com/wp-content/uploads/2022/02/sailboat-in-the-luxembourg-garden-in-Paris.jpg": {
+    "siteName": "Misadventures with Andi",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://misadventureswithandi.com/luxembourg-gardens-in-paris/"
+  },
+  "https://misadventureswithandi.com/wp-content/uploads/2022/02/Paris-6th-arrondissement-Jardin-du-Luxembourg-Marie-de-Medicis-Fountain-2-1.jpg": {
+    "siteName": "Misadventures with Andi",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://misadventureswithandi.com/luxembourg-gardens-in-paris/"
+  },
+  "https://www.getlostinwanderlust.com/wp-content/uploads/2024/03/Latin-Quarter-3.jpg": {
+    "siteName": "Get Lost in Wanderlust",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.getlostinwanderlust.com/babymoon-in-paris/"
+  },
+  "https://images.squarespace-cdn.com/content/v1/5c705ecb51f4d4c18997db3f/1551912825616-SDO1NU4GJGV99CPRDUL5/IMG_8389.jpeg?format=1500w": {
+    "siteName": "Sarah Freia",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.sarahfreia.com/blog/2019/3/6/jardin-du-palais-royal-paris-garden-spotlight"
+  },
+  "https://images.squarespace-cdn.com/content/v1/5c705ecb51f4d4c18997db3f/1551911492759-D9IW1M9729EM0A335N8C/IMG_2603.jpeg?format=1500w": {
+    "siteName": "Sarah Freia",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.sarahfreia.com/blog/2019/3/6/jardin-du-palais-royal-paris-garden-spotlight"
+  },
+  "https://live.staticflickr.com/6173/6177233722_a3f873fc18_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Mark B. Schlemmer",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/28066281@N03/6177233722"
+  },
+  "https://live.staticflickr.com/1234/1385065404_9238976222_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "wallyg",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/70323761@N00/1385065404"
+  },
+  "https://live.staticflickr.com/5521/10418623013_9f2d0e1850_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "proper dave",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/46743608@N00/10418623013"
+  },
+  "https://live.staticflickr.com/7301/9175648464_808e5fd4e4_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "David McKelvey",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/94735786@N00/9175648464"
+  },
+  "https://www.getlostinwanderlust.com/wp-content/uploads/2024/05/Get-Lost-in-Wanderlust-2024-05-06T152624.534.jpg": {
+    "siteName": "Get Lost in Wanderlust",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.getlostinwanderlust.com/babymoon-in-paris/"
+  },
+  "https://live.staticflickr.com/7388/9152323912_e1ee787cfd_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "David McKelvey",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/94735786@N00/9152323912"
+  },
+  "https://i0.wp.com/theparisialite.com/wp-content/uploads/2025/04/pont-alexandre-iii-eiffel-background.jpg?resize=800%2C533&ssl=1": {
+    "siteName": "The Parisialite",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theparisialite.com/pont-alexandre-iii-paris/"
+  },
+  "https://i0.wp.com/theparisialite.com/wp-content/uploads/2025/04/fame-statue-clear-sky.jpg?resize=749%2C1200&ssl=1": {
+    "siteName": "The Parisialite",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theparisialite.com/pont-alexandre-iii-paris/"
+  },
+  "https://i0.wp.com/roamandthrive.com/wp-content/uploads/2022/10/DSC05207.jpg": {
+    "siteName": "Roam and Thrive",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://roamandthrive.com/eiffel-tower-photo-spots/"
+  },
+  "https://uploads.grupodicas.com/2026/02/ponte.jpg": {
+    "siteName": "LorenziGo",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://lorenzigo.com/eiffel-tower-photography-spots/"
+  },
+  "https://www.thewanderinglens.com/wp-content/uploads/2018/01/Paris-and-Eiffel-Tower-Photo-Spots-for-the-best-view-of-the-Eiffel-Tower-2.jpg": {
+    "siteName": "Photo Tips, Creative Photography + Travel Guides - The Wandering Lens",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thewanderinglens.com/paris-places-photograph-eiffel-tower/"
+  },
+  "https://i0.wp.com/roamandthrive.com/wp-content/uploads/2022/10/DSC04981.jpg": {
+    "siteName": "Roam and Thrive",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://roamandthrive.com/eiffel-tower-photo-spots/"
+  },
+  "https://uploads.grupodicas.com/2026/02/trocadero.jpeg": {
+    "siteName": "LorenziGo",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://lorenzigo.com/eiffel-tower-photography-spots/"
+  },
+  "https://i0.wp.com/roamandthrive.com/wp-content/uploads/2022/10/DSC04459-2.jpeg": {
+    "siteName": "Roam and Thrive",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://roamandthrive.com/eiffel-tower-photo-spots/"
+  },
+  "https://www.thewanderinglens.com/wp-content/uploads/2018/01/Paris-and-Eiffel-Tower-Photo-Spots-for-the-best-view-of-the-Eiffel-Tower-13.jpg": {
+    "siteName": "Photo Tips, Creative Photography + Travel Guides - The Wandering Lens",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thewanderinglens.com/paris-places-photograph-eiffel-tower/"
+  },
+  "https://uploads.grupodicas.com/2026/02/Champ-de-Mars-Paris-1366x768.webp": {
+    "siteName": "LorenziGo",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://lorenzigo.com/eiffel-tower-photography-spots/"
+  },
+  "https://uploads.grupodicas.com/2026/02/563346637-1477722795-FA-champs-de-mars-park-1-original.avif": {
+    "siteName": "LorenziGo",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://lorenzigo.com/eiffel-tower-photography-spots/"
+  },
+  "https://live.staticflickr.com/1867/29342620527_ed07d7dab8_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "K_rho",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/27892629@N04/29342620527"
+  },
+  "https://live.staticflickr.com/65535/48160317217_d5e52d69eb_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "Katell Ar Gow",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/145780790@N06/48160317217"
+  },
+  "https://live.staticflickr.com/1880/44230044172_0f511de2da_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "K_rho",
+    "license": "CC BY",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/27892629@N04/44230044172"
+  },
+  "https://www.solosophie.com/wp-content/uploads/2017/01/funiculaire_de_montmartre-1536x1024.jpg": {
+    "siteName": "solosophie",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.solosophie.com/funiculaire-de-montmartre-montmartre-funicular/"
+  },
+  "https://www.solosophie.com/wp-content/uploads/2022/01/view-from-the-top-of-montmartre-1536x2048.jpg": {
+    "siteName": "solosophie",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.solosophie.com/funiculaire-de-montmartre-montmartre-funicular/"
+  },
+  "https://www.getlostinwanderlust.com/wp-content/uploads/2024/03/Latin-Quarter-2.jpg": {
+    "siteName": "Get Lost in Wanderlust",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.getlostinwanderlust.com/babymoon-in-paris/"
+  },
+  "https://www.solosophie.com/wp-content/uploads/2018/01/rue_cremieux-1536x1024.jpg": {
+    "siteName": "solosophie",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.solosophie.com/rue-cremieux-cute-street-paris/"
+  },
+  "https://www.solosophie.com/wp-content/uploads/2018/01/cute_street_rue_cremieux-1536x1024.jpg": {
+    "siteName": "solosophie",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.solosophie.com/rue-cremieux-cute-street-paris/"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/20220328_-_The_Travel_Buds_x_Bouillon04_rhtzrt": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/paris/reviews/bouillon-pigalle"
+  },
+  "https://res.cloudinary.com/the-infatuation/image/upload/c_scale,w_800,q_auto,f_auto/images/Le_Mary_Celeste_Paris_Ilya_KAGAN_ilyafoodstories_inenfu": {
+    "siteName": "The Infatuation",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theinfatuation.com/paris/reviews/le-mary-celeste"
+  },
+  "https://www.madaboutmacarons.com/wp-content/uploads/2012/08/giverny-nympheas-restaurant.jpg": {
+    "siteName": "Mad about Macarons",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/"
+  },
+  "https://www.madaboutmacarons.com/wp-content/uploads/2023/06/French-take-away-kiosk.jpg": {
+    "siteName": "Mad about Macarons",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurant-Les-Nymph%C3%A9as/i-tJwxvjs/0/2971c190/L/restaurant-les-nympheas-giverny-14-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-MDh8R5F/0/272c7212/L/restaurants-giverny-vernon-35-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://www.madaboutmacarons.com/wp-content/uploads/2023/06/la-capucine-pressoir-cafe-giverny.jpg": {
+    "siteName": "Mad about Macarons",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-8hpG8mJ/0/b61e4c53/L/restaurants-giverny-vernon-44-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://www.madaboutmacarons.com/wp-content/uploads/2012/08/Jardin-des-plumes-restaurant-giverny.jpg": {
+    "siteName": "Mad about Macarons",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Le-Jardin-des-plumes/i-pjdsXph/0/MD2GxvDgNprB7n8K95C727Tr28WTpKRjKGWjPdzLM/L/Jardin%20plumes-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://www.madaboutmacarons.com/wp-content/uploads/2023/06/bakery-giverny.jpg": {
+    "siteName": "Mad about Macarons",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-SLKqtZB/0/82cd5dd4/L/restaurants-giverny-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-w4Nz62L/0/7e355e9a/L/restaurants-giverny-vernon-07-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://photos.smugmug.com/Normandie-Lovers/Giverny/n-v3KR44/Restaurants/i-jrcnpJd/0/c78e6a06/L/restaurants-giverny-vernon-04-L.jpg": {
+    "siteName": "Normandie Lovers",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://normandielovers.fr/en/best-restaurants-giverny-eating/"
+  },
+  "https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/auberge-facade-1024x613.jpg?strip=info&w=1200&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/chambre-lucarne-1024x613.jpg?strip=info&w=1200&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://i0.wp.com/travelawaits.com/wp-content/uploads/2021/04/the-auvers-sur-oise-city-hall9f2bc2.jpg?resize=1024%2C731&ssl=1": {
+    "siteName": "TravelAwaits",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.travelawaits.com/2494210/auvers-sur-oise-france/"
+  },
+  "https://bonjourparis.com/wp-content/uploads/2024/10/Van-Goghs-last-home.jpg": {
+    "siteName": "Bonjour Paris",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/"
+  },
+  "https://i1.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/15977_961_Auvers-Jardin-de-la-Maison-du-docteur-Gachet.jpg?strip=info&w=760&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/sur-les-pas-des-impressionnistes/"
+  },
+  "https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/09/20220613_112049-scaled.jpg?strip=info&w=1500&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/musee-de-labsinthe-musee-2-1024x768.webp?strip=info&w=1200&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://bonjourparis.com/wp-content/uploads/2024/10/Antique-absinthe-fountain.jpg": {
+    "siteName": "Bonjour Paris",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/"
+  },
+  "https://bonjourparis.com/wp-content/uploads/2024/10/Wormwood-plant.jpg": {
+    "siteName": "Bonjour Paris",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/"
+  },
+  "https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/FRA95-Auvers-sur-Oise-Gil-Giuglio-1137-1024x681.jpg?strip=info&w=1200&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/FRA95-Auvers-sur-Oise-Gil-Giuglio-1126-1024x681.jpg?strip=info&w=1200&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://bonjourparis.com/wp-content/uploads/2024/10/The-garden-at-Daubignys-house.jpg": {
+    "siteName": "Bonjour Paris",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://bonjourparis.com/paris-day-trips/a-walk-around-auvers-sur-oise/"
+  },
+  "https://i2.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2023/09/Eglise-Notre-Dame-de-lAssomption-%C2%A9-Auvers-Tourisme-768x1024.jpg?strip=info&w=1500&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://live.staticflickr.com/1864/43645724695_a6b6752ee7_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "sottolestelle",
+    "license": "CC BY-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/29664148@N03/43645724695"
+  },
+  "https://i1.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2022/10/eglise-auvers-sur-oise-la-nuit.jpg?strip=info&w=640&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://i1.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2023/09/tombes_des_freres-Van_Gogh_%C2%A9Auvers_tourisme-rotated.jpg?strip=info&w=1500&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/sur-les-pas-des-impressionnistes/"
+  },
+  "https://i0.wp.com/travelawaits.com/wp-content/uploads/2021/04/the-green-fields-of-auvers-sud8c9bd.jpg?resize=1024%2C683&ssl=1": {
+    "siteName": "TravelAwaits",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.travelawaits.com/2494210/auvers-sur-oise-france/"
+  },
+  "https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/04/Racines-1024x506.jpg?strip=info&w=1500&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2023/10/chateau-auvers-sur-oise-edited-1024x1024.jpg?strip=info&w=1428&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://images.squarespace-cdn.com/content/v1/5c705ecb51f4d4c18997db3f/1595884285219-J2A26N6BZW24P1UE6XCO/IMG_5646.jpeg?format=1500w": {
+    "siteName": "Sarah Freia",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.sarahfreia.com/blog/auvers-sur-oise"
+  },
+  "https://i0.wp.com/tourisme-auverssuroise.fr/wp-content/uploads/2025/05/FRA-95-Auvers_sur_Oise-GilGiuglio_3487-1024x681.jpg?strip=info&w=1452&ssl=1": {
+    "siteName": "Site officiel de l'office de Tourisme Auvers-sur-Oise Sausseron Impressionnistes",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://tourisme-auverssuroise.fr/activites-loisirs/patrimoine-culturel/"
+  },
+  "https://cdn.mediatheque.epmoo.fr/link/3c9igq/gjl1bx2lwcbo2g0.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.musee-orangerie.fr/en/visit-orangerie"
+  },
+  "https://www.dangerous-business.com/wp-content/uploads/2024/10/DSC00362-1536x1024.jpg": {
+    "siteName": "A Dangerous Business Travel Blog",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.dangerous-business.com/giverny-day-trip-from-paris/"
+  },
+  "https://www.madaboutmacarons.com/wp-content/uploads/2012/08/hotel-baudy-terrace-restaurant.jpg": {
+    "siteName": "Mad about Macarons",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.madaboutmacarons.com/giverny-and-inspiration-from-monets-gardens/"
+  },
+  "https://www.mdig.fr/wp-content/uploads/2020/03/jardin-musee-giverny-2-scaled-1535x2048.jpg": {
+    "siteName": "Musée Giverny",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.mdig.fr/en/the-garden/"
+  },
+  "https://live.staticflickr.com/3216/2963248234_d0c6956973_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "█ Slices of Light ✴ █▀ ▀ ▀",
+    "license": "CC BY-NC-ND",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/95282411@N00/2963248234"
+  },
+  "https://live.staticflickr.com/1410/4723119959_22073c9048_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "1yen",
+    "license": "CC BY-NC-SA",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/62929416@N00/4723119959"
+  },
+  "https://www.versailles-tourisme.com/medias/images/prestataires/multitailles/800x600_156473-musee_lambinet_facade_copyright_musee_lambinet.jpg": {
+    "siteName": "en.versailles-tourisme.com",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://en.versailles-tourisme.com/lambinet-museum.html"
+  }
+}</script>
+<script type="module">
+const DATA   = JSON.parse(document.getElementById('guide-data').textContent);
+const ITEMS  = DATA.items  || [];
+const ROUTE  = DATA.route  || [];
+const BRANCHES = DATA.branches || [];
+let activeSeason = null;
+
+// ── gallery ───────────────────────────────────────────────────────────────
+let GALLERIES = [];
+function galleryHTML(images){
+  let imgs = images || [];
+  if (activeSeason){ const f = imgs.filter(i => inSeason(i.season, activeSeason)); if (f.length) imgs = f; }
+  if (!imgs.length) return '<div class="no-img">No photograph</div>';
+  const gid = GALLERIES.push(imgs) - 1, f = imgs[0], multi = imgs.length > 1;
+  return `<div class="car" data-gid="${gid}" role="group" aria-roledescription="carousel" aria-label="Images">
+    <img class="car-main" src="${f.url}" alt="${f.label}" loading="lazy" role="button" tabindex="0" aria-label="Enlarge image" onerror="this.style.opacity=.2">
+    ${multi ? `<button class="car-nav prev" aria-label="Previous">‹</button><button class="car-nav next" aria-label="Next">›</button>
+    <div class="car-dots" aria-hidden="true">${imgs.map((_,i) => `<i class="${i?'':'active'}"></i>`).join('')}</div>
+    <span class="car-live sr-only" aria-live="polite"></span>` : ''}
+  </div>`;
+}
+
+// ── render ────────────────────────────────────────────────────────────────
+const CARD_VARIANTS = {};
+function renderCard(it){
+  return `<article class="card${it.feature ? ' feature' : ''}" data-id="${it.id}" aria-labelledby="t-${it.id}">${galleryHTML(it.images)}
+    <div class="body"><p class="card-title" id="t-${it.id}">${it.name}</p><p class="meta">${it.blurb}</p>
+    ${it.description ? `<p class="desc">${it.description}</p>` : ''}
+    ${it.sources?.length ? `<div class="card-sources">${it.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>`).join(' · ')}</div>` : ''}
+    </div></article>`;
+}
+function render(){
+  GALLERIES = [];
+  const sectionOf = i => i.section;
+  document.querySelectorAll('.cards[data-section]').forEach(el => {
+    const sec = el.dataset.section;
+    const items = ITEMS.filter(i => sectionOf(i) === sec && inSeason(i.season, activeSeason))
+      .sort((a, b) => (b.feature ? 1 : 0) - (a.feature ? 1 : 0));
+    const draw = CARD_VARIANTS[el.dataset.variant] || renderCard;
+    el.innerHTML = `<ul class="grid" role="list">${items.map(it => `<li>${draw(it)}</li>`).join('')}</ul>`;
+  });
+  wire();
+}
+
+// ── map ───────────────────────────────────────────────────────────────────
+const cs = getComputedStyle(document.documentElement);
+const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
+const map = L.map('map');
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+if (ROUTE.length) L.polyline(ROUTE,{color:'#888',weight:2,dashArray:'7 7',opacity:.6}).addTo(map);
+BRANCHES.forEach(b => L.polyline(b.coords,{color:b.color||'#aaa',weight:1.5,dashArray:'4 6',opacity:.5}).addTo(map));
+
+const markers = {}, catOf = {}, seasonOf = {}, pts = [];
+ITEMS.filter(i => i.lat && i.lng).forEach(it => {
+  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
+    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
+  m.on('click', () => focusCard(it.id));
+  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);
+});
+if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([48.86,2.33],12);
+
+const catOff = new Set();
+const inSeason = (val, s) => !s || val == null || (Array.isArray(val) ? val.includes(s) : val === s);
+function applyMarkerFilters(){
+  Object.entries(markers).forEach(([id, m]) => {
+    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
+    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
+    else if (map.hasLayer(m)) map.removeLayer(m);
+  });
+}
+
+const LABELS = {art:'Art', do:'Slow Paris', food:'Food &amp; drink', stay:'Stay', daytrip:'Day trips'};
+const mf = document.getElementById('mapfilter');
+if (mf){
+  mf.innerHTML = [...new Set(ITEMS.filter(i => i.lat && i.lng).map(i => i.category))]
+    .map(c => `<button data-cat="${c}"><i style="background:${color(c)}"></i>${LABELS[c] || c}</button>`).join('');
+  mf.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const c = btn.dataset.cat;
+    if (btn.classList.toggle('off')) catOff.add(c); else catOff.delete(c);
+    applyMarkerFilters();
+  }));
+}
+
+// ── card ↔ marker sync ────────────────────────────────────────────────────
+const isSplit = () => document.body.classList.contains('split');
+function focusCard(id){
+  if (!isSplit()) return;
+  document.querySelectorAll('[data-id]').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+  const el = document.querySelector(`[data-id="${id}"]`); if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function wire(){
+  document.querySelectorAll('.car').forEach(car => {
+    const imgs = GALLERIES[+car.dataset.gid], main = car.querySelector('.car-main'),
+          dots = car.querySelectorAll('.car-dots i'), live = car.querySelector('.car-live');
+    let idx = 0;
+    const set = d => { idx = (idx + d + imgs.length) % imgs.length; const im = imgs[idx];
+      main.src = im.url; main.alt = im.label;
+      if (live) live.textContent = `${idx+1} of ${imgs.length}: ${im.label||''}`;
+      dots.forEach((x,i) => x.classList.toggle('active', i === idx)); };
+    car.querySelector('.next')?.addEventListener('click', e => { e.stopPropagation(); set(1); });
+    car.querySelector('.prev')?.addEventListener('click', e => { e.stopPropagation(); set(-1); });
+    main.addEventListener('click', () => openLB(imgs, idx));
+    main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
+  });
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => {
+    if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+}
+
+// ── attribution ───────────────────────────────────────────────────────────
+const ATTRIBUTION = JSON.parse(document.getElementById('attribution-data').textContent || '{}');
+document.querySelectorAll('.credit[data-src]').forEach(el => {
+  const attr = ATTRIBUTION[el.dataset.src];
+  if (attr) el.textContent = attr.credit ? `${attr.credit} · ${attr.siteName}` : attr.siteName || '';
+  else if (el.dataset.src) try { el.textContent = new URL(el.dataset.src).hostname.replace('www.',''); } catch{}
+});
+
+// ── lightbox ──────────────────────────────────────────────────────────────
+const lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'),
+      lbCap = lb.querySelector('.cap'), lbCount = lb.querySelector('.count');
+let lbImgs = [], lbI = 0;
+function openLB(imgs, start){ lbImgs = imgs; lbI = start || 0; drawLB(); lb.showModal(); }
+function drawLB(){ const im = lbImgs[lbI]; lbImg.src = im.url; lbImg.alt = im.label;
+  const attr = ATTRIBUTION[im.url] || {};
+  let siteName = attr.siteName || '';
+  if (!siteName && attr.sourcePage) { try { siteName = new URL(attr.sourcePage).hostname.replace('www.',''); } catch{} }
+  const person = im.credit || attr.credit || '';
+  const site = attr.sourcePage ? `<a href="${attr.sourcePage}" target="_blank" rel="noopener">${siteName}</a>` : siteName;
+  const lic = attr.license && attr.licenseUrl ? ` · <a href="${attr.licenseUrl}" target="_blank" rel="noopener">${attr.license}</a>` : '';
+  const parts = [person, site].filter(Boolean).join(' · ');
+  lbCap.innerHTML = `${im.label}<span class="cr">${parts}${lic}</span>`;
+  lbCount.textContent = lbImgs.length > 1 ? `${lbI+1} / ${lbImgs.length}` : '';
+  lb.querySelectorAll('.arw').forEach(a => a.style.display = lbImgs.length > 1 ? '' : 'none'); }
+function stepLB(d){ lbI = (lbI + d + lbImgs.length) % lbImgs.length; drawLB(); }
+lb.querySelector('.next').addEventListener('click', e => { e.stopPropagation(); stepLB(1); });
+lb.querySelector('.prev').addEventListener('click', e => { e.stopPropagation(); stepLB(-1); });
+lb.querySelector('.x').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+document.addEventListener('keydown', e => { if (!lb.open) return;
+  if (e.key === 'ArrowRight') stepLB(1); if (e.key === 'ArrowLeft') stepLB(-1); });
+document.addEventListener('click', e => {
+  const img = e.target.closest('img[data-lightbox]');
+  if (!img) return;
+  const group = img.dataset.lightbox;
+  const all = group ? [...document.querySelectorAll(`img[data-lightbox="${group}"]`)] : [img];
+  const imgs = all.map(i => { const attr = ATTRIBUTION[i.src]||{}; return {url:i.src, label:i.alt||'', credit:attr.credit||''}; });
+  openLB(imgs, all.indexOf(img));
+});
+
+// ── split view ────────────────────────────────────────────────────────────
+document.getElementById('toggle').addEventListener('click', e => {
+  const split = document.body.classList.toggle('split');
+  e.target.textContent = split ? 'Close ▸' : '◂ Map';
+  setTimeout(() => map.invalidateSize(), 220);
+});
+
+// ── GPX export ────────────────────────────────────────────────────────────
+const exportDialog = document.getElementById('export-dialog');
+document.getElementById('export-btn').addEventListener('click', () => exportDialog.showModal());
+exportDialog.querySelector('.close').addEventListener('click', () => exportDialog.close());
+function esc(s){ return String(s).replace(/&amp;/g,'&').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+document.getElementById('download-gpx').addEventListener('click', () => {
+  const checked = [...exportDialog.querySelectorAll('.cats input:checked')].map(c => c.value);
+  const mapped = ITEMS.filter(i => i.lat && i.lng && checked.includes(i.category));
+  const title = document.title;
+  const wpts = mapped.map(i => `<wpt lat="${i.lat}" lon="${i.lng}"><name>${esc(i.name)}</name><desc>${esc(i.blurb||'')}</desc></wpt>`).join('\n');
+  const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="travel-guide"><metadata><name>${esc(title)}</name></metadata>\n${wpts}\n</gpx>`], {type:'application/gpx+xml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'paris-babymoon-places.gpx';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  exportDialog.close();
+});
+
+render();
+</script></body></html>

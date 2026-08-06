@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Safe Travels — Sample Guides</title>
+<meta name="description" content="Browse sample travel guides created by Safe Travels — each one researched, written and designed from a single prompt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+:root{
+  --bg:#f2ece1;
+  --paper:#faf6ee;
+  --ink:#16130f;
+  --muted:#7d7364;
+  --line:#ddd2bd;
+  --coral:#d9451f;
+  --gold:#e8a02c;
+  --teal:#1d7f8c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Newsreader',serif;line-height:1.5}
+.frame{max-width:1120px;margin:0 auto;padding:0 1.25rem}
+header{padding:3rem 0 1.4rem}
+h1{font-family:'Big Shoulders Display',sans-serif;font-weight:900;font-size:clamp(2.6rem,7vw,4.6rem);line-height:.95;margin:0 0 .7rem;text-transform:uppercase;letter-spacing:.015em}
+h1 .accent{color:var(--coral)}
+header p.sub{margin:0;font-size:1.12rem;color:var(--muted)}
+header p.sub .hand{font-family:'Caveat',cursive;font-size:1.5rem;color:var(--teal);white-space:nowrap}
+.map-wrap{padding:1.4rem 0 0}
+#map{height:62vh;min-height:400px;border:2px solid var(--ink);border-radius:2px;box-shadow:6px 6px 0 rgba(22,19,15,.12);z-index:0}
+main{padding:2rem 0 3.4rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1.5rem 1.25rem}
+.card{position:relative;display:block;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:1.15rem 3.4rem 1.25rem 1.2rem;text-decoration:none;color:inherit;
+  box-shadow:0 2px 6px rgba(22,19,15,.08);transition:transform .18s,box-shadow .18s;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 6px,rgba(217,69,31,.05) 6px,rgba(217,69,31,.05) 7px)}
+.grid .card:nth-child(3n+1){transform:rotate(-.7deg)}
+.grid .card:nth-child(3n+2){transform:rotate(.5deg)}
+.grid .card:nth-child(3n){transform:rotate(-.3deg)}
+.card:hover,.card:focus-visible{transform:rotate(0) translateY(-4px);box-shadow:0 12px 26px rgba(22,19,15,.16);outline:none;z-index:2}
+.card .stamp{position:absolute;top:.7rem;right:.7rem;width:2.15rem;height:2.6rem;border:2px dashed var(--coral);border-radius:2px;display:flex;align-items:center;justify-content:center;
+  font-family:'Big Shoulders Display',sans-serif;font-weight:700;font-size:.8rem;color:var(--coral);transform:rotate(4deg);background:rgba(217,69,31,.05)}
+.card h2{font-family:'Big Shoulders Display',sans-serif;font-weight:700;font-size:1.35rem;line-height:1.12;margin:0 0 .5rem;text-transform:uppercase;letter-spacing:.02em}
+.card p.prompt{margin:0;font-style:italic;color:var(--muted);font-size:.98rem}
+.card p.prompt::before{content:"“"}
+.card p.prompt::after{content:"”"}
+.leaflet-popup-content-wrapper{background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:2px;box-shadow:4px 4px 0 rgba(22,19,15,.15)}
+.leaflet-popup-tip-container{margin-top:-2px}
+.leaflet-popup-tip{background:var(--paper);border:none;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.leaflet-popup-content{font-family:'Newsreader',serif;font-size:.94rem;line-height:1.45;margin:14px 16px}
+.leaflet-popup-content b{display:block;font-family:'Big Shoulders Display',sans-serif;font-weight:700;font-size:1.1rem;text-transform:uppercase;letter-spacing:.02em;margin-bottom:.35rem}
+.leaflet-popup-content em{color:var(--muted)}
+.leaflet-popup-content .open{display:block;margin-top:.55rem;color:var(--coral);font-style:normal;font-weight:600;text-decoration:none}
+.leaflet-popup-content .open:hover{text-decoration:underline}
+footer{padding:0 0 2.4rem;color:var(--muted);font-size:.88rem;font-style:italic}
+footer a{color:var(--muted)}
+@media (max-width:600px){#map{height:48vh;box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="frame">
+<header>
+  <h1><span class="accent">Safe Travels!</span><br>Sample Guides</h1>
+  <p class="sub">Real asks, and the guides that came back. <span class="hand">— hover a postcard to find it on the map ↓</span></p>
+</header>
+
+<div class="map-wrap">
+  <div id="map" aria-label="World map of sample guide routes"></div>
+</div>
+
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  Guides are researched and assembled by AI — details drift, so double-check anything your plans depend on.
+  Made with <a href="https://github.com/nickeng/safe-travels">Safe Travels</a>.
+</footer>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="application/json" id="guides-data">
+[{
+    "file": "80-days.html",
+    "title": "Around the World in 80 Days",
+    "route": [
+        [51.5075, -0.1278],
+        [51.129, 1.3229],
+        [48.858, 2.352],
+        [45.0619, 7.6784],
+        [40.6411, 17.9467],
+        [31.2641, 32.3133],
+        [30.5901, 32.2733],
+        [29.9668, 32.5498],
+        [18.922, 72.8346],
+        [20.006, 73.794],
+        [25.4233, 81.8897],
+        [25.3054, 83.0094],
+        [22.5832, 88.3427],
+        [1.2865, 103.8531],
+        [22.2951, 114.1718],
+        [31.2433, 121.4848],
+        [35.4505, 139.6473],
+        [37.7954, 237.6052],
+        [39.2937, 239.72719999999998],
+        [41.223, 248.02620000000002],
+        [41.1332, 255.1857],
+        [41.2554, 264.0626],
+        [41.8791, 272.3676],
+        [40.7054, 285.9924],
+        [51.8488, 351.7004],
+        [53.348, 353.722],
+        [53.4075, 357.0225],
+        [51.5075, 359.8722]
+    ],
+    "marker": [51.5074, -0.1278],
+    "prompt": "Around the world in 80 days, just like Phileas Fogg",
+    "muted": true
+}, {
+    "file": "kyoto.html",
+    "title": "Kyoto Autumn Leaves",
+    "route": [
+        [36.1417, 137.2595],
+        [36.262, 136.9069],
+        [36.5624, 136.6624],
+        [35.0116, 135.7681],
+        [34.669, 135.5016]
+    ],
+    "marker": [35.0116, 135.7681],
+    "prompt": "I want to see the autumn leaves in Kyoto, but can I time it so I can see the leaves in other locations too? ~10 days."
+}, {
+    "file": "chengdu.html",
+    "title": "Chengdu with a Baby",
+    "route": [],
+    "marker": [30.4921, 103.6989],
+    "prompt": "Visiting Chengdu in August with our 1 year old"
+}, {
+    "file": "christmas-markets.html",
+    "title": "The Christmas Market Circuit",
+    "route": [
+        [48.1852, 16.3773],
+        [47.8131, 13.0458],
+        [48.1396, 11.5588]
+    ],
+    "marker": [47.8131, 13.0458],
+    "prompt": "Vienna, Salzburg, and Munich, Christmas market circuit, ~5 days by train."
+}, {
+    "file": "antarctica.html",
+    "title": "Antarctica",
+    "route": [],
+    "marker": [-64.8, -63.5],
+    "prompt": "I want to see Antarctica. When is the best time to go? How do I even get there?"
+}, {
+    "file": "ha-giang.html",
+    "title": "Hà Giang Motorcycle Tour",
+    "route": [
+        [22.8312, 104.9886],
+        [23.0727, 104.9876],
+        [23.071, 105.2109],
+        [23.2769, 105.361],
+        [23.2425, 105.4036],
+        [23.1644, 105.4088],
+        [22.9312, 105.2229],
+        [22.8312, 104.9886]
+    ],
+    "marker": [23.2769, 105.361],
+    "prompt": "Ha Giang loop, Vietnam, October, ~6 days. We ride motorcycles at home, should we self-ride or hire easy riders? Interested in the market days of the villages"
+}, {
+    "file": "oaxaca.html",
+    "title": "Días de Muertos in Oaxaca",
+    "route": [],
+    "marker": [16.9995, -96.6877],
+    "prompt": "Trip with friends to Oaxaca for Dias de Muertos, ~5 days."
+}, {
+    "file": "sri-lanka.html",
+    "title": "Sri Lanka Loop with Kids",
+    "route": [
+        [7.2086, 79.8358],
+        [7.9571, 80.76],
+        [7.2936, 80.6413],
+        [6.9497, 80.7891],
+        [6.8369, 80.7713],
+        [6.8751, 81.045],
+        [6.5122, 80.8876],
+        [5.9676, 80.3713],
+        [6.027, 80.217],
+        [6.9271, 79.8612]
+    ],
+    "marker": [6.8369, 80.7713],
+    "prompt": "Sri Lanka loop with kids aged 10 and 12. February, Want to see it all: hill country, train ride, temples, surfing."
+}, {
+    "file": "morocco.html",
+    "title": "Morocco (Age 65+)",
+    "route": [
+        [33.5947, -7.612],
+        [34.0227, -6.834],
+        [35.1695, -5.2642],
+        [34.062, -4.982],
+        [31.6258, -7.9889]
+    ],
+    "marker": [34.062, -4.982],
+    "prompt": "Senior retired couple visiting Morocco, we want to see Marrakech, Casablanca and Chefchaouen, we have 10-12 days, plan a route for us"
+}, {
+    "file": "annapurna.html",
+    "title": "Hiking The Annapurna Circuit",
+    "route": [
+        [27.7172, 85.324],
+        [28.2287, 84.3797],
+        [28.5507, 84.2424],
+        [28.6164, 84.153],
+        [28.6418, 84.1373],
+        [28.649, 84.1013],
+        [28.6661, 84.0231],
+        [28.7227, 83.9738],
+        [28.7768, 83.9726],
+        [28.7936, 83.9388],
+        [28.8156, 83.8705],
+        [28.8378, 83.7843],
+        [28.7838, 83.7305],
+        [28.7519, 83.6862],
+        [28.6433, 83.5978],
+        [28.4944, 83.6528],
+        [28.4025, 83.6999],
+        [28.3581, 83.8047],
+        [28.2044, 83.9663]
+    ],
+    "marker": [28.5507, 84.2424],
+    "prompt": "Annapurna circuit, it's my first major trek"
+}, {
+    "file": "seattle-jasper.html",
+    "title": "RV Family Road Trip",
+    "route": [
+        [47.4489, -122.3094],
+        [48.8715, -122.5866],
+        [49.0048, -122.7569],
+        [49.3807, -121.4413],
+        [49.6522, -121.0009],
+        [50.6785, -120.3389],
+        [51.6514, -120.0379],
+        [52.1088, -119.3105],
+        [52.8318, -119.264],
+        [53.0355, -119.229],
+        [52.8655, -118.5361],
+        [52.8464, -118.0779]
+    ],
+    "marker": [50.6785, -120.3389],
+    "prompt": "RV family road trip, plan a drive from Sea-Tac to Whistlers Campground. I have 2 daughters in high school who won't take a hike more than 30 min without complaining to high hell."
+}, {
+    "file": "netherlands.html",
+    "title": "Netherlands Garden Tour",
+    "route": [
+        [52.373, 4.892],
+        [52.3814, 4.6361],
+        [52.2699, 4.5473],
+        [52.1573, 4.485],
+        [52.0804, 4.3145]
+    ],
+    "marker": [52.2699, 4.5473],
+    "prompt": "I want to do a garden tour in the Netherlands, April or May"
+}, {
+    "file": "galapagos.html",
+    "title": "Galápagos Islands Wildlife Photography",
+    "route": [
+        [-0.4536, -90.2659],
+        [-0.7434, -90.313],
+        [-0.9022, -89.61]
+    ],
+    "marker": [-0.7434, -90.313],
+    "prompt": "Galápagos Islands in June for wildlife photography. ~6 days land-based"
+}, {
+    "file": "new-york-city.html",
+    "title": "New York City (Local's Guide)",
+    "route": [],
+    "marker": [40.7272, -73.9842],
+    "prompt": "New York City in October, I've been 100 times, show me the side the locals love"
+}, {
+    "file": "paris.html",
+    "title": "Babymoon in Paris",
+    "route": [],
+    "marker": [48.8566, 2.3522],
+    "prompt": "Visiting Paris for our babymoon in June, help us plan a pregnancy friendly itinerary for 5days. Interested in art, Monet and Van Gogh especially."
+}, {
+    "file": "camino.html",
+    "title": "Camino de Santiago",
+    "route": [
+        [42.7775, -7.4149],
+        [42.7652, -7.4504],
+        [42.7822, -7.5213],
+        [42.7843, -7.5355],
+        [42.8033, -7.6157],
+        [42.8076, -7.6156],
+        [42.8253, -7.6961],
+        [42.8332, -7.7198],
+        [42.8574, -7.7788],
+        [42.8736, -7.807],
+        [42.8725, -7.8679],
+        [42.8881, -7.9656],
+        [42.9084, -7.9988],
+        [42.9132, -8.017],
+        [42.9147, -8.078],
+        [42.9306, -8.1314],
+        [42.9263, -8.1625],
+        [42.9263, -8.28],
+        [42.9047, -8.3624],
+        [42.9002, -8.4465],
+        [42.8843, -8.495],
+        [42.8804, -8.5448]
+    ],
+    "marker": [42.8881, -7.9656],
+    "prompt": "I want to walk the Camino de Santiago, the last 100km from Sarria to Santiago"
+}, {
+    "file": "tbilisi.html",
+    "title": "Tbilisi (Wine Tasting)",
+    "route": [],
+    "marker": [41.7844, 45.0282],
+    "prompt": "Tbilisi, Georgia in October, ~4 days. Interested in wine and old architecture."
+}, {
+    "file": "madagascar-rn7.html",
+    "title": "Madagascar RN7 (Vegetarian diet)",
+    "route": [
+        [-18.9083, 47.5263],
+        [-19.866, 47.0329],
+        [-20.5328, 47.245],
+        [-21.2563, 47.4212],
+        [-21.4589, 47.0764],
+        [-21.8316, 46.9385],
+        [-22.0802, 46.7746],
+        [-22.5568, 45.4141],
+        [-22.8862, 44.6914],
+        [-23.3542, 43.6697],
+        [-23.1254, 43.6095],
+        [-23.6667, 43.65]
+    ],
+    "marker": [-22.0802, 46.7746],
+    "prompt": "Madagascar RN7, September, couple on our honeymoon. One of us is vegetarian, is that survivable in Madagascar?"
+}, {
+    "file": "augusta-masters.html",
+    "title": "Augusta Masters Week",
+    "route": [],
+    "marker": [33.5072, -81.9273],
+    "prompt": "Going to Augusta Georgia with friends for the Masters tournament. What else is there to do nearby? ~4 days."
+}, {
+    "file": "bbq-trail.html",
+    "title": "The Southern BBQ Trail",
+    "route": [
+        [36.161, -86.7773],
+        [35.9246, -86.8704],
+        [35.8957, -86.9969],
+        [35.1399, -90.053],
+        [34.7467, -92.2599],
+        [34.5143, -93.0537],
+        [33.4729, -94.0432],
+        [32.7838, -96.7841],
+        [31.5483, -97.1467],
+        [30.2672, -97.7431],
+        [29.8846, -97.6723]
+    ],
+    "marker": [34.5143, -93.0537],
+    "prompt": "Southern BBQ Trail, Memphis, Nashville, and Austin. March, 4 friends, ~7 days road trip."
+}, {
+    "file": "puffin.html",
+    "title": "I Want To See a Puffin",
+    "route": [
+        [64.1504, -21.9433],
+        [63.9367, -21.0037],
+        [63.6155, -19.9882],
+        [63.4166, -19.0306],
+        [63.7875, -18.0597],
+        [64.0167, -16.9663],
+        [64.0431, -16.1782]
+    ],
+    "marker": [63.4166, -19.0306],
+    "prompt": "I want to see a puffin"
+}]
+</script>
+<script>
+(function () {
+  var guides = JSON.parse(document.getElementById('guides-data').textContent);
+
+  var map = L.map('map', { worldCopyJump: true });
+  // Routes get their own pane below the default overlay pane (z-index 400),
+  // so every dot renders on top of every route line regardless of add order.
+  map.createPane('routes');
+  map.getPane('routes').style.zIndex = 390;
+  map.fitBounds(L.latLngBounds(guides.map(function (g) { return g.marker; })).pad(0.06));
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  var ROUTE = { pane: 'routes', color: '#d9451f', weight: 2.5, opacity: 0.85 };
+  var ROUTE_MUTED = { pane: 'routes', color: '#b3a68d', weight: 1.5, opacity: 0.5, dashArray: '5 6' };
+  var DOT = { radius: 7, color: '#faf6ee', weight: 2, fillColor: '#d9451f', fillOpacity: 1 };
+
+  function popupHtml(g) {
+    var el = document.createElement('div');
+    var b = document.createElement('b'); b.textContent = g.title;
+    var em = document.createElement('em'); em.textContent = '\u201C' + g.prompt + '\u201D';
+    var a = document.createElement('a');
+    a.className = 'open'; a.href = 'samples/' + g.file; a.textContent = 'Open guide \u2192';
+    el.appendChild(b); el.appendChild(em); el.appendChild(a);
+    return el;
+  }
+
+  // Split a route at the antimeridian. Each crossing segment is drawn twice —
+  // running off one edge of the map and re-entering from the other — so the
+  // line stays continuous from dateline to dateline.
+  function datelineSegments(route) {
+    var pts = route.map(function (p) {
+      var lon = ((p[1] + 180) % 360 + 360) % 360 - 180;
+      return [p[0], lon];
+    });
+    var segs = [], cur = [pts[0]];
+    for (var i = 1; i < pts.length; i++) {
+      var a = cur[cur.length - 1], b = pts[i];
+      if (Math.abs(b[1] - a[1]) > 180) {
+        var shift = b[1] > a[1] ? -360 : 360;
+        cur.push([b[0], b[1] + shift]);   // run off this edge
+        segs.push(cur);
+        cur = [[a[0], a[1] - shift], b];  // re-enter from the opposite edge
+      } else {
+        cur.push(b);
+      }
+    }
+    segs.push(cur);
+    return segs;
+  }
+
+  guides.forEach(function (g) {
+    if (g.route && g.route.length > 1) {
+      datelineSegments(g.route).forEach(function (seg) {
+        L.polyline(seg, g.muted ? ROUTE_MUTED : ROUTE).addTo(map)
+          .on('click', function () { g._marker.openPopup(); });
+      });
+    }
+    g._marker = L.circleMarker(g.marker, DOT).addTo(map)
+      .bindPopup(popupHtml(g), { maxWidth: 280 });
+  });
+
+  // Postcard grid, from the same data
+  var grid = document.getElementById('grid');
+  guides.forEach(function (g, idx) {
+    var card = document.createElement('a');
+    card.className = 'card';
+    card.href = 'samples/' + g.file;
+    var stamp = document.createElement('span');
+    stamp.className = 'stamp';
+    stamp.textContent = String(idx + 1).padStart(2, '0');
+    var h = document.createElement('h2'); h.textContent = g.title;
+    var p = document.createElement('p'); p.className = 'prompt'; p.textContent = g.prompt;
+    card.appendChild(stamp); card.appendChild(h); card.appendChild(p);
+
+    var timer;
+    function show() {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        map.panTo(g.marker, { duration: 0.7 });
+        g._marker.openPopup();
+      }, 180);
+    }
+    card.addEventListener('mouseenter', show);
+    card.addEventListener('focus', show);
+    card.addEventListener('mouseleave', function () { clearTimeout(timer); });
+
+    grid.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>

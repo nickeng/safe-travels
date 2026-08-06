@@ -1,0 +1,2060 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Augusta, Georgia — Masters Week, 5–11 April 2027</title>
+<meta name="description" content="A four-day guide to Augusta, Georgia for Masters week 2027 — badges, patron rules, azaleas, pimento cheese, Broad Street, and the Aiken day trip.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;0,6..96,800;1,6..96,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   AUGUSTA IN APRIL — "the patron's card"
+   Surface: scorecard card-stock cream + mown fairway green + Broad Street brick
+   Tradition: the Masters' own restraint — green jacket green, the yellow pin
+     flag, engraved serif caps, a numbered hole marking every section
+   Form: the flagstick. Light: high Georgia spring sun through pine and magnolia
+   Motif: the dogwood blossom — four notched bracts — tiled faint on the paper
+   ══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#f5f0e1;
+  --card:#fcf9f0;
+  --text:#1b2a20;
+  --muted:#5d6b5c;
+  --line:#d7cdaf;
+  --accent:#0a5c35;          /* fairway / green jacket */
+  --pine:#073a22;            /* deep pine — the band */
+  --pine-2:#0b4a2b;
+  --gold:#b28c10;            /* pin-flag yellow, darkened for cream */
+  --gold-bright:#f0c93f;
+  --azalea:#c04a74;
+  --brick:#9d3f22;
+  --sand:#ebdfc2;
+  --c-do:#0a5c35; --c-food:#9d3f22; --c-stay:#2b5f80;
+  --card-w:290px;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+
+/* ── dogwood blossom paper ─────────────────────────────────────────────── */
+#content{position:relative;width:100%;transition:width .35s ease;
+  background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='74' height='74'%3E%3Cg fill='none' stroke='%23e7ddc1' stroke-width='1'%3E%3Cg transform='translate(19,19)'%3E%3Cpath d='M0 0 C-6 -4 -6.4 -14 -3 -18.4 C-2 -16.2 -1 -16.2 0 -17.2 C1 -16.2 2 -16.2 3 -18.4 C6.4 -14 6 -4 0 0z'/%3E%3Cpath d='M0 0 C4 -6 14 -6.4 18.4 -3 C16.2 -2 16.2 -1 17.2 0 C16.2 1 16.2 2 18.4 3 C14 6.4 4 6 0 0z'/%3E%3Cpath d='M0 0 C6 4 6.4 14 3 18.4 C2 16.2 1 16.2 0 17.2 C-1 16.2 -2 16.2 -3 18.4 C-6.4 14 -6 4 0 0z'/%3E%3Cpath d='M0 0 C-4 6 -14 6.4 -18.4 3 C-16.2 2 -16.2 1 -17.2 0 C-16.2 -1 -16.2 -2 -18.4 -3 C-14 -6.4 -4 -6 0 0z'/%3E%3Ccircle r='2.3'/%3E%3C/g%3E%3Cg transform='translate(56,56)'%3E%3Cpath d='M0 0 C-6 -4 -6.4 -14 -3 -18.4 C-2 -16.2 -1 -16.2 0 -17.2 C1 -16.2 2 -16.2 3 -18.4 C6.4 -14 6 -4 0 0z'/%3E%3Cpath d='M0 0 C4 -6 14 -6.4 18.4 -3 C16.2 -2 16.2 -1 17.2 0 C16.2 1 16.2 2 18.4 3 C14 6.4 4 6 0 0z'/%3E%3Cpath d='M0 0 C6 4 6.4 14 3 18.4 C2 16.2 1 16.2 0 17.2 C-1 16.2 -2 16.2 -3 18.4 C-6.4 14 -6 4 0 0z'/%3E%3Cpath d='M0 0 C-4 6 -14 6.4 -18.4 3 C-16.2 2 -16.2 1 -17.2 0 C-16.2 -1 -16.2 -2 -18.4 -3 C-14 -6.4 -4 -6 0 0z'/%3E%3Ccircle r='2.3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;}
+
+/* ── type ─────────────────────────────────────────────────────────────── */
+h1,h2,h3,h4,.disp{font-family:'Bodoni Moda',Didot,Georgia,serif;font-weight:800;line-height:1.06;letter-spacing:-.01em}
+.kick{font-family:'Archivo Narrow',sans-serif;font-weight:600;font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+.wrap{max-width:1130px;margin:0 auto;padding-inline:clamp(1rem,4vw,2.6rem)}
+.read{max-width:64ch}
+p+p{margin-top:.85em}
+a{color:var(--accent)}
+em{font-style:italic}
+strong{font-weight:600}
+
+/* ── nav: cream card stock over a strip of mown fairway ───────────────── */
+nav{position:sticky;top:0;z-index:10000;background:#f9f5e9;
+  border-bottom:5px solid transparent;
+  border-image:repeating-linear-gradient(101deg,#0a5c35 0 15px,#11743f 15px 30px) 1;
+  display:flex;align-items:center;gap:.85rem;padding:.6rem clamp(1rem,4vw,2.6rem);
+  box-shadow:0 1px 0 rgba(27,42,32,.08)}
+nav .mark{width:15px;height:26px;position:relative;flex:none}
+nav .mark::after{content:'';position:absolute;left:1px;top:0;bottom:0;width:1.5px;background:var(--text)}
+nav .mark::before{content:'';position:absolute;left:2.5px;top:1px;width:12px;height:9px;background:var(--gold-bright);
+  clip-path:polygon(0 0,100% 8%,100% 100%,0 92%)}
+nav .nm{font-family:'Bodoni Moda',serif;font-weight:800;font-size:1.02rem;letter-spacing:.14em;text-transform:uppercase}
+nav .dates{font-family:'Archivo Narrow',sans-serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  border-left:1px solid var(--line);padding-left:.85rem}
+nav .links{display:flex;gap:.9rem;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+nav .links a{font-family:'Archivo Narrow',sans-serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  text-decoration:none;color:var(--muted)}
+nav .links a:hover{color:var(--accent)}
+#toggle{font-family:'Archivo Narrow',sans-serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  background:var(--accent);color:#f6f2e4;border:0;padding:.45rem .8rem;cursor:pointer;flex:none}
+#toggle:hover{background:var(--pine-2)}
+@media(max-width:820px){nav .dates,nav .links a:not(.key){display:none}}
+
+/* ── hero ─────────────────────────────────────────────────────────────── */
+.hero{position:relative;height:min(78vh,660px);overflow:hidden;background:var(--pine)}
+.hero>img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,58,34,.42) 0%,rgba(7,58,34,.12) 38%,rgba(7,58,34,.86) 100%)}
+.hero .txt{position:absolute;left:0;right:0;bottom:0;padding:0 clamp(1rem,4vw,2.6rem) clamp(1.6rem,4vw,3rem)}
+.hero .inner{max-width:1130px;margin:0 auto}
+.hero .kick{color:var(--gold-bright)}
+.hero h1{color:#fbf8ee;font-size:clamp(2.7rem,9vw,6.1rem);margin:.3rem 0 .1rem;text-shadow:0 2px 24px rgba(0,0,0,.4)}
+.hero h1 .thin{font-weight:400;font-style:italic;display:block;font-size:.42em;letter-spacing:.02em;color:var(--gold-bright);margin-top:.4rem}
+.hero .one{color:#e7e3d2;font-size:clamp(.95rem,2vw,1.15rem);max-width:52ch;margin-top:.7rem;font-style:italic}
+.hero .credit{position:absolute;bottom:.35rem;right:.9rem;font-family:'Archivo Narrow',sans-serif;font-size:.58rem;
+  letter-spacing:.06em;color:rgba(255,255,255,.45)}
+
+/* ── the mown-fairway separator ───────────────────────────────────────── */
+/* Full-bleed blocks in this guide own the space above them (see .band's
+   margin-top, .credits' padding) because sections carry top padding only.
+   The strip uses the same clamp as section padding-top, so it sits centred
+   in a symmetric gutter. Exception: where it forms the lower edge of the
+   hero image or the green band, it stays flush. */
+.mow{height:22px;margin:clamp(1.6rem,3.6vw,2.8rem) 0 0;border-top:1px solid var(--gold);
+  background:repeating-linear-gradient(101deg,#0a5c35 0 21px,#11743f 21px 42px);
+  box-shadow:inset 0 6px 12px -8px rgba(0,0,0,.5)}
+.hero + .mow,.band + .mow{margin-top:0}
+.mow.thin{height:12px;border-top:0;opacity:.85}
+
+/* ── section heading: the flagstick + hole number ─────────────────────── */
+section{padding:clamp(2.6rem,6vw,4.6rem) 0 0}
+.hole{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.15rem}
+.flagstick{position:relative;width:40px;height:62px;flex:none;margin-top:.2rem}
+.flagstick::after{content:'';position:absolute;left:4px;top:0;bottom:6px;width:2px;background:var(--text)}
+.flagstick::before{content:'';position:absolute;left:-2px;bottom:0;width:20px;height:6px;border-radius:50%;
+  background:var(--accent);opacity:.22}
+.flagstick i{position:absolute;left:6px;top:1px;width:34px;height:22px;background:var(--gold-bright);
+  color:var(--pine);font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.82rem;
+  display:flex;align-items:center;justify-content:center;font-style:normal;letter-spacing:.04em;
+  clip-path:polygon(0 0,100% 7%,100% 100%,0 93%)}
+.hole h2{font-size:clamp(1.85rem,4.6vw,3.1rem);margin-top:.05rem}
+.hole h2 .ac{color:var(--accent)}
+.hole .kick{display:block;margin-bottom:.15rem}
+.lede{font-size:1.06rem;max-width:64ch}
+.lede.wide{max-width:74ch}
+h3{font-size:clamp(1.15rem,2.6vw,1.5rem);margin:2.3rem 0 .45rem}
+h3 .n{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.62em;color:var(--gold);
+  letter-spacing:.12em;margin-right:.5rem;vertical-align:.12em}
+h4{font-size:1.02rem;margin-bottom:.15rem}
+
+/* ── opening ──────────────────────────────────────────────────────────── */
+.open .drop::first-letter{font-family:'Bodoni Moda',serif;font-weight:800;float:left;font-size:4.5rem;
+  line-height:.78;padding:.06em .16em 0 0;color:var(--accent)}
+.two{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,3rem);align-items:start}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+
+/* ── scorecard stat strip ─────────────────────────────────────────────── */
+.card-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:0;margin:1.8rem 0;
+  border:1.5px solid var(--text);background:var(--card)}
+.card-strip .box{padding:.7rem .8rem .8rem;border-right:1px solid var(--line)}
+.card-strip .box:last-child{border-right:0}
+.card-strip .l{font-family:'Archivo Narrow',sans-serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);display:block;margin-bottom:.15rem}
+.card-strip .v{font-family:'Bodoni Moda',serif;font-weight:800;font-size:1.32rem;line-height:1.12;display:block}
+.card-strip .v small{font-family:'Lora',serif;font-weight:400;font-size:.6em;color:var(--muted);display:block;
+  letter-spacing:0;margin-top:.1rem}
+@media(max-width:620px){.card-strip .box{border-bottom:1px solid var(--line)}}
+
+/* ── callouts & sidebars ──────────────────────────────────────────────── */
+.callout{margin:1.5rem 0;padding:1rem 1.15rem;background:var(--sand);border-left:4px solid var(--accent);
+  font-size:.95rem}
+.callout .h{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.3rem}
+.callout.warn{border-left-color:var(--brick);background:#f3e5d8}
+.callout.warn .h{color:var(--brick)}
+.side{background:var(--card);border:1.5px solid var(--text);padding:1.1rem 1.2rem 1.2rem;font-size:.92rem;
+  box-shadow:5px 5px 0 rgba(10,92,53,.13)}
+.side h4{font-family:'Bodoni Moda',serif;font-size:1.08rem;margin-bottom:.6rem}
+.side .kick{display:block;margin-bottom:.25rem}
+.side dl{margin:0}
+.side dt{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--accent);margin-top:.7rem}
+.side dt:first-of-type{margin-top:0}
+.side dd{margin:.05rem 0 0;color:var(--muted);font-size:.88rem;line-height:1.5}
+.side ul{margin:.2rem 0 0;padding-left:1.1rem}
+.side li{margin-bottom:.4rem;color:var(--muted);font-size:.89rem;line-height:1.5}
+.side li b{color:var(--text);font-weight:600}
+.tip{font-family:'Lora',serif;font-size:.92rem;font-style:italic;color:var(--accent);margin-top:.9rem;
+  padding-left:1.6rem;position:relative}
+.tip::before{content:'';position:absolute;left:0;top:.42em;width:11px;height:11px;background:var(--gold-bright);
+  clip-path:polygon(0 0,100% 8%,100% 100%,0 92%)}
+
+/* ── tables ───────────────────────────────────────────────────────────── */
+table.g{width:100%;border-collapse:collapse;font-size:.9rem;margin:1.4rem 0;background:var(--card);
+  border:1.5px solid var(--text)}
+table.g th{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.15em;
+  text-transform:uppercase;text-align:left;padding:.6rem .7rem;background:var(--pine);color:#f4efe0;
+  border-right:1px solid rgba(255,255,255,.14)}
+table.g th:last-child{border-right:0}
+table.g td{padding:.62rem .7rem;border-top:1px solid var(--line);border-right:1px solid var(--line);vertical-align:top;
+  color:var(--muted);line-height:1.5}
+table.g td:last-child{border-right:0}
+table.g td b{color:var(--text);font-weight:600;font-family:'Bodoni Moda',serif;font-size:1.02rem}
+table.g tr:hover td{background:#f6f1e0}
+.tw{overflow-x:auto}
+
+/* ── cards ────────────────────────────────────────────────────────────── */
+.cards{margin-top:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--card-w),1fr));gap:1.1rem;
+  list-style:none;margin:0;padding:0}
+.grid>li{display:contents}
+.cards.rail{min-width:0}
+.cards.rail>.grid{display:flex;flex-wrap:nowrap;overflow:auto hidden;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scrollbar-width:thin;padding-block:.9rem}
+.cards.rail .card{flex:0 0 var(--card-w);scroll-snap-align:start}
+.card{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--c-do);
+  display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+.cards[data-section^="food"] .card,.cards[data-section$="eat"] .card{border-top-color:var(--c-food)}
+.cards[data-section^="stay"] .card{border-top-color:var(--c-stay)}
+.card:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 rgba(10,92,53,.18)}
+.card.active{box-shadow:0 0 0 2px var(--accent),7px 7px 0 rgba(10,92,53,.18)}
+.card .body{padding:.85rem .9rem .9rem;flex:1;display:flex;flex-direction:column}
+.card-title{font-family:'Bodoni Moda',serif;font-weight:800;font-size:1.06rem;line-height:1.18;margin:0}
+.card .meta{font-family:'Archivo Narrow',sans-serif;font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--gold);margin-top:.28rem;line-height:1.35}
+.card .desc{font-size:.875rem;color:var(--muted);margin-top:.5rem;line-height:1.55}
+.card-sources{font-family:'Archivo Narrow',sans-serif;font-size:.66rem;letter-spacing:.05em;color:#8a9489;
+  margin-top:auto;padding-top:.65rem}
+.card-sources a{color:inherit;text-decoration:underline;text-decoration-color:var(--line)}
+.card-sources a:hover{color:var(--accent)}
+.no-img{height:52px;display:flex;align-items:center;justify-content:center;background:var(--sand);
+  font-family:'Archivo Narrow',sans-serif;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#9aa298}
+/* carousel */
+.car{position:relative;margin:0}
+.car-main{width:100%;height:196px;object-fit:cover;display:block;background:var(--sand);cursor:zoom-in}
+.car-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(7,58,34,.62);color:#fff;border:0;
+  width:28px;height:28px;cursor:pointer;font-size:1rem;line-height:1}
+.car-nav.prev{left:5px}.car-nav.next{right:5px}
+.car-dots{position:absolute;bottom:7px;left:0;right:0;display:flex;gap:5px;justify-content:center}
+.car-dots i{width:6px;height:6px;background:rgba(255,255,255,.55);border:.5px solid rgba(0,0,0,.25)}
+.car-dots i.active{background:var(--gold-bright)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;margin:-1px;padding:0}
+/* feature card */
+.grid .card.feature{grid-column:1/-1;flex-direction:row;min-height:320px;border-top-width:5px}
+.grid .card.feature .car{width:52%;flex:none;position:relative}
+.grid .card.feature .car-main{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.grid .card.feature .body{justify-content:center;padding:1.5rem 1.7rem}
+.grid .card.feature .card-title{font-size:1.85rem}
+.grid .card.feature .desc{font-size:.98rem}
+@media(max-width:700px){.grid .card.feature{flex-direction:column;min-height:0}
+  .grid .card.feature .car{width:100%;position:static}
+  .grid .card.feature .car-main{position:static;height:200px}
+  .grid .card.feature .body{padding:.85rem .9rem .9rem}
+  .grid .card.feature .card-title{font-size:1.2rem}}
+
+/* ── feature band: the green jacket ───────────────────────────────────── */
+.band{color:var(--text);--text:#f4efe0;--muted:#c3cfc0;--line:#2a5b41;--card:#0b4a2b;--accent:var(--gold-bright);
+  --sand:#0e5533;--gold:var(--gold-bright);
+  background:var(--pine);
+  background-image:repeating-linear-gradient(101deg,rgba(255,255,255,.028) 0 26px,transparent 26px 52px);
+  padding-bottom:clamp(2.6rem,6vw,4.4rem);margin-top:clamp(2.6rem,6vw,4.6rem)}
+.band .hole h2{color:#f7f3e6}
+.band .hole h2 .ac{color:var(--gold-bright)}
+.band .flagstick::after{background:#f4efe0}
+.band .flagstick i{background:var(--gold-bright);color:var(--pine)}
+.band .flagstick::before{background:#f4efe0;opacity:.18}
+.band p,.band .lede{color:#e9e5d4}
+.band a{color:var(--gold-bright)}
+.band .card-strip{border-color:var(--gold-bright);background:rgba(255,255,255,.04)}
+.band .card-strip .box{border-right-color:#2a5b41}
+.band .card-strip .l{color:#a9bda8}
+.band .card-strip .v{color:#f7f3e6}
+.band .card-strip .v small{color:#a9bda8}
+.band .side{background:rgba(255,255,255,.045);border-color:var(--gold-bright);box-shadow:5px 5px 0 rgba(0,0,0,.28)}
+.band .side dt{color:var(--gold-bright)}
+.band .side dd,.band .side li{color:#cfd8cd}
+.band .side li b{color:#f4efe0}
+.band .callout{background:rgba(255,255,255,.06);border-left-color:var(--gold-bright)}
+.band .callout .h{color:var(--gold-bright)}
+.band .callout.warn{background:rgba(217,120,72,.13);border-left-color:#e79a63}
+.band .callout.warn .h{color:#f0b183}
+.band .card{background:#0b4a2b;border-color:#2a5b41;border-top-color:var(--gold-bright)}
+.band .card:hover{box-shadow:7px 7px 0 rgba(0,0,0,.3)}
+.band .card .meta{color:var(--gold-bright)}
+.band .card .desc{color:#c3cfc0}
+.band .card-sources{color:#8fa38e}
+.band table.g{background:rgba(255,255,255,.04);border-color:var(--gold-bright)}
+.band table.g th{background:#062e1b;color:#f0c93f}
+.band table.g td{border-color:#2a5b41;color:#cfd8cd}
+.band table.g td b{color:#f7f3e6}
+.band table.g tr:hover td{background:rgba(255,255,255,.05)}
+.band .tip{color:var(--gold-bright)}
+.band .cal .cell{border-color:#2a5b41;color:#b7c6b6}
+
+/* ── calendar ─────────────────────────────────────────────────────────── */
+.cal{margin-top:.4rem}
+.cal .hd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:5px}
+.cal .hd span{text-align:center;font-family:'Archivo Narrow',sans-serif;font-size:.6rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted)}
+.cal .grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);
+  font-family:'Archivo Narrow',sans-serif;font-size:.82rem;color:var(--muted)}
+.cal .cell.pad{border:0}
+.cal .cell.pre{background:rgba(240,201,63,.2);color:#f2ecd8;border-color:rgba(240,201,63,.5)}
+.cal .cell.prac{background:rgba(240,201,63,.55);color:#062e1b;font-weight:700;border-color:var(--gold-bright)}
+.cal .cell.peak{background:var(--gold-bright);color:#062e1b;font-weight:700;border-color:var(--gold-bright)}
+.cal .legend{display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;margin-top:.8rem}
+.cal .legend span{font-family:'Archivo Narrow',sans-serif;font-size:.68rem;letter-spacing:.06em;
+  display:flex;align-items:center;gap:.4rem;color:#b7c6b6}
+.cal .legend i{width:11px;height:11px;flex:none;border:1px solid rgba(240,201,63,.6)}
+
+/* ── schedule timeline ────────────────────────────────────────────────── */
+.day-schedule{margin:1.3rem 0 0}
+.ev{display:grid;grid-template-columns:78px 1fr;gap:.2rem 1.1rem;align-items:baseline}
+.ev .t{font-family:'Archivo Narrow',sans-serif;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--gold-bright);font-weight:700;text-align:right}
+.ev .bd{font-size:.9rem;color:#cfd8cd;padding:.6rem 0;border-bottom:1px solid #2a5b41;line-height:1.5}
+.ev .bd b{color:#f4efe0;font-weight:600}
+.ev:first-of-type .bd,.ev:first-of-type .t{padding-top:0}
+.ev:last-child .bd{border-bottom:0}
+
+/* ── data graphics ────────────────────────────────────────────────────── */
+figure{margin:1.5rem 0 0}
+figcaption{font-family:'Archivo Narrow',sans-serif;font-size:.68rem;letter-spacing:.09em;color:var(--muted);
+  margin-top:.9rem;line-height:1.5}
+.ranges .rl{font-family:'Archivo Narrow',sans-serif;font-size:.74rem;letter-spacing:.06em;margin-bottom:5px;
+  text-transform:uppercase;color:var(--text)}
+.ranges .rl span{color:var(--muted);text-transform:none;letter-spacing:0;font-family:'Lora',serif;font-size:.8rem}
+.ranges .row{margin-bottom:1rem}
+.ranges .track{position:relative;height:12px;background:var(--sand);border:1px solid var(--line)}
+.ranges .bar{position:absolute;top:0;bottom:0}
+.ranges .plot{position:relative;margin-top:1.9rem}
+.ranges .band-ov{position:absolute;top:0;bottom:0;z-index:3;pointer-events:none;
+  background:color-mix(in srgb,var(--accent) 15%,transparent);border-left:2px solid var(--accent);
+  border-right:2px solid var(--accent)}
+.ranges .band-ov b{position:absolute;top:-1.55rem;left:-2px;white-space:nowrap;font-family:'Archivo Narrow',sans-serif;
+  font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.ranges .axis{position:relative;height:1.3rem;margin-top:.4rem;border-top:1px solid var(--line)}
+.ranges .axis span{position:absolute;transform:translateX(-50%);font-family:'Archivo Narrow',sans-serif;
+  font-size:.65rem;letter-spacing:.07em;color:var(--muted);padding-top:.25rem;text-transform:uppercase}
+.bars{display:flex;align-items:flex-end;gap:.7rem;height:170px;margin-top:1.7rem}
+.bars .col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%}
+.bars .track{flex:1;width:74%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.bars .bar{width:100%;background:var(--sand);border:1px solid var(--line);position:relative}
+.bars .bar b{position:absolute;bottom:calc(100% + .3rem);left:50%;transform:translateX(-50%);
+  font-family:'Bodoni Moda',serif;font-weight:800;font-size:.94rem;white-space:nowrap}
+.bars .bar.hi{background:var(--brick);border-color:var(--brick)}
+.bars .bar.hi b{color:var(--brick)}
+.bars .lbl{font-family:'Archivo Narrow',sans-serif;font-size:.66rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);margin-top:.5rem;text-align:center;line-height:1.3}
+
+/* ── dish grid ────────────────────────────────────────────────────────── */
+.dishes{list-style:none;padding:0;margin:1.3rem 0 0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:0;border:1.5px solid var(--text);background:var(--card)}
+.dishes li{padding:.85rem .95rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.dishes .dn{font-family:'Bodoni Moda',serif;font-weight:800;font-size:1rem;display:block}
+.dishes .dw{font-size:.86rem;color:var(--muted);display:block;margin-top:.2rem;line-height:1.5}
+.dishes .tag{font-family:'Archivo Narrow',sans-serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--brick);display:inline-block;margin-top:.35rem;border:1px solid var(--brick);padding:.05rem .35rem}
+
+/* ── stop list (day trips) ────────────────────────────────────────────── */
+.stops{list-style:none;margin:1.4rem 0 0;padding:0}
+.stop{display:grid;grid-template-columns:auto 108px 1fr;gap:0 .95rem;padding:.95rem 0;
+  border-bottom:1px solid var(--line);align-items:start}
+.stop:not(:has(img)){grid-template-columns:auto 1fr}
+.stop .num{font-family:'Bodoni Moda',serif;font-weight:800;font-size:1.4rem;color:var(--gold);line-height:1;width:1.4rem}
+.stop img{width:108px;height:78px;object-fit:cover;cursor:zoom-in;border:1px solid var(--line)}
+.stop h4{font-size:1rem;margin-bottom:.1rem}
+.stop p{font-size:.88rem;color:var(--muted);line-height:1.55}
+.stop .detail{font-family:'Archivo Narrow',sans-serif;font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--accent);margin-top:.3rem}
+
+/* ── add-on blocks ────────────────────────────────────────────────────── */
+.addon{border:1.5px solid var(--text);background:var(--card);padding:clamp(1.1rem,3vw,1.8rem);margin-top:1.6rem;
+  box-shadow:6px 6px 0 rgba(10,92,53,.12)}
+.addon h3{margin-top:0}
+.addon .logi{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--brick);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:.45rem 0;margin:.6rem 0 1rem;display:block}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;margin-top:1.2rem}
+.shots img{width:100%;height:145px;object-fit:cover;display:block;cursor:zoom-in;border:1px solid var(--line)}
+
+/* ── pack list ────────────────────────────────────────────────────────── */
+.pack{margin-top:1.2rem}
+.pack .grp{font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.68rem;letter-spacing:.19em;
+  text-transform:uppercase;color:var(--gold-bright);margin:1.1rem 0 .45rem;display:block}
+.pack ul{list-style:none;padding:0;margin:0}
+.pack li{display:flex;gap:.6rem;align-items:baseline;font-size:.92rem;padding:.28rem 0;color:#dfe4dc}
+.pack li em{color:#a9bda8;font-size:.86rem}
+.pack input{accent-color:var(--gold-bright);margin:0;flex:none;transform:translateY(2px)}
+.pack li.no{color:#8fa38e}
+.pack li.no span.tx{text-decoration:line-through}
+
+/* ── map ──────────────────────────────────────────────────────────────── */
+.map-section{padding-bottom:clamp(2rem,5vw,3.4rem)}
+.mapfilter{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 .3rem}
+.mapfilter button{display:inline-flex;align-items:center;gap:.45rem;font-family:'Archivo Narrow',sans-serif;
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;background:var(--card);border:1px solid var(--text);
+  padding:.36rem .7rem;cursor:pointer;color:var(--text)}
+.mapfilter button i{width:10px;height:10px;border-radius:50%}
+.mapfilter button.off{opacity:.35}
+.map-container{margin-top:1rem;border:1.5px solid var(--text)}
+.map-container #map{height:520px}
+body.split #content{width:50%}
+body.split .map-section>.hole,body.split .map-section>.lede,body.split .export-row{display:none}
+body.split .map-container{position:fixed;top:0;right:0;width:50vw;height:100vh;margin:0;z-index:50;border:0}
+body.split .map-container #map{height:100vh !important;margin:0 !important}
+body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;bottom:auto;z-index:60;margin:0;
+  max-width:min(60vw,340px);background:rgba(252,249,240,.94);backdrop-filter:blur(6px);
+  border:1.5px solid var(--text);padding:.55rem .6rem;box-shadow:0 8px 24px -10px rgba(0,0,0,.4)}
+@media(max-width:900px){
+  body.split #content{width:auto;margin-top:33vh}
+  body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:33vh;z-index:50}
+  body.split .map-container #map{height:33vh !important}
+  body.split nav{top:33vh}}
+.leaflet-popup-content{font-family:'Lora',serif;font-size:.86rem}
+.leaflet-popup-content b{font-family:'Bodoni Moda',serif;font-size:1rem}
+
+/* ── lightbox ─────────────────────────────────────────────────────────── */
+.lightbox{border:0;padding:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:rgba(6,30,18,.96)}
+.lightbox::backdrop{background:rgba(6,30,18,.96)}
+.lightbox[open]{display:flex;align-items:center;justify-content:center}
+.lightbox img{max-width:90vw;max-height:76vh;object-fit:contain}
+.lightbox .cap{position:fixed;bottom:4.5vh;left:0;right:0;text-align:center;color:#f4efe0;font-size:.9rem;padding:0 2rem}
+.lightbox .cap .cr{display:block;color:#9fb09e;font-family:'Archivo Narrow',sans-serif;font-size:.72rem;
+  letter-spacing:.07em;margin-top:.35rem}
+.lightbox .cap .cr a{color:#9fb09e}
+.lightbox .count{position:fixed;top:4.5vh;left:0;right:0;text-align:center;color:#9fb09e;
+  font-family:'Archivo Narrow',sans-serif;font-size:.78rem;letter-spacing:.14em;pointer-events:none}
+.lightbox .arw{position:fixed;top:50%;transform:translateY(-50%);font-size:2.2rem;color:#f4efe0;background:none;
+  border:0;cursor:pointer;padding:1rem}
+.lightbox .arw.prev{left:1.5vw}.lightbox .arw.next{right:1.5vw}
+.lightbox .x{position:fixed;top:2.6vh;right:3.4vw;font-size:1.5rem;color:#f4efe0;background:none;border:0;cursor:pointer}
+
+/* ── export dialog ────────────────────────────────────────────────────── */
+.export-row{margin:.9rem 0 0}
+.export-btn{font-family:'Archivo Narrow',sans-serif;font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);background:none;border:1px solid var(--line);padding:.45rem .85rem;cursor:pointer}
+.export-btn:hover{color:var(--accent);border-color:var(--accent)}
+dialog.export-dialog{border:1.5px solid var(--text);padding:1.9rem 2rem;max-width:390px;width:90vw;
+  background:var(--card);color:var(--text);box-shadow:0 24px 60px -12px rgba(0,0,0,.4);margin:auto;position:relative}
+dialog.export-dialog::backdrop{background:rgba(6,30,18,.5)}
+dialog.export-dialog h3{font-size:1.3rem;margin:0 0 .3rem}
+dialog.export-dialog p{font-size:.86rem;color:var(--muted);margin-bottom:1.1rem}
+dialog.export-dialog .cats{display:flex;flex-wrap:wrap;gap:.5rem .9rem;margin-bottom:1.1rem}
+dialog.export-dialog .cats label{display:flex;align-items:center;gap:.4rem;font-size:.82rem;cursor:pointer}
+dialog.export-dialog .opt{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border:1px solid var(--line);
+  cursor:pointer;background:none;text-align:left;width:100%;font-family:inherit;color:inherit}
+dialog.export-dialog .opt:hover{border-color:var(--accent);background:var(--sand)}
+dialog.export-dialog .opt .icon{font-size:1.2rem;width:1.7rem;text-align:center;color:var(--accent)}
+dialog.export-dialog .opt .label{font-weight:600;font-size:.88rem}
+dialog.export-dialog .opt .desc{font-size:.74rem;color:var(--muted)}
+dialog.export-dialog .close{position:absolute;top:.7rem;right:.95rem;background:none;border:0;font-size:1.3rem;
+  color:var(--muted);cursor:pointer}
+dialog.export-dialog .export-attribution{font-size:.68rem;margin:1rem 0 0}
+
+/* ── credits ──────────────────────────────────────────────────────────── */
+.credits{background:var(--pine);color:#cfd8cd;padding:clamp(2.4rem,6vw,4rem) 0 clamp(2rem,5vw,3rem);margin-top:0}
+.credits h2{color:#f7f3e6;font-size:clamp(1.6rem,4vw,2.4rem)}
+.credits .kick{color:var(--gold-bright)}
+.credits .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.6rem 2.2rem;margin-top:1.6rem}
+.credits h4{color:var(--gold-bright);font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:.7rem;
+  letter-spacing:.2em;text-transform:uppercase;margin-bottom:.55rem}
+.credits ul{list-style:none;padding:0;margin:0}
+.credits li{font-size:.83rem;margin-bottom:.34rem;line-height:1.45}
+.credits a{color:#cfd8cd;text-decoration:underline;text-decoration-color:#2a5b41}
+.credits a:hover{color:var(--gold-bright)}
+.credits .note{font-size:.83rem;color:#a9bda8;margin-top:1.8rem;max-width:74ch;line-height:1.6}
+.credits .bye{font-family:'Bodoni Moda',serif;font-weight:800;font-size:1.5rem;color:var(--gold-bright);margin-top:2rem}
+.foot{font-size:.8rem;color:var(--muted);margin-top:1.1rem;font-style:italic}
+</style></head><body>
+<div id="content">
+
+<nav>
+  <span class="mark" aria-hidden="true"></span>
+  <span class="nm">Augusta</span>
+  <span class="dates">5–11 April 2027 · Masters Week</span>
+  <span class="links">
+    <a href="#masters" class="key">The Masters</a>
+    <a href="#golf-off">Off-course</a>
+    <a href="#downtown">Downtown</a>
+    <a href="#eat">Eat</a>
+    <a href="#stay">Stay</a>
+    <a href="#aiken">Aiken</a>
+    <a href="#more">Add-ons</a>
+  </span>
+  <button id="toggle">◂ Map</button>
+</nav>
+
+<header class="hero">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Augusta_GA_WV_banner.JPG/1280px-Augusta_GA_WV_banner.JPG" alt="Downtown Augusta, Georgia seen across the Savannah River">
+  <div class="veil"></div>
+  <div class="txt"><div class="inner">
+    <span class="kick">Georgia · Four days · A group of friends</span>
+    <h1>Augusta<span class="thin">the one week a year the whole town wears green</span></h1>
+    <p class="one">Pines, pimento cheese, and 61 magnolias down a private driveway. A guide to the 2027 Masters — and to the river city that hosts it.</p>
+  </div></div>
+  <span class="credit" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Augusta_GA_WV_banner.JPG/1280px-Augusta_GA_WV_banner.JPG"></span>
+</header>
+<div class="mow"></div>
+
+<main>
+<section class="open wrap" id="open" style="padding-top:clamp(2.2rem,5vw,3.6rem)">
+  <div class="two">
+    <div>
+      <p class="drop lede">For fifty-one weeks a year Augusta is a working river city of about 200,000 people — brick cotton warehouses on the widest main street in the South, a canal from 1845 still turning turbines, James Brown in bronze downtown. Then, for one week in April, the population swells with golf pilgrims from every continent and the whole place tilts toward a private club on Washington Road that nobody can get into. Restaurants extend their hours. Homeowners hand over their keys and leave town. Azaleas and dogwoods detonate pink and white along every street, not as landscaping for the cameras but because that is simply what Augusta does in April.</p>
+      <p>Your window is <strong>Monday 5 April to Sunday 11 April 2027</strong> — practice rounds Monday through Wednesday, the Par 3 Contest on Wednesday afternoon, and the tournament proper Thursday to Sunday. Four days is a good length: one full day inside the ropes if your badges came through, a half-day for the Riverwalk and Broad Street, an evening or two of rooftops and barbecue, and a day for horse country across the state line in Aiken, South Carolina.</p>
+      <p>What follows assumes you are here for the golf but not <em>only</em> for the golf — because the odds are good that at least one of your four days will not have a badge attached to it, and Augusta in bloom is a genuinely lovely place to be turned loose in.</p>
+    </div>
+    <aside class="side">
+      <span class="kick">Speaking Augusta</span>
+      <h4>Nine words to have straight before you land</h4>
+      <dl>
+        <dt>Patron</dt><dd>What Augusta National calls a spectator. Never "fan," never "the crowd." Use it and you'll pass.</dd>
+        <dt>Magnolia Lane</dt><dd>The 330-yard drive to the clubhouse, flanked by 61 magnolias grown from seeds the Berckmans family planted in the 1850s.</dd>
+        <dt>Amen Corner</dt><dd>Holes 11, 12 and 13 — the azalea-banked stretch around Rae's Creek where the tournament is usually won or lost.</dd>
+        <dt>Founders Circle</dt><dd>The one sanctioned photo spot on the grounds, looking back down Magnolia Lane. Practice days only.</dd>
+        <dt>The Par 3 Contest</dt><dd>Wednesday afternoon on the club's short course. Players caddie their own kids. Nobody who wins it has ever won that year's Masters.</dd>
+        <dt>Pimento cheese</dt><dd>Sharp cheese, mayonnaise, diced pimento, plain white bread, green bag. $1.50, unchanged since 2002.</dd>
+        <dt>The Azalea</dt><dd>The tournament's cocktail — vodka, lemonade, grenadine. Downtown bars pour their own versions all week.</dd>
+        <dt>Hash on rice</dt><dd>Once you cross into South Carolina: a thick pork stew ladled over white rice. A barbecue plate without it is unfinished.</dd>
+        <dt>The CSRA</dt><dd>Central Savannah River Area — how locals refer to the two-state metro that straddles the river.</dd>
+      </dl>
+    </aside>
+  </div>
+
+  <div class="card-strip">
+    <div class="box"><span class="l">Tournament</span><span class="v">Apr 5–11<small>Practice Mon–Wed · Rounds Thu–Sun</small></span></div>
+    <div class="box"><span class="l">Badge price</span><span class="v">$125–160<small>Per day, by lottery only</small></span></div>
+    <div class="box"><span class="l">Gates open</span><span class="v">7:00 am<small>Course gates ~7:30</small></span></div>
+    <div class="box"><span class="l">April weather</span><span class="v">40s → 80s°F<small>Layers and a rain shell</small></span></div>
+    <div class="box"><span class="l">Fly into</span><span class="v">AGS<small>Or drive 2½ hrs from Atlanta</small></span></div>
+    <div class="box"><span class="l">Recommended</span><span class="v">4 nights<small>Sun–Thu, or Wed–Sun</small></span></div>
+  </div>
+
+  <div class="two" style="margin-top:2.4rem">
+    <div>
+      <h3><span class="n">01</span>Getting here, and getting around</h3>
+      <p>Augusta Regional Airport (AGS) sits eight miles south of downtown and runs a genuinely reduced schedule most of the year — during Masters week it fills to bursting and fares behave accordingly. The pragmatic alternative for a group is to fly into <strong>Atlanta (ATL)</strong> and drive the 2½ hours east on I-20, or <strong>Columbia, SC (CAE)</strong> and drive 90 minutes west. Either way, <strong>rent a car.</strong> Nothing here is walkable between neighbourhoods, and the two best things you'll do off-course — Aiken and the canal — are both drives.</p>
+      <p>Once you're in town, plan around the tournament's tidal traffic. Washington Road becomes a managed corridor with shuttle stops and $40–100 parking lots; the bridges into North Augusta clog at gate-open and gate-close. Lean on rideshare for evenings on Broad Street rather than hunting downtown parking, and if you're staying across the river in South Carolina, leave a real buffer for morning rounds.</p>
+      <h3><span class="n">02</span>The uncomfortable truth about badges</h3>
+      <p>Augusta National sells tournament tickets through <strong>its own lottery and nowhere else</strong>. Applications for 2027 opened 1 June 2026 and closed on 20 June; winners were notified by late July 2026, and badges are mailed out in <strong>March 2027</strong>. You could request up to four tickets for each practice day, four for the Par 3 Contest, and two for each tournament round — but you only ever win <em>one</em> day. Tournament-round names are drawn first; everyone unsuccessful rolls into the practice-round draw.</p>
+      <p>Resale is prohibited outright, and third-party badges can be — and are — refused at the gate. If your group's lottery came up empty, the honest answer is that Augusta throws a very good party outside the fence, and the section below is built for exactly that scenario.</p>
+    </div>
+    <aside class="side">
+      <span class="kick">Four days, sketched</span>
+      <h4>A shape that works</h4>
+      <ul>
+        <li><b>Day 1 · Sunday or Monday.</b> Land, collect the car, and ease in: the Riverwalk and Broad Street on foot, the green jacket at the Augusta Museum of History, an Azalea cocktail at Craft &amp; Vine, supper at Luigi's if you can get in.</li>
+        <li><b>Day 2 · Practice round (Mon–Wed).</b> Gates at 7. This is the day cameras are allowed — Founders Circle, Amen Corner, ball-skipping on 16. Nap after. Rooftop at Six South for sunset.</li>
+        <li><b>Day 3 · Aiken.</b> Out by 7:30 for the training track and the oak tunnel on South Boundary, breakfast at the Track Kitchen, Hopelands Gardens mid-morning, lunch and a wander in The Alley. Sunday polo at Whitney Field if the day lines up.</li>
+        <li><b>Day 4 · Tournament round, or the free version.</b> Badge in hand: leave the phone in the car and walk the whole property. No badge: Savannah Rapids at sunrise, Phinizy Swamp, Sconyers for barbecue, then find a bar with a patio and a television.</li>
+      </ul>
+      <p class="tip">If your dates are still soft, arrive by Saturday 3 April: the Augusta National Women's Amateur final round is that day and the Drive, Chip and Putt finals are Sunday the 4th — two much cheaper ways onto the same grass.</p>
+    </aside>
+  </div>
+
+  <figure>
+    <h3 style="margin-top:2.2rem"><span class="n">03</span>What will be in bloom</h3>
+    <p class="lede">The azaleas that frame Amen Corner are the same ones going off in every front yard from Summerville to Aiken. Early April usually catches azalea and dogwood together — the reason the tournament sits where it does in the calendar.</p>
+    <div class="ranges" role="img" aria-label="Typical Central Savannah River Area spring bloom windows: azaleas roughly mid-March to about 20 April, peaking early April; flowering dogwood roughly 22 March to 16 April; wisteria roughly 18 March to 10 April. Masters week, 5 to 11 April 2027, falls inside all three windows and at or just past azalea peak.">
+      <div class="plot">
+        <div class="band-ov" style="left:calc(100% * 35/61);width:calc(100% * 7/61)"><b>Masters week</b></div>
+        <div class="row"><div class="rl">Azalea <span>· mid-Mar → ~20 Apr, peaking early April</span></div>
+          <div class="track"><div class="bar" style="left:calc(100% * 14/61);width:calc(100% * 37/61);background:linear-gradient(90deg,#e9b6cc,#c04a74 55%,#e0a7c0)"></div></div></div>
+        <div class="row"><div class="rl">Flowering dogwood <span>· ~22 Mar → ~16 Apr</span></div>
+          <div class="track"><div class="bar" style="left:calc(100% * 21/61);width:calc(100% * 26/61);background:linear-gradient(90deg,#efe7d2,#cfc4a4 50%,#e6dcc4)"></div></div></div>
+        <div class="row"><div class="rl">Wisteria <span>· ~18 Mar → ~10 Apr</span></div>
+          <div class="track"><div class="bar" style="left:calc(100% * 17/61);width:calc(100% * 23/61);background:linear-gradient(90deg,#c9bfe0,#8f7fbe 55%,#bdb2d8)"></div></div></div>
+      </div>
+      <div class="axis">
+        <span style="left:calc(100% * 0/61)">1 Mar</span>
+        <span style="left:calc(100% * 15/61)">16 Mar</span>
+        <span style="left:calc(100% * 31/61)">1 Apr</span>
+        <span style="left:calc(100% * 45/61)">15 Apr</span>
+        <span style="left:calc(100% * 60/61)">30 Apr</span>
+      </div>
+    </div>
+    <figcaption>Indicative windows for the Augusta area, not a forecast — peak shifts a week or more either way with the winter, and a late freeze can shorten it. Visit Augusta posts spring bloom updates each March; check before you finalise anything you're timing to the flowers.</figcaption>
+  </figure>
+</section>
+
+<!-- ══ FEATURE BAND: THE MASTERS ═══════════════════════════════════════ -->
+<section class="band" id="masters">
+  <div class="wrap">
+    <div class="hole">
+      <span class="flagstick" aria-hidden="true"><i>1</i></span>
+      <div><span class="kick">The reason you're here</span>
+      <h2>Seven days in <span class="ac">April</span></h2></div>
+    </div>
+    <p class="lede wide">The first men's major of the year, played on the same course every year since 1934, and the only one with a permanent home. What surprises first-timers is not the golf but the <em>quiet</em> — no corporate signage anywhere on the property, no phones ringing, concession prices frozen in 2002, and a crowd that has been taught to call itself something other than a crowd. The roars, when they come from down in Amen Corner, arrive through the pines before you can see what caused them.</p>
+
+    <div class="two" style="margin-top:2.2rem">
+      <div>
+        <h3><span class="n">Week</span>How the seven days actually run</h3>
+        <p>Monday, Tuesday and Wednesday are practice rounds — cheaper, looser, and the only days a camera gets through the gate. Wednesday afternoon brings the <strong>Par 3 Contest</strong> on the club's short course, an institution since 1960 when co-founder Clifford Roberts went looking for ways to "give spectators value." Players bring their children out to caddie; the running superstition is that nobody has ever won the Par 3 and the Masters in the same year. Competition begins Thursday and runs to Sunday, when the gates close thirty minutes after the green jacket ceremony.</p>
+        <p>The unofficial practice-round tradition worth turning up for: golfers skipping balls across the pond in front of the par-3 16th green, a stunt dating back to at least the late 1980s and now so expected that the gallery groans if a player declines.</p>
+        <div class="callout warn">
+          <span class="h">Leave the phone in the car</span>
+          Mobile phones are banned on the grounds <strong>every day of the week, practice rounds included</strong>. Personal cameras are allowed Monday to Wednesday only — no video — and banned outright Thursday to Sunday. Bags must be no bigger than 10″×10″×12″, one armless folding chair per patron, and the entire tournament is cashless: card only, at every concession and merchandise stand.
+        </div>
+      </div>
+      <div>
+        <div class="cal">
+          <span class="kick">April 2027</span>
+          <div class="hd" aria-hidden="true"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+          <div class="grid7" role="img" aria-label="April 2027 calendar. Saturday 3 April: Augusta National Women's Amateur final round. Sunday 4 April: Drive, Chip and Putt National Finals. Monday 5 to Wednesday 7 April: Masters practice rounds, with the Par 3 Contest on Wednesday 7. Thursday 8 to Sunday 11 April: Masters tournament rounds.">
+            <span class="cell pad"></span><span class="cell pad"></span><span class="cell pad"></span><span class="cell pad"></span>
+            <span class="cell">1</span><span class="cell">2</span><span class="cell pre">3</span>
+            <span class="cell pre">4</span><span class="cell prac">5</span><span class="cell prac">6</span><span class="cell prac">7</span>
+            <span class="cell peak">8</span><span class="cell peak">9</span><span class="cell peak">10</span>
+            <span class="cell peak">11</span><span class="cell">12</span><span class="cell">13</span><span class="cell">14</span><span class="cell">15</span><span class="cell">16</span><span class="cell">17</span>
+            <span class="cell">18</span><span class="cell">19</span><span class="cell">20</span><span class="cell">21</span><span class="cell">22</span><span class="cell">23</span><span class="cell">24</span>
+            <span class="cell">25</span><span class="cell">26</span><span class="cell">27</span><span class="cell">28</span><span class="cell">29</span><span class="cell">30</span>
+          </div>
+          <div class="legend">
+            <span><i style="background:var(--gold-bright)"></i>Tournament rounds</span>
+            <span><i style="background:rgba(240,201,63,.55)"></i>Practice · Par 3 on the 7th</span>
+            <span><i style="background:rgba(240,201,63,.2)"></i>Amateur weekend</span>
+          </div>
+        </div>
+        <div class="day-schedule">
+          <div class="ev"><div class="t">7:00 am</div><div class="bd">Gates open. <b>Course gates around 7:30</b> — the queue to plant a chair behind the 16th green forms before dawn.</div></div>
+          <div class="ev"><div class="t">Morning</div><div class="bd"><b>Founders Circle</b> photos on practice days: your group is walked over for a few minutes to shoot back down Magnolia Lane. Free.</div></div>
+          <div class="ev"><div class="t">Midday</div><div class="bd">Concessions: <b>pimento cheese and egg salad, $1.50 each</b>, plus a Georgia peach ice cream sandwich at $3. The whole menu totals under $80.</div></div>
+          <div class="ev"><div class="t">Afternoon</div><div class="bd">Walk down to <b>Amen Corner</b> — holes 11, 12 and 13. It is steeper and tighter in person than television suggests.</div></div>
+          <div class="ev"><div class="t">Wed pm</div><div class="bd">The <b>Par 3 Contest</b>, and ball-skipping across the water at 16 all through practice week.</div></div>
+          <div class="ev"><div class="t">Sun close</div><div class="bd">Sunday gates shut <b>30 minutes after the green jacket ceremony</b> — every other day varies with play and weather.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3><span class="n">Badges</span>What a day inside costs, and how it's sold</h3>
+    <div class="tw"><table class="g">
+      <thead><tr><th>Day</th><th>What it is</th><th>Ticket</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><b>Sat 3 Apr</b></td><td>Augusta National Women's Amateur — final round, on the course itself</td><td><b>$150</b></td><td>Rounds 1–2 play at Champions Retreat in Evans, GA, 31 Mar–1 Apr</td></tr>
+        <tr><td><b>Sun 4 Apr</b></td><td>Drive, Chip and Putt National Finals — junior golfers</td><td><b>$35</b></td><td>The cheapest legitimate way onto Augusta National, full stop</td></tr>
+        <tr><td><b>Mon 5 · Tue 6</b></td><td>Practice rounds</td><td><b>$125</b>/day</td><td>Cameras permitted. Apply for up to 4 tickets per day</td></tr>
+        <tr><td><b>Wed 7</b></td><td>Practice round + the Par 3 Contest</td><td><b>$150</b></td><td>Up to 4 tickets. The best-value single day for a group</td></tr>
+        <tr><td><b>Thu 8 – Sun 11</b></td><td>Tournament rounds</td><td><b>$160</b>/day</td><td>Up to 2 tickets per round; no cameras, no phones. Drawn first in the lottery</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:.92rem">Prices are unchanged from 2026. The 2027 application window ran 1–20 June 2026 with notification by late July and badges mailed in March 2027 — the cycle repeats each June, so if 2027 didn't come through, the 2028 lottery is the plan. <strong>There is no second market.</strong> Augusta National states plainly that it is the only authorised seller and that resale is prohibited; tickets bought elsewhere can be voided at the gate.</p>
+
+    <div class="cards" data-section="masters"></div>
+
+    <div class="two" style="margin-top:2.6rem">
+      <div>
+        <h3><span class="n">Pack</span>What actually gets you through the gate</h3>
+        <p>Almost everything on this list exists because of a rule, not a preference. Augusta's screening is fast but absolute, and there is nowhere to leave a rejected item except the car you parked half a mile away.</p>
+        <div class="pack">
+          <span class="grp">On a tournament day</span>
+          <ul>
+            <li><input type="checkbox"><span class="tx">Your mailed badge <em>— arrives in March; don't leave it at the rental house</em></span></li>
+            <li><input type="checkbox"><span class="tx">A credit or debit card <em>— the grounds are entirely cashless</em></span></li>
+            <li><input type="checkbox"><span class="tx">Bag no larger than 10″×10″×12″ <em>— a small tote, not a daypack</em></span></li>
+            <li><input type="checkbox"><span class="tx">One folding chair, no arms <em>— or buy the green Masters chair on site and take it home</em></span></li>
+            <li><input type="checkbox"><span class="tx">Broken-in walking shoes <em>— the property has 175 feet of elevation change and you will feel all of it</em></span></li>
+            <li><input type="checkbox"><span class="tx">Layers plus a light rain shell <em>— lows in the 40s–50s, highs in the 80s, showers likely</em></span></li>
+            <li><input type="checkbox"><span class="tx">Sunscreen and a hat <em>— high spring sun, very little shade on the fairways</em></span></li>
+          </ul>
+          <span class="grp">Practice days only (Mon–Wed)</span>
+          <ul>
+            <li><input type="checkbox"><span class="tx">A stills camera <em>— no video mode use, no phone-as-camera; Founders Circle is the sanctioned frame</em></span></li>
+          </ul>
+          <span class="grp">Deliberately leaving behind</span>
+          <ul>
+            <li class="no"><input type="checkbox" checked disabled><span class="tx">Your phone <em>— banned all seven days. Agree a meeting point with your group before you go in</em></span></li>
+            <li class="no"><input type="checkbox" checked disabled><span class="tx">Any camera, Thu–Sun <em>— confiscated at the gate</em></span></li>
+            <li class="no"><input type="checkbox" checked disabled><span class="tx">Cash <em>— it buys nothing inside</em></span></li>
+            <li class="no"><input type="checkbox" checked disabled><span class="tx">A chair with armrests <em>— refused</em></span></li>
+          </ul>
+        </div>
+      </div>
+      <aside class="side">
+        <span class="kick">A photographer's problem</span>
+        <h4>You will get almost no pictures</h4>
+        <p style="font-size:.9rem;color:#cfd8cd">This is the single planning fact most groups miss. If your badge is for a tournament day, you will leave Augusta National with <strong>zero personal photographs</strong> — no phone, no camera, no exceptions. Plan the golf imagery elsewhere:</p>
+        <ul>
+          <li><b>The Washington Road gates.</b> The Magnolia Lane entrance is shootable from the public road outside the property. It's the shot everyone actually goes home with.</li>
+          <li><b>Founders Circle</b> — but only if one of your days is a practice round, and only with a stills camera. Free, and they walk you over.</li>
+          <li><b>Amen Corner and the azaleas at 12</b> — practice days only. Bring the camera Monday even if your "real" day is Sunday.</li>
+          <li><b>Everywhere else in town.</b> Pendleton King's Azalea Walk, the headgates at Savannah Rapids, the Freedom Bridge at blue hour, the 75-foot James Brown mural — all in the pages below, all with your phone in your hand.</li>
+        </ul>
+        <p class="tip">Practical group move: send one person on the practice-round day with a proper camera and treat that as the trip's photo day. Everyone else's Thursday-to-Sunday memories will be verbal — which, honestly, is part of the point.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+<div class="mow"></div>
+
+<!-- ══ GOLF OFF-COURSE ═════════════════════════════════════════════════ -->
+<section class="wrap" id="golf-off">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>2</i></span>
+    <div><span class="kick">For the days without a badge</span>
+    <h2>Golf, <span class="ac">outside the fence</span></h2></div>
+  </div>
+  <p class="lede">The club runs no public tours and never has — the gates on Washington Road are as close as an unbadged visitor gets. But Augusta has spent ninety years building a secondary golf culture around the week, and it is genuinely good: a green jacket on display a mile from the ones that aren't, a rooftop putting green with cocktails, and a public course that Bobby Jones played on his way to the 1930 Grand Slam.</p>
+  <div class="cards" data-section="golf-off"></div>
+  <div class="callout">
+    <span class="h">Eat the tournament without a ticket</span>
+    Visit Augusta publishes a free downloadable <strong>"Taste of the Tournament"</strong> passport each spring, sending you round downtown restaurants that put their own spin on the club's pimento cheese and other golf-inspired plates, collecting stamps as you go. The 2027 participant list won't post until closer to the week — check visitaugusta.com in March.
+  </div>
+</section>
+
+<!-- ══ DOWNTOWN & THE RIVER ════════════════════════════════════════════ -->
+<section class="wrap" id="downtown">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>3</i></span>
+    <div><span class="kick">Beyond the gates</span>
+    <h2>The city on the <span class="ac">Savannah River</span></h2></div>
+  </div>
+  <p class="lede">Augusta is more than a golf backdrop. It's James Brown's hometown, an 1845 canal city of textile mills, a walkable downtown of murals and rooftop bars strung along a mile of riverside boardwalk. Save the non-tournament hours for it — most of this is free, and much of it is best at golden hour when the crowds have gone back to Washington Road.</p>
+
+  <h3><span class="n">3a</span>Downtown, on foot</h3>
+  <p>Start at the water. The <strong>Riverwalk</strong> is the city's green spine — a landscaped mile along the Savannah with an amphitheatre, gardens and the Augusta Sculpture Trail threaded along it — and everything below is within a walk of it. Two blocks up, Broad Street carries the <strong>James Brown bronze</strong> and the downtown mural trail; on Saturdays the market takes over the 8th Street plaza from 8 am to 2 pm, which means it will be running on Saturday 10 April, mid-tournament. When the sun gets high, the indoor half is just as good: a former cathedral with 94 stained-glass windows, the first museum in the country devoted to Southern art, and the house a future president grew up in.</p>
+  <div class="cards" data-section="downtown"></div>
+
+  <h3><span class="n">3b</span>The canal, and the water</h3>
+  <p>The other Augusta is the one dug in 1845 — still the oldest continuously operating industrial canal in the United States, and the reason the mills are here at all. You can ride it on an open-air Petersburg boat, walk its towpath from the headgates ten miles upriver, or trade it for 1,100 acres of floodplain marsh on the southern edge of town. All of it sits fifteen to twenty minutes from downtown, which makes a sunrise walk before a 7 am gate entirely realistic.</p>
+  <div class="cards" data-section="canal"></div>
+</section>
+<div class="mow"></div>
+
+<!-- ══ EAT ═════════════════════════════════════════════════════════════ -->
+<section class="wrap" id="eat">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>4</i></span>
+    <div><span class="kick">Eating in Augusta</span>
+    <h2>The most famous sandwich in <span class="ac">American sport</span></h2></div>
+  </div>
+  <p class="lede wide">The Washington Post once wrote, flatly, that "Augusta is not a culinary destination." That was probably fair fifty-one weeks a year and is not really the point. For one week Augusta gets a stage almost no city its size ever gets, and what it puts on that stage costs $1.50 — a cold spread of sharp cheese, mayonnaise and diced pimento on plain white bread, handed over in a fairway-green bag. Everything else here orbits that: a Greek-Italian dining room that has fed four generations of Masters champions, barbecue pits that have run since 1956, a 145-year-old grocery-turned-deli, and a chef-driven scene that has quietly got good enough for food writers to detour off I-20.</p>
+
+  <h3><span class="n">4a</span>Pimento cheese, and the small war over its recipe</h3>
+  <p>Pimento cheese is Georgia's official state sandwich, but nowhere is it ritualised like this. The story starts with a husband and wife, <strong>Hodges and Ola Herndon</strong>, making sandwiches in their home kitchen on Kissingbower Road and selling them to patrons for a quarter apiece; their son drove them to the course in a delivery truck. As crowds grew, a South Carolina caterer named <strong>Nick Rangos</strong> took the contract in the 1950s and guarded the recipe until he died. The Augusta chain <strong>Wife Saver</strong> took over in 1998. Then, in 2013, Augusta National brought catering in-house — and longtime patrons swore the sandwich changed. Fans nicknamed it <em>PimentoGate</em>. Wife Saver's owner, who had spent years reverse-engineering Rangos's original, never revealed the missing ingredient.</p>
+  <p>Its quieter twin, the egg salad sandwich, has also been $1.50 since 2002. Between them they anchor a concessions list — peach ice cream sandwich $3, sweet tea, Georgia pecan caramel popcorn — cheap enough to be an annual news story in its own right.</p>
+  <ul class="dishes">
+    <li><span class="dn">Pimento cheese</span><span class="dw">"Carolina caviar." Sharp cheese, mayo, diced pimento, white bread, green bag. Made fresh on site.</span><span class="tag">$1.50 · patrons only</span></li>
+    <li><span class="dn">Egg salad</span><span class="dw">The other half of the pair, and the one locals quietly prefer. Same price since 2002.</span><span class="tag">Tournament week</span></li>
+    <li><span class="dn">Pit-cooked barbecue</span><span class="dw">Pork, ribs, chopped beef and smoked turkey over live oak-and-hickory coals for up to 24 hours.</span></li>
+    <li><span class="dn">Hash over rice</span><span class="dw">Thick pork stew ladled onto plain white rice. Native to the counties either side of the Savannah River.</span><span class="tag">Cross into SC</span></li>
+    <li><span class="dn">Soul food plates</span><span class="dw">Fried chicken, collards, mac and cheese, oxtail, fried green tomatoes, hash and rice.</span></li>
+    <li><span class="dn">Greek-Italian "Augusta red sauce"</span><span class="dw">Lasagna and veal parmigiana beside moussaka and avgolemono — a hybrid invented because 1940s Augusta couldn't source Greek ingredients.</span><span class="tag">Only at Luigi's</span></li>
+    <li><span class="dn">The Azalea</span><span class="dw">Vodka, lemonade, grenadine. The tournament's cocktail, poured all over Broad Street in April.</span></li>
+    <li><span class="dn">Georgia peaches &amp; pecans</span><span class="dw">Peach ice cream sandwiches, cobblers, and bourbon pecan pie — the pecan version runs year-round.</span></li>
+  </ul>
+
+  <div class="two" style="margin-top:2.4rem">
+    <div>
+      <h3 style="margin-top:0"><span class="n">4b</span>Booking, and the week the rules change</h3>
+      <p>Masters week bears no resemblance to a normal Augusta week. Restaurants extend hours, reservations move from optional to essential, and a few institutions do the opposite of what you'd expect: <strong>Luigi's closes on the tournament's final Sunday</strong> after opening every other night of the week, and the <strong>Sports Center</strong> is cash-only and shut Sunday and Monday year-round. Sources agree that bookings are required at most sit-down rooms but none of them will tell you how far ahead — so the practical advice is to phone directly as soon as your dates are fixed, and to confirm hours again in the week itself.</p>
+    </div>
+    <aside class="side">
+      <span class="kick">When Augustans eat</span>
+      <h4>The shape of the day</h4>
+      <dl>
+        <dt>Breakfast · 6:30–9:30 am</dt><dd>A working meal — coffee and a biscuit or a full plate, done early. Do not expect late-morning breakfast service outside dedicated brunch cafés.</dd>
+        <dt>Lunch · 11:30 am–2 pm</dt><dd>For many Augustans the main sit-down meal: a deli sandwich, a soul-food plate, a barbecue plate. Counter service, eaten fast.</dd>
+        <dt>Supper · 6–9 pm</dt><dd>Southerners here say <em>supper</em>, not dinner — a holdover from when the midday meal was the big one. During Masters week supper becomes the event, and the reservation crunch is built around it.</dd>
+        <dt>Watching · afternoon → late</dt><dd>The tournament-only occasion: groups on patios in front of televisions, ordering rounds of appetisers rather than a meal, from the first afternoon tee times straight through to last call. Augusta's normally quiet bar scene gets genuinely rowdy.</dd>
+      </dl>
+    </aside>
+  </div>
+
+  <h3><span class="n">4c</span>Broad Street, sitting down</h3>
+  <p>Luigi's is the one to plan around — the Ballas family have run it since 1949, and touring professionals and their families have eaten there every tournament for decades. It is also the reservation most likely to defeat you, so try early in the week.</p>
+  <div class="cards" data-section="food-broad"></div>
+
+  <h3><span class="n">4d</span>Counters, dives and early mornings</h3>
+  <p>The other half of Broad Street: a lunch counter older than the tournament, a cash-only burger room next door to Luigi's, a screened patio with televisions, and somewhere to get coffee before a 7 am gate.</p>
+  <div class="cards" data-section="food-counter"></div>
+
+  <h3><span class="n">4e</span>Smoke, soul, and the pimento lineage</h3>
+  <p>South of downtown the register changes: pits, buffets, and plate lunches. Sconyers has been going since Claude and Adeline Sconyers opened a roadside stand in 1956 and has fed a sitting president; it sits about eight miles from Augusta National, which makes it an easy detour on the way back from the course.</p>
+  <div class="cards" data-section="food-smoke"></div>
+
+  <h3><span class="n">4f</span>Worth leaving Broad Street for</h3>
+  <p>Two rooms out in the Summerville and Surrey Center direction, both better than their strip-mall addresses suggest.</p>
+  <div class="cards" data-section="food-off"></div>
+  <p class="foot">Neither Eater nor The Infatuation covers Augusta, so nothing above is cross-checked against a national list — these come from the city's own tourism office, Augusta Chronicle dining coverage, Roadfood, Global Golf Post and one Atlanta Magazine feature. Sconyers, Wife Saver and Boll Weevil all have more than one location; confirm the branch nearest your bed.</p>
+</section>
+<div class="mow"></div>
+
+<!-- ══ STAY ════════════════════════════════════════════════════════════ -->
+<section class="wrap" id="stay">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>5</i></span>
+    <div><span class="kick">Where to sleep</span>
+    <h2>The strangest lodging market in <span class="ac">American sport</span></h2></div>
+  </div>
+  <p class="lede wide">A city of roughly 200,000 absorbs six-figure single-night demand for four days. Chain hotels within three miles of the club run four to eight times their normal rate. And the default way a group of friends does Masters week is not a hotel at all — it is a rented house, because the maths is not close.</p>
+
+  <figure>
+    <div class="bars" role="img" aria-label="Average cost of a five-night Augusta-area rental for two adults: 4,316 dollars the week before the Masters; 6,744 dollars during Masters week; 1,864 dollars the week after.">
+      <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 4316/6744)"><b>$4,316</b></div></div><span class="lbl">Week before</span></div>
+      <div class="col"><div class="track"><div class="bar hi" style="height:100%"><b>$6,744</b></div></div><span class="lbl">Masters week</span></div>
+      <div class="col"><div class="track"><div class="bar" style="height:calc(100% * 1864/6744)"><b>$1,864</b></div></div><span class="lbl">Week after</span></div>
+    </div>
+    <figcaption>Average five-night stay for two adults across 1,000+ Augusta-area listings — <strong>+56% on the week before, +262% on the week after</strong>. Data compiled from Airbnb and Booking.com and reported by the Augusta Chronicle. The most expensive listing found: a three-bedroom house within walking distance of a gate, <strong>$55,715 for five nights</strong>. At least 45 listings ran above $15,000. The cheapest, eight miles out: $428.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <span class="h">If you take one piece of booking advice</span>
+    Split a three- or four-bedroom house. For a group of four or more it beats multiple hotel rooms on cost per head and gets you a kitchen and a living room with a television, which is where you'll actually watch the rounds you don't have badges for. The catch: <strong>the best walkable-to-a-gate properties re-book within days of the previous year's tournament ending</strong> — twelve months out is normal for that tier — and four-to-five-night minimums are standard. Aiken's rental market is cheaper and far less competitive; three to six months out is realistic there.
+  </div>
+
+  <h3><span class="n">5a</span>Six places to base, honestly compared</h3>
+  <div class="tw"><table class="g">
+    <thead><tr><th>Area</th><th>Best for</th><th>To Augusta National</th><th>The trade-off</th></tr></thead>
+    <tbody>
+      <tr><td><b>Summerville<br>"The Hill"</b></td><td>Character and quiet nights, still close. Oak-canopied avenues of antebellum and Victorian mansions on a literal hill above the city</td><td>~2.5–3 mi · 10 min</td><td>Walton Way backs up badly during tournament hours; limited enforced street parking; few large modern rentals</td></tr>
+      <tr><td><b>West Augusta /<br>Washington Rd</b></td><td>Proximity above everything — walking to a gate, or a five-minute ride. Ground zero for shuttle stops and $40–100 lots</td><td>0.5–2 mi · walkable</td><td>Budget-to-midscale chains at $800–2,000/night; the city's worst traffic; essentially no nightlife</td></tr>
+      <tr><td><b>Downtown<br>Broad Street</b></td><td>Groups whose evenings are the highlight — 25+ bars and restaurants, the Riverwalk and both museums out the front door</td><td>~10–12 mi · 20–25 min</td><td>The longest course commute here, and it crosses the city at peak hours</td></tr>
+      <tr><td><b>North Augusta, SC<br>Riverside Village</b></td><td>A modern hotel on the water with the Augusta skyline as the view, plus a walkable strip of restaurants and a ballpark</td><td>~7–8 mi · 15–20 min</td><td>Few properties, and a cross-river commute every day of the tournament</td></tr>
+      <tr><td><b>Evans /<br>Martinez</b></td><td>Value and calm. Where residents actually live — Evans Towne Center, Savannah Rapids Park, real suburban dining</td><td>~15 mi · 25–30 min</td><td>Longest realistic Georgia-side commute; no walkable nightlife; zero Masters-week atmosphere</td></tr>
+      <tr><td><b>Aiken, SC</b></td><td>Escaping the circus. A charming small city with its own dining scene, historic downtown and equestrian heritage — at roughly half Augusta's surge rates</td><td>~20 mi · 25–35 min</td><td>A highway commute every tournament morning; leave a real traffic buffer</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:.93rem">Columbia, SC (75 min) and Athens, GA (105 min) have cheaper and better hotel stock but fall outside a sane daily commute for a trip built around multiple course days.</p>
+
+  <h3><span class="n">5b</span>On the Georgia side</h3>
+  <p>The Partridge Inn is the only property here with real character — a century-old hilltop hotel built around a restored 1836 house, with a quarter-mile of connected verandas and the city's best rooftop bar on top of it.</p>
+  <div class="cards rail" data-section="stay-ga"></div>
+
+  <h3><span class="n">5c</span>Across the river, and down the road in South Carolina</h3>
+  <p>Everything below sits in South Carolina, and everything below is cheaper than its Georgia equivalent for the same nights. The Willcox in Aiken — an 1898 Colonial Revival hotel at the centre of the old Winter Colony — is the one to book if you'd rather your base be a destination than a bed.</p>
+  <div class="cards rail" data-section="stay-sc"></div>
+  <p class="foot">Prices are indicative. The Booking.com figures were pulled live for 8–12 April 2027 and show realistic surge pricing; the Partridge Inn, Augusta Marriott and Crowne Plaza returned non-surge rack rates because the indexes hadn't yet absorbed 2027 demand — expect those three to move toward the same multiples. No individual Airbnb or Vrbo listing is named here on purpose: they churn annually and none could be confirmed live this far out.</p>
+</section>
+<div class="mow"></div>
+
+<!-- ══ AIKEN: DAY-TRIP MINI-GUIDE ══════════════════════════════════════ -->
+<section class="wrap" id="aiken">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>6</i></span>
+    <div><span class="kick">The day trip · 20 miles · car required</span>
+    <h2>Aiken, <span class="ac">South Carolina</span></h2></div>
+  </div>
+  <p class="lede wide">Twenty miles east and across the state line sits the sport Augusta isn't about. In the 1880s wealthy Northern families — Vanderbilts, Astors, Whitneys — came south for the "pine vapors," decided the air was good for their lungs, and brought their racehorses with them. The Winter Colony they built never really left: 2,100 acres of privately-owned urban forest inside the city limits, dirt roads deliberately left unpaved so horses have right of way, a street sign at the corner of Whiskey Road and Easy Street, and a polo field that has been in continuous use since 1882. The City of Aiken runs an entire tourism campaign aimed at Masters visitors — <em>Tournament Days, Aiken Nights</em> — which tells you how well-worn this day trip is.</p>
+  <span class="logi" style="display:block;max-width:640px">Drive · 25–35 min via US-1 or I-20 · half day, or a full day with polo · no transit link</span>
+
+  <div class="two" style="margin-top:1.6rem">
+    <div>
+      <h3 style="margin-top:0"><span class="n">6a</span>How to spend the day</h3>
+      <p>Go early. Aiken's best hours are before nine, when the light is under the oaks and the horses are working. Start on <strong>South Boundary Avenue</strong> — a live-oak tunnel so photogenic it made the cover of Southern Living's "South's Best" issue — then five minutes on to the <strong>Aiken Training Track</strong> for the 7–11 am workout window, watched free from the Cot Campbell Clockers' Stand. Eat at the <strong>Track Kitchen</strong>, a breakfast-only room that has fed exercise riders and grooms since 1957 and functions more like a company canteen than a restaurant — the same people, the same seats, table-hopping through the meal.</p>
+      <p>Mid-morning belongs to <strong>Hopelands Gardens</strong>: fourteen acres of former Winter Colony estate behind a serpentine brick wall, free, with century-old live oaks, deodar cedars, a reflecting pool, and camellias, roses and azaleas all at once in April. The <strong>Thoroughbred Racing Hall of Fame</strong> is inside the grounds in a converted carriage house, also free, and includes an exhibit on the Black community's role in the local equine industry that most visitors don't expect. Then downtown — <strong>The Alley</strong>, a car-free pedestrian district off Laurens Street with a self-pour taproom, a whiskey bar, a smokehouse and an ice cream parlour — for lunch and a wander.</p>
+      <p>If your Aiken day lands on a Sunday, that changes the plan: the <strong>Aiken Polo Club</strong>'s spring season runs April through June with double-header Sunday matches at Whitney Field, $10 general admission and free parking, on ground where polo has been played continuously since 1882. Call the polo hotline before you drive out — matches move for weather.</p>
+      <div class="callout warn">
+        <span class="h">One seasonal caveat</span>
+        Aiken's headline horse events are <strong>March</strong> events. The Aiken Triple Crown — the Trials, the Steeplechase, Pacers and Polo — runs on three consecutive March Saturdays and will be over before you arrive. By April most winter-season trainers have shipped their horses on to Keeneland, Churchill Downs and Belmont, so morning activity at the training track is noticeably lighter than a February visit. Treat it as an atmospheric detour, not the day's main event. What <em>is</em> running in April: Sunday polo, the Hopelands Monday-evening concert series, and FEI-level eventing at Stable View.
+      </div>
+    </div>
+    <aside class="side">
+      <span class="kick">Also in April</span>
+      <h4>Three things worth checking dates for</h4>
+      <ul>
+        <li><b>Hopelands Concert Series</b> — free Monday-evening lawn concerts under the oaks, April through June, opening in the first week of April. Bring chairs and a picnic; non-alcoholic drinks only. Park at the Green Boundary Club on Whiskey Road.</li>
+        <li><b>Stable View Spring International</b> — FEI cross-country, dressage and show jumping at a 1,500-acre venue, and <strong>free for all spectators</strong>, no ticket. The 2026 edition ran 3–5 April; the spring dates land in the first week most years, so it may overlap your practice rounds.</li>
+        <li><b>Aiken County Farmers Market</b> — the oldest continuously operating county market in South Carolina, at the same site since it opened. Tuesday and Thursday mornings, and Saturday 7:30 am–2 pm for the full vendor count.</li>
+      </ul>
+      <p class="tip">2027 dates for the polo fixtures, Stable View and the Aiken Art Walk weren't published when this was written. All three recur annually in this window — check visitaikensc.com and aikenpolo.org a couple of months out.</p>
+    </aside>
+  </div>
+
+  <h3><span class="n">6b</span>What to see</h3>
+  <div class="cards" data-section="aiken-do"></div>
+
+  <h3><span class="n">6c</span>Where to eat in horse country</h3>
+  <p>Aiken eats like two towns folded together: a Gilded Age winter colony, and a Midlands South Carolina barbecue town sitting in the belt of counties where <strong>hash on rice</strong> — a thick pork stew ladled over plain white rice, documented at community barbecues here since the 1850s — is not optional on a plate. Masters week is locally nicknamed "a second Christmas": hotels near full, restaurant and beverage tax receipts up about 9%. Sit-down rooms like The Willcox and Prime Steakhouse want reservations well ahead; counter-service spots and the market run close to normal.</p>
+  <div class="cards rail" data-section="aiken-eat"></div>
+  <p class="foot">If you want a second South Carolina stop on the same day, <strong data-id="redcliffe">Redcliffe Plantation State Historic Site</strong> in Beech Island sits roughly between Augusta and Aiken — an 1859 Greek Revival house whose interpretation now centres the enslaved people who lived and worked there, with tours of the mansion and surviving slave quarters Thursday to Monday at 11, 1 and 3 ($10 adults; grounds free, 9 am–6 pm). Reservations aren't required but are strongly encouraged. <strong data-id="stable-view">Stable View</strong> is 20 minutes north of downtown Aiken.</p>
+</section>
+<div class="mow"></div>
+
+<!-- ══ OPTIONAL ADD-ONS ════════════════════════════════════════════════ -->
+<section class="wrap" id="more">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>7</i></span>
+    <div><span class="kick">If you have more time, or a spare afternoon</span>
+    <h2>Three <span class="ac">detours</span></h2></div>
+  </div>
+  <p class="lede">None of these is in the four-day plan above. Each is here because it's genuinely good and because a Masters trip has more dead hours than people expect — the afternoon after a 7 am gate, or the day your badge didn't cover.</p>
+
+  <!-- North Augusta -->
+  <div class="addon">
+    <span class="kick">The half-day across the bridge</span>
+    <h3>North Augusta, South Carolina</h3>
+    <span class="logi">Drive · 5–10 min over the 13th Street bridge · half day or an evening · free</span>
+    <p>Discover South Carolina titles its own article on the place <em>"North Augusta: A Little North of the Masters,"</em> which is about right. It is five minutes over the river and a complete change of gear: a paved seven-mile rail-trail along the water, a restored wetland with alligators in it, a colonial village staffed by volunteers, and a riverfront district built around one of the best minor-league ballparks in the country, with the Augusta skyline behind the outfield. The obvious play is a late-afternoon walk followed by dinner in Riverside Village and a sunset drink at Jackson's Bluff, the rooftop bar on top of the Crowne Plaza, where downtown Augusta catches the last light across the water.</p>
+    <ol class="stops" role="list">
+      <li class="stop" data-id="brick-pond">
+        <div class="num">1</div>
+        <img data-lightbox="naug" src="https://scprt.widen.net/content/wypaeu7a8s/web/Outdoor_Brick+Pond+water+1.jpg?w=400&amp;h=225&amp;crop=yes&amp;u=nkm28l" alt="The wetland ponds at Brick Pond Park, North Augusta">
+        <div><h4>Brick Pond Park</h4>
+        <p>Forty acres of restored wetland with boardwalks past four ponds, a waterfall, a fishing dock and a wildlife-viewing pavilion. Around 110 bird species recorded, plus river otters and — repeat visitors insist — alligators up to seven or eight feet. Locals call it a miniature Okefenokee.</p>
+        <div class="detail">Free · 30–60 min · park by the municipal building</div></div>
+      </li>
+      <li class="stop">
+        <div class="num">2</div>
+        <img data-lightbox="naug" src="https://scprt.widen.net/content/qjajbaq1ns/web/Outdoor_Greeneway+bikers+1.jpg?w=400&amp;h=225&amp;crop=yes&amp;u=nkm28l" alt="Cyclists on the paved North Augusta Greeneway trail">
+        <div><h4 id="greeneway">The North Augusta Greeneway</h4>
+        <p>A designated National Recreation Trail on an old Norfolk Southern rail bed, paved and fully accessible, tracing the Savannah River for several of its seven-plus miles. Includes a 180-foot bridge over Highway 230 and a repurposed 90-foot flatbed railcar serving as a bridge over Crystal Creek.</p>
+        <div class="detail">Free · 20 min to a half day · links Brick Pond and Riverview Park</div></div>
+      </li>
+      <li class="stop" data-id="living-history">
+        <div class="num">3</div>
+        <img data-lightbox="naug" src="https://scprt.widen.net/content/qie8zxdmjd/web/SCPRT_NAugusta_LivingHistoryPark_May16_040.tif?w=400&amp;h=225&amp;crop=yes&amp;u=nkm28l" alt="Colonial-era buildings at Living History Park, North Augusta">
+        <div><h4>Living History Park</h4>
+        <p>Seven and a half acres of recreated colonial village representing 1735–1785, built on the site of the old waterworks and run entirely by volunteers. Fifteen structures including a blacksmith's forge, a grist mill and the Spring House Tavern — the one surviving original waterworks building. Self-guided, or take the phone audio tour.</p>
+        <div class="detail">Free · 45–90 min · check the calendar; it closes for private events</div></div>
+      </li>
+      <li class="stop" data-id="srp-park">
+        <div class="num">4</div>
+        <img data-lightbox="naug" src="https://scprt.widen.net/content/x7pgy7vlyc/web/Outdoor_Boeckh+Park+river+2.jpg?w=800&amp;h=350&amp;crop=yes&amp;u=nkm28l" alt="The Savannah River shoreline at Boeckh Park, North Augusta">
+        <div><h4>Riverside Village &amp; SRP Park</h4>
+        <p>Home of the Augusta GreenJackets, the Atlanta Braves' Single-A affiliate — voted Ballpark Digest's Ballpark of the Year in its opening season, sitting right on the river with the Augusta skyline as its backdrop. Around it: a walkable strip of restaurants and bars, a boardwalk, and the Crowne Plaza's rooftop.</p>
+        <div class="detail">Free to walk · the 2027 GreenJackets home schedule wasn't published at time of writing</div></div>
+      </li>
+    </ol>
+    <p class="tip">Bridge traffic thickens sharply at gate-open and gate-close. Cross mid-afternoon and you'll barely notice it; cross at 5:30 pm on a Saturday and you will.</p>
+  </div>
+
+  <!-- Clarks Hill -->
+  <div class="addon">
+    <span class="kick">The outdoor day, and a round of your own</span>
+    <h3>Clarks Hill Lake &amp; Hickory Knob</h3>
+    <span class="logi">Drive · 50–75 min northwest · full day · park pass / green fee</span>
+    <p>Forty-five minutes to an hour and a quarter out of Augusta the Piedmont opens into a 71,000-acre reservoir with more than 1,200 miles of largely undeveloped shoreline straddling the state line — pine and hardwood, red-clay bluffs, quiet coves, and none of the resort-town gloss you might expect. <strong data-id="mistletoe">Mistletoe State Park</strong> is the Georgia-side anchor and the easiest version of the day: 15.5 miles of trail, a sandy swim beach, kayak rentals on site, and a reputation as one of the best bass lakes in the country. April is prime for crappie, bluegill and shellcracker, and prime for the native Piedmont azalea blooming through the woods.</p>
+    <p>The other reason to come is that some of your group will want to actually hit a ball. <strong data-id="hickory-knob">Hickory Knob State Resort Park</strong>, over the line in McCormick, South Carolina, is the only full-service resort park in the South Carolina system: an eighteen-hole championship course where Lake Thurmond is visible or in play on every hole, plus archery, skeet, lakeside cabins and an on-site restaurant. It's about 65–75 minutes from Augusta via US-25 — a long way to drive for golf, unless you've spent three days watching other people play it.</p>
+    <div class="shots">
+      <img data-lightbox="lake" src="https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-kayak.jpg" alt="Two kayaks pulled up on the shore at Mistletoe State Park on Clarks Hill Lake">
+      <img data-lightbox="lake" src="https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-beach.jpg" alt="The sandy swim beach at Mistletoe State Park">
+      <img data-lightbox="lake" src="https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-canyon-trail.jpg" alt="The small eroded canyon on the Canyon Trail Loop at Mistletoe State Park">
+      <img data-lightbox="lake" src="https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-lake-evening.jpg" alt="Evening light over Clarks Hill Lake seen from a campsite at Mistletoe State Park">
+    </div>
+    <p class="tip">Two things to verify before you commit. Hurricane Helene badly damaged the Corps of Engineers' recreation areas on this lake in September 2024; the last campground reopened in May 2026, so it should be fully back by your visit — check the Savannah District's site anyway. And Hickory Knob's course was closed May–September 2026 for bunker and green renovations, scheduled to reopen well before April 2027. Confirm tee times directly.</p>
+  </div>
+
+  <!-- Savannah -->
+  <div class="addon">
+    <span class="kick">Add a night, before or after</span>
+    <h3>Savannah</h3>
+    <span class="logi">Drive · ~2½ hrs southeast · 1–2 nights · book lodging early</span>
+    <p>The one genuinely different trip on this page, and the one that needs a decision up front: because it's two and a half hours away, Savannah works as a pre-tournament arrival or a post-tournament decompression, but not as a day trip. Either way, book the beds as early as you book Augusta's — April is Savannah's peak month independently of the Masters, and the whole region's inventory compresses in tournament week.</p>
+    <p>What you get for the drive is a compact, ferociously walkable two square miles built on James Oglethorpe's 1733 grid of <strong>22 public squares</strong> — live oaks, Spanish moss, monuments, and grand houses framing each one. Monterey Square is the loveliest, centred on the Pulaski Monument with the Mercer-Williams House on its edge; Chippewa Square is the <em>Forrest Gump</em> bench square, though the bench itself now lives in the history museum. <strong>Forsyth Park</strong>'s 1858 fountain anchors the southern end, with a farmers market on the lawns on Saturday mornings. Down at the water, <strong>River Street</strong>'s cobblestones and converted cotton warehouses hold seventy-odd shops and bars while container ships slide past at eye level.</p>
+    <p>For a group, the differentiator is the law: Savannah's Historic District permits <strong>open containers</strong> — one drink at a time, in a plastic cup no larger than 16 ounces, anywhere from the river to Jones Street. Most bars will pour yours to go on request. String together the rooftops (Peregrin atop the Perry Lane, Bar Julian on the 13th floor of the Thompson, Rocks on the Roof, Electric Moon in the Plant Riverside district), and finish at a dueling-piano saloon near River Street. Book a table: <strong>Mrs. Wilkes Dining Room</strong> is the essential one and it's weekdays only, 11 am–2 pm, walk-up, with a queue before opening — build the day around lunch rather than dinner. For evenings, The Grey in a restored 1938 Greyhound terminal, Husk, or the pink 18th-century mansion that is The Olde Pink House. Twenty minutes east, <strong>Bonaventure Cemetery</strong> under moss-draped oaks is the most photogenic hour in Georgia; thirty minutes east, <strong>Tybee Island</strong> has three miles of beach, a lighthouse you can climb all 178 steps of, and a crab shack under the live oaks.</p>
+    <div class="shots">
+      <img data-lightbox="sav" src="https://www.thesimplesaltylife.com/wp-content/uploads/2024/01/20221217_121300-1536x1152.jpg" alt="An oak-lined street in Savannah's Historic District draped in Spanish moss">
+      <img data-lightbox="sav" src="https://www.thesimplesaltylife.com/wp-content/uploads/2024/01/20221217_121108.jpg" alt="The 1858 fountain at Forsyth Park, Savannah">
+      <img data-lightbox="sav" src="https://www.thesimplesaltylife.com/wp-content/uploads/2024/01/20221217_145452.jpg" alt="Cobblestoned River Street in Savannah, lined with converted cotton warehouses">
+      <img data-lightbox="sav" src="https://www.travelyesplease.com/wp-content/uploads/2016/05/IMG_9453-Edit-Edit-Edit.jpg" alt="Moss-draped live oaks over the pathways of Bonaventure Cemetery, Savannah">
+      <img data-lightbox="sav" src="https://www.ourescapeclause.com/wp-content/uploads/2021/02/Georgia_Savannah-185.avif" alt="Tybee Island Light Station on the Georgia coast">
+    </div>
+    <p class="tip">The Savannah Music Festival — seventeen days of jazz, bluegrass, classical and roots across downtown venues — very likely overlaps. A third-party listing puts 2027 at 2–17 April but the festival hasn't posted its own dates; check savannahmusicfestival.org. SCAD's Sidewalk Arts Festival, which turns Forsyth Park into a chalk-art competition, falls on the last Saturday of April and so will almost certainly miss you.</p>
+    <p class="foot">Savannah's stops are deliberately left off the map below — pinning a city 130 miles away would zoom the CSRA map out to uselessness.</p>
+  </div>
+</section>
+<div class="mow"></div>
+
+<!-- ══ MAP ═════════════════════════════════════════════════════════════ -->
+<section class="wrap map-section" id="map-section">
+  <div class="hole">
+    <span class="flagstick" aria-hidden="true"><i>8</i></span>
+    <div><span class="kick">Everything, pinned</span>
+    <h2>The <span class="ac">card</span></h2></div>
+  </div>
+  <p class="lede">Every place in this guide across the two-state metro, from Sconyers in south Augusta to Hickory Knob up on the lake. Toggle the categories, or open the split view from the nav to browse cards and pins side by side.</p>
+  <div class="mapfilter" id="mapfilter"></div>
+  <div class="map-container"><div id="map"></div></div>
+  <div class="export-row"><button class="export-btn" id="export-btn">⤓ Save map to file</button></div>
+  <p class="foot">Pins are geocoded from street addresses, so a few sit on the building's parcel rather than its front door. Two are approximate by nature: Brick Pond Park is pinned at the North Augusta municipal building (the recommended parking), and Summerville is pinned at the Walton Way / Milledge Road corner rather than any one house.</p>
+</section>
+
+<dialog class="export-dialog" id="export-dialog">
+  <button class="close" aria-label="Close">×</button>
+  <h3>Save these places</h3>
+  <p>Download as a .gpx file to import into your maps app.</p>
+  <div class="cats">
+    <label><input type="checkbox" value="do" checked> See &amp; do</label>
+    <label><input type="checkbox" value="food" checked> Food</label>
+    <label><input type="checkbox" value="stay" checked> Stay</label>
+  </div>
+  <div class="opts">
+    <button class="opt" id="download-gpx"><span class="icon">⤓</span><span><span class="label">Download .gpx</span><br><span class="desc">Works with OsmAnd, Maps.me, Gaia GPS, Garmin and others</span></span></button>
+  </div>
+  <p class="export-attribution">Map data © OpenStreetMap contributors, provided under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL</a> license.</p>
+</dialog>
+</main>
+
+<!-- ══ CREDITS ═════════════════════════════════════════════════════════ -->
+<section class="credits" id="credits">
+  <div class="wrap">
+    <span class="kick">Sources &amp; credits</span>
+    <h2>Where all this came from</h2>
+    <div class="cols">
+      <div>
+        <h4>The Masters &amp; badges</h4>
+        <ul>
+          <li><a href="https://www.masters.com/patron" target="_blank" rel="noopener">Masters.com — patron information</a></li>
+          <li><a href="https://www.visitaugusta.com/the-masters/plan/faq/" target="_blank" rel="noopener">Visit Augusta — Masters Week FAQs</a></li>
+          <li><a href="https://www.augustachronicle.com/story/sports/pga/2026/06/01/masters-lottery-2027-tickets-golf-augusta-national/90356248007/" target="_blank" rel="noopener">Augusta Chronicle — 2027 ticket lottery</a></li>
+          <li><a href="https://golfdigest.com/story/masters-2027-augusta-national-lottery-tickets-faq-price-application-window" target="_blank" rel="noopener">Golf Digest — 2027 Masters ticket FAQ</a></li>
+          <li><a href="https://ftw.usatoday.com/story/news/2025/03/21/masters-phones-not-allowed-rules-policy-augusta-national/82592226007/" target="_blank" rel="noopener">USA Today — phone and camera rules</a></li>
+          <li><a href="https://www.golf.com/news/columns/2019/04/06/best-places-snap-photo-masters/" target="_blank" rel="noopener">Golf.com — best places to take a photo</a></li>
+          <li><a href="https://www.golfmonthly.com/tour/us-masters/masters-history-records/augusta-high-jinx-masters-par-3-contest-68281" target="_blank" rel="noopener">Golf Monthly — the Par 3 Contest</a></li>
+          <li><a href="https://www.augusta.com/masters/story/news/2020-10-25/skipping-ball-across-water-no-16-must-see-masters-tournament-tradition" target="_blank" rel="noopener">Augusta.com — skipping balls at 16</a></li>
+          <li><a href="https://anwagolf.com/" target="_blank" rel="noopener">Augusta National Women's Amateur</a></li>
+          <li><a href="https://www.golfchannel.com/news/news/registration-open-for-2027-drive-chip-and-putt-qualifiers" target="_blank" rel="noopener">Golf Channel — Drive, Chip and Putt 2027</a></li>
+          <li><a href="https://golf.com/news/augusta-national-10-most-famous-landmarks/" target="_blank" rel="noopener">Golf.com — Augusta National's landmarks</a></li>
+          <li><a href="https://www.caddiehq.com/resources/can-you-tour-augusta-national-golf-course" target="_blank" rel="noopener">Caddie HQ — can you tour Augusta National?</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Augusta — city, sights &amp; photography</h4>
+        <ul>
+          <li><a href="https://www.visitaugusta.com/plan/about-augusta/downtown/" target="_blank" rel="noopener">Visit Augusta — downtown</a></li>
+          <li><a href="https://www.visitaugusta.com/blog/post/top-things-to-do-at-the-augusta-riverwalk/" target="_blank" rel="noopener">Visit Augusta — the Riverwalk</a></li>
+          <li><a href="https://www.visitaugusta.com/blog/post/golf-adventures/" target="_blank" rel="noopener">Visit Augusta — golf experiences off-course</a></li>
+          <li><a href="https://www.visitaugusta.com/blog/post/augustas-best-outdoor-adventures-during-masters-week/" target="_blank" rel="noopener">Visit Augusta — outdoor escapes in Masters week</a></li>
+          <li><a href="https://www.visitaugusta.com/plan/experience-passes/taste-of-the-tournament/" target="_blank" rel="noopener">Visit Augusta — Taste of the Tournament</a></li>
+          <li><a href="https://www.atlantamagazine.com/southbound-articles/weekend-getaway-augusta/" target="_blank" rel="noopener">Atlanta Magazine — weekend getaway: Augusta</a></li>
+          <li><a href="https://www.augustamuseum.org/ComeInside" target="_blank" rel="noopener">Augusta Museum of History</a></li>
+          <li><a href="https://www.augustamuseum.org/HarrisHouse" target="_blank" rel="noopener">1797 Ezekiel Harris House</a></li>
+          <li><a href="https://sacredheartaugusta.org/learn/" target="_blank" rel="noopener">Sacred Heart Cultural Center</a></li>
+          <li><a href="https://historicaugusta.org/preservation/historic-districts/summerville-historic-district/" target="_blank" rel="noopener">Historic Augusta — Summerville</a></li>
+          <li><a href="https://theaugustapress.com/springtime-sights-in-augusta/" target="_blank" rel="noopener">The Augusta Press — springtime sights</a></li>
+          <li><a href="https://theaugustapress.com/photojournalism-the-lights-at-the-pedestrian-bridge/" target="_blank" rel="noopener">The Augusta Press — the pedestrian bridge lights</a></li>
+          <li><a href="https://www.mainstreetbackroads.com/post/the-ultimate-guide-to-augusta-s-hidden-gems" target="_blank" rel="noopener">Main Street Backroads — Augusta's hidden gems</a></li>
+          <li><a href="https://www.atlasobscura.com/places/james-brown-plaza" target="_blank" rel="noopener">Atlas Obscura — James Brown Plaza</a></li>
+          <li><a href="https://www.visitaugusta.com/blog/post/james-brown-mural-tour/" target="_blank" rel="noopener">Visit Augusta — the James Brown murals</a></li>
+          <li><a href="https://exploregeorgia.org/martinez/outdoors-nature/biking-mountain-cycling/savannah-rapids-park" target="_blank" rel="noopener">Explore Georgia — Savannah Rapids Park</a></li>
+          <li><a href="https://www.visitaugusta.com/things-to-do/attractions/augusta-canal/" target="_blank" rel="noopener">Augusta Canal National Heritage Area</a></li>
+          <li><a href="https://wheninaugusta.com/rooftop-bars-in-augusta-ga/" target="_blank" rel="noopener">When In Augusta — rooftop bars</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Food &amp; drink</h4>
+        <ul>
+          <li><a href="https://www.insidehook.com/food/the-rich-creamy-and-slightly-spicy-history-of-the-masters-pimento-cheese-sandwich" target="_blank" rel="noopener">InsideHook — history of the $1.50 pimento cheese sandwich</a></li>
+          <li><a href="https://www.golfdigest.com/story/masters-2019-the-curious-case-of-the-original-pimento-cheese-recipe-and-how-you-can-now-buy-it" target="_blank" rel="noopener">Golf Digest — the original pimento cheese recipe</a></li>
+          <li><a href="https://www.usatoday.com/story/sports/golf/masters/2026/04/07/2026-masters-concessions-prices-pimento-cheese-sandwich/89502915007/" target="_blank" rel="noopener">USA Today — concession prices</a></li>
+          <li><a href="https://www.globalgolfpost.com/more/augustas-winning-recipe/" target="_blank" rel="noopener">Global Golf Post — Augusta's winning recipe (Luigi's)</a></li>
+          <li><a href="https://www.visitaugusta.com/blog/post/where-to-eat-drink-like-a-local-during-masters-week/" target="_blank" rel="noopener">Visit Augusta — eat and drink like a local</a></li>
+          <li><a href="https://www.visitaugusta.com/blog/post/like-a-local-where-to-watch-the-masters/" target="_blank" rel="noopener">Visit Augusta — where to watch the Masters</a></li>
+          <li><a href="https://www.theadventuristmagazine.com/city-guides/the-south/georgia/best-augusta-restaurants" target="_blank" rel="noopener">The Adventurist — best Augusta restaurants</a></li>
+          <li><a href="https://roadfood.com/restaurants/boll-weevil-cafe-sweetery" target="_blank" rel="noopener">Roadfood — Boll Weevil</a></li>
+          <li><a href="https://roadfood.com/restaurants/sports-center" target="_blank" rel="noopener">Roadfood — Sports Center</a></li>
+          <li><a href="https://roadfood.com/restaurants/big-mamas-soul-food/" target="_blank" rel="noopener">Roadfood — Big Mama's Soul Food</a></li>
+          <li><a href="https://roadfood.com/restaurants/track-kitchen/" target="_blank" rel="noopener">Roadfood — Track Kitchen</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Sconyers_Bar-B-Que" target="_blank" rel="noopener">Sconyers Bar-B-Que</a></li>
+          <li><a href="https://robertfmoss.com/features/The-Story-of-South-Carolina-Hash-and-Rice" target="_blank" rel="noopener">Robert F. Moss — the story of hash and rice</a></li>
+          <li><a href="https://thelocalpalate.com/articles/aiken-south-carolina-unexpected-culinary-journey/" target="_blank" rel="noopener">The Local Palate — Aiken's culinary journey</a></li>
+          <li><a href="https://www.postandcourier.com/aikenstandard/" target="_blank" rel="noopener">Aiken Standard — Taste of the Town reviews</a></li>
+          <li><a href="https://www.southernliving.com/culture/supper-vs-dinner" target="_blank" rel="noopener">Southern Living — supper vs. dinner</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Where to stay</h4>
+        <ul>
+          <li><a href="https://travel.yahoo.com/hotels/articles/much-more-expensive-lodging-augusta-080330085.html" target="_blank" rel="noopener">Augusta Chronicle — how much more expensive lodging gets</a></li>
+          <li><a href="https://www.hilton.com/en/hotels/agscuqq-the-partridge-inn-augusta/hotel-info/" target="_blank" rel="noopener">The Partridge Inn Augusta</a></li>
+          <li><a href="https://www.marriott.com/en-us/hotels/agsmc-augusta-marriott-at-the-convention-center/" target="_blank" rel="noopener">Augusta Marriott at the Convention Center</a></li>
+          <li><a href="https://www.ihg.com/crowneplaza/hotels/us/en/north-augusta/aikna/hoteldetail" target="_blank" rel="noopener">Crowne Plaza North Augusta</a></li>
+          <li><a href="https://www.thewillcox.com/" target="_blank" rel="noopener">The Willcox, Aiken</a></li>
+          <li><a href="https://www.vrbo.com/vacation-rentals/usa/georgia/augusta" target="_blank" rel="noopener">Vrbo — Augusta rentals</a></li>
+          <li><a href="https://thehillaugustaneighborhood.org/" target="_blank" rel="noopener">The Hill Neighborhood Association</a></li>
+          <li><a href="https://visitcolumbiacountyga.com/plan-your-visit/towns-and-communities/evans/" target="_blank" rel="noopener">Visit Columbia County — Evans &amp; Martinez</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Aiken, North Augusta &amp; the lake</h4>
+        <ul>
+          <li><a href="https://www.visitaikensc.com/tournament-week-in-aiken-things-to-do-near-augusta-ga/" target="_blank" rel="noopener">Visit Aiken — Tournament Week in Aiken</a></li>
+          <li><a href="https://www.visitaikensc.com/aiken-is-a-photographers-paradise/" target="_blank" rel="noopener">Visit Aiken — a photographer's paradise</a></li>
+          <li><a href="https://www.visitaikensc.com/your-chance-to-experience-aikens-spring-gardens/" target="_blank" rel="noopener">Visit Aiken — the spring gardens</a></li>
+          <li><a href="https://www.visitaikensc.com/do/hopelands_gardens/" target="_blank" rel="noopener">Visit Aiken — Hopelands Gardens</a></li>
+          <li><a href="https://www.hitchcockwoods.org/the-woods/about-the-woods/" target="_blank" rel="noopener">Hitchcock Woods Foundation</a></li>
+          <li><a href="https://aikentrainingtrack.com/about" target="_blank" rel="noopener">Aiken Training Track</a></li>
+          <li><a href="https://aikenpolo.org/" target="_blank" rel="noopener">Aiken Polo Club</a></li>
+          <li><a href="https://www.cityofaikensc.gov/the-52nd-annual-hopelands-concert-series-returns-to-hopelands-gardens/" target="_blank" rel="noopener">City of Aiken — Hopelands Concert Series</a></li>
+          <li><a href="https://discoversouthcarolina.com/articles/horse-culture-in-aiken-grew-out-of-a-winter-retreat-for-health" target="_blank" rel="noopener">Discover South Carolina — Aiken's horse culture</a></li>
+          <li><a href="https://discoversouthcarolina.com/articles/north-augusta-a-little-north-of-the-masters" target="_blank" rel="noopener">Discover South Carolina — North Augusta</a></li>
+          <li><a href="https://discoversouthcarolina.com/articles/explore-nature-at-brick-pond-park" target="_blank" rel="noopener">Discover South Carolina — Brick Pond Park</a></li>
+          <li><a href="https://colonialtimes.us/" target="_blank" rel="noopener">Living History Park, North Augusta</a></li>
+          <li><a href="https://www.milb.com/augusta/ballpark/gj-srp-park" target="_blank" rel="noopener">SRP Park &amp; the Augusta GreenJackets</a></li>
+          <li><a href="https://southcarolinaparks.com/redcliffe/things-to-do" target="_blank" rel="noopener">Redcliffe Plantation State Historic Site</a></li>
+          <li><a href="https://gastateparks.org/mistletoe" target="_blank" rel="noopener">Mistletoe State Park</a></li>
+          <li><a href="https://traveltrailsail.com/mistletoe-state-park-review/" target="_blank" rel="noopener">Travel Trail Sail — Mistletoe State Park review</a></li>
+          <li><a href="https://southcarolinaparks.com/hickory-knob/golf" target="_blank" rel="noopener">Hickory Knob State Resort Park — golf</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Savannah (the add-on)</h4>
+        <ul>
+          <li><a href="https://www.thesimplesaltylife.com/walking-tour-of-savannah/" target="_blank" rel="noopener">The Simple Salty Life — a walking tour of Savannah</a></li>
+          <li><a href="https://jennylynnanderson.com/one-day-in-savannah-a-locals-perfect-itinerary-for-2025/" target="_blank" rel="noopener">Jenny Lynn Anderson — one day in Savannah</a></li>
+          <li><a href="https://www.travelyesplease.com/travel-blog-bonaventure-cemetery/" target="_blank" rel="noopener">Travel Yes Please — Bonaventure Cemetery</a></li>
+          <li><a href="https://www.ourescapeclause.com/things-to-do-on-tybee-island-ga/" target="_blank" rel="noopener">Our Escape Clause — Tybee Island</a></li>
+          <li><a href="https://www.savannah.com/savannahs-open-container-policy-the-to-go-cup-takeaway/" target="_blank" rel="noopener">Savannah's open-container policy</a></li>
+          <li><a href="https://www.luckysavannah.com/blog/things-to-do/savannah-from-above-a-guide-to-the-city-s-best-rooftop-cocktails" target="_blank" rel="noopener">Lucky Savannah — the best rooftop cocktails</a></li>
+          <li><a href="https://carolinas.eater.com/maps/best-restaurant-savannah" target="_blank" rel="noopener">Eater Carolinas — best restaurants in Savannah</a></li>
+          <li><a href="https://www.theinfatuation.com/savannah" target="_blank" rel="noopener">The Infatuation — Savannah</a></li>
+          <li><a href="https://www.savannahmusicfestival.org/" target="_blank" rel="noopener">Savannah Music Festival</a></li>
+          <li><a href="https://gosouthsavannah.com/things-to-do/savannah-in-april.html" target="_blank" rel="noopener">Go South Savannah — Savannah in April</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Weather, climate &amp; maps</h4>
+        <ul>
+          <li><a href="https://weatherspark.com/s/17867/0/Average-Spring-Weather-in-Augusta-Georgia-United-States" target="_blank" rel="noopener">WeatherSpark — Augusta spring averages</a></li>
+          <li><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Coordinates: © OpenStreetMap contributors (ODbL)</a> and the US Census Geocoder</li>
+          <li><a href="https://carto.com/attributions" target="_blank" rel="noopener">Basemap tiles: CARTO</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Photographs throughout are hotlinked from the sources linked above and remain the property of their photographers and publishers; per-image credit and licence appear in the lightbox when you click a picture. Creative Commons images sourced via Flickr geo-search are credited to their authors. A handful of items — Broad Street, Summerville, Savannah Rapids, Forest Hills, and several restaurants — appear without a photograph because no image with clear provenance could be found rather than because they aren't worth seeing.</p>
+    <p class="note">A few things this guide cannot pin down twenty months out and you should re-check before you travel: the 2027 dates for Aiken's polo fixtures, Stable View's spring trials, the Aiken Art Walk, North Augusta's Downtown Spring Fest and the GreenJackets' home schedule; the Savannah Music Festival's official 2027 programme; the Taste of the Tournament participant list; azalea and dogwood peak timing; and the exact current location of the James Brown statue. Masters-week restaurant hours diverge sharply from normal — confirm by phone in the week itself.</p>
+    <p class="bye">Safe travels!</p>
+  </div>
+</section>
+</div><!-- /#content -->
+
+<dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="application/json" id="guide-data">
+{
+  "items": [
+    { "id":"augusta-national", "category":"do", "section":"masters", "feature":true, "name":"Augusta National Golf Club", "blurb":"2604 Washington Rd · badge holders only · no public tours",
+      "description":"Intensely private, with no public access of any kind outside a Masters, ANWA or Drive-Chip-and-Putt ticket. Magnolia Lane runs 330 yards to the clubhouse between 61 magnolias grown from seeds the Berckmans family planted in the 1850s; Amen Corner is holes 11, 12 and 13.",
+      "sources":[{"url":"https://golf.com/news/augusta-national-10-most-famous-landmarks/","title":"Golf.com"},{"url":"https://www.caddiehq.com/resources/can-you-tour-augusta-national-golf-course","title":"Caddie HQ"}],
+      "lat":33.50659, "lng":-82.01954,
+      "images":[{"url":"https://live.staticflickr.com/5032/7050792037_01118ae9ae_b.jpg","label":"An azalea in bloom at Augusta National","credit":"brettchisum"}] },
+
+    { "id":"museum-history", "category":"do", "section":"golf-off", "name":"Augusta Museum of History", "blurb":"560 Reynolds St · the green jacket · allow 1–2 hrs",
+      "description":"Holds the only Masters green jacket displayed anywhere outside Augusta National — whose owner is a closely guarded secret. Also 'Augusta's Story', a 12,000-year walk through local history, a restored 1917 steam locomotive and a James Brown exhibit.",
+      "sources":[{"url":"https://www.augustamuseum.org/ComeInside","title":"Augusta Museum of History"},{"url":"https://www.atlantamagazine.com/southbound-articles/weekend-getaway-augusta/","title":"Atlanta Magazine"}],
+      "lat":33.47484, "lng":-81.95997,
+      "images":[{"url":"https://assets.simpleviewinc.com/sv-augusta/image/fetch/c_fill,f_avif,fl_strip_profile,h_400,q_65,w_600/https://assets.simpleviewinc.com/simpleview/image/upload/crm/augusta/021015---Augusta-Museum-of-History-Exterior_99D9FD1F-0A59-4664-9CD7C9321BED705A_c752e37d-c40a-4e05-901a73542bccbb69.jpg","label":"The museum exterior at 6th and Reynolds","credit":"visitaugusta.com"}] },
+
+    { "id":"augusta-co", "category":"do", "section":"golf-off", "name":"Augusta & Co.", "blurb":"1010 Broad St · visitor centre + merchandise",
+      "description":"The city's official visitor experience centre on Broad Street, and the place to buy gear and Masters memorabilia if you never get through the gate. Also where the Taste of the Tournament passport lives.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/golf-adventures/","title":"Visit Augusta"}],
+      "lat":33.47665, "lng":-81.96995, "images":[] },
+
+    { "id":"edgars", "category":"food", "section":"golf-off", "name":"Edgar's Above Broad", "blurb":"699 Broad St · rooftop social club · putting green",
+      "description":"A rooftop bar with an interactive putting green, live music and downtown views — the closest most visitors get to swinging a club during tournament week. Reserve during Masters week.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/golf-adventures/","title":"Visit Augusta"}],
+      "lat":33.47468, "lng":-81.96321, "images":[] },
+
+    { "id":"topgolf", "category":"do", "section":"golf-off", "name":"Topgolf Augusta", "blurb":"437 Topgolf Way · simulator bays · groups",
+      "description":"Climate-controlled hitting bays with food and drink service — the reliable rainy-evening group option when the tournament has finished for the day and nobody wants to sit down.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/golf-adventures/","title":"Visit Augusta"}],
+      "lat":33.52580, "lng":-82.01540, "images":[] },
+
+    { "id":"forest-hills", "category":"do", "section":"golf-off", "name":"Forest Hills Golf Club", "blurb":"1500 Comfort Rd · public · 18 holes",
+      "description":"Built in 1926 and therefore older than Augusta National itself — Bobby Jones teed off here during his still-unmatched 1930 Grand Slam year. The closest the public gets to playing hallowed-adjacent ground in Augusta.",
+      "sources":[{"url":"https://www.atlantamagazine.com/southbound-articles/weekend-getaway-augusta/","title":"Atlanta Magazine"}],
+      "lat":33.47299, "lng":-82.04643, "images":[] },
+
+    { "id":"riverwalk", "category":"do", "section":"downtown", "name":"Augusta Riverwalk", "blurb":"5th–13th St · free · open 24h · best at sunset",
+      "description":"The city's green spine: a landscaped mile along the Savannah River with an amphitheatre, gardens, and monuments. Best at sunset, and at its most attractive in April with the plantings in bloom.",
+      "sources":[{"url":"https://www.visitaugusta.com/things-to-do/attractions/riverwalk/","title":"Visit Augusta"},{"url":"https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia","title":"Chris & Sara"}],
+      "lat":33.46542, "lng":-81.97557,
+      "images":[
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d46f_652fcdac17e83e0fbc0ce166_Augusta%252C%2520Georgia-07082.jpeg", "label": "Amphitheatre on the Savannah River", "credit": "Chris & Sara"},
+        {"url": "https://media.theaugustapress.com/uploads/2022/10/PEDESTRIAN-BRIDGE-9-1536x1049.jpg", "label": "Savannah River from the pedestrian bridge", "credit": "Mike Adams"}] },
+
+    { "id":"jb-broad", "category":"do", "section":"downtown", "name":"James Brown Statue & Broad St Murals", "blurb":"800 block of Broad St · free · 1–2 hrs on foot",
+      "description":"A life-size bronze of the Godfather of Soul on the 800 block of Broad Street, anchoring a self-guided walk of Augusta's downtown murals. The statue's base texts you a selfie.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/outdoor-murals-worth-finding-in-augusta/","title":"Visit Augusta"},{"url":"https://www.mainstreetbackroads.com/post/augusta-ga","title":"Main Street & Back Roads"}],
+      "lat":33.47535, "lng":-81.96625,
+      "images":[
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d44d_652fd114a6da25bcfc4b9f52_Augusta%252C%2520Georgia-04838.jpeg", "label": "James Brown mural, Augusta", "credit": "Chris & Sara"}] },
+
+    { "id":"saturday-market", "category":"do", "section":"downtown", "name":"Augusta Saturday Market", "blurb":"Riverwalk, 8th St plaza · Saturdays 8am–2pm · free",
+      "description":"A bustling farmers-and-artisan market by the Riverwalk, running April through November — produce, crafts, live music, and a striking range of global and Southern food stands. A perfect Saturday-morning stop.",
+      "sources":[{"url":"https://www.theaugustamarket.com/","title":"The Augusta Market"},{"url":"https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia","title":"Chris & Sara"}],
+      "lat":33.47711, "lng":-81.96448,
+      "images":[
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d45f_652fce233c14b9bf48c613fe_Augusta%252C%2520Georgia-07102.jpeg", "label": "Augusta Saturday Market", "credit": "Chris & Sara"},
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d472_652fcea1b3731aa019df2abe_Augusta%252C%2520Georgia-07114.jpeg", "label": "Food stand at the market", "credit": "Chris & Sara"}] },
+
+    { "id":"sacred-heart", "category":"do", "section":"downtown", "name":"Sacred Heart Cultural Center", "blurb":"1301 Greene St · free · Mon–Fri · 30–60 min",
+      "description":"A jaw-dropping 1897 former Catholic church with 94 Munich stained-glass windows, a barrel-vaulted ceiling, twin Romanesque spires, and 15 styles of brickwork. The interior lights up in the low afternoon sun.",
+      "sources":[{"url":"https://sacredheartaugusta.org/learn/","title":"Sacred Heart"},{"url":"https://www.mainstreetbackroads.com/post/augusta-ga","title":"Main Street & Back Roads"}],
+      "lat":33.4769, "lng":-81.97638,
+      "images":[
+        {"url": "https://images.squarespace-cdn.com/content/v1/62c5c45058e5ba63815d7068/1773326398742-LBZ4AXEC8ISR8M4A6T9A/DSCF1425.jpg?format=500w", "label": "Stained-glass interior", "credit": "Kelsey Smith"},
+        {"url": "https://images.squarespace-cdn.com/content/v1/62c5c45058e5ba63815d7068/1773326395596-YJ08T3QJKWMZUBX2OSE6/DSCF7305.jpg?format=500w", "label": "Dome and barrel-vaulted ceiling", "credit": "Kelsey Smith"},
+        {"url": "https://images.squarespace-cdn.com/content/v1/62c5c45058e5ba63815d7068/bd890ec6-e9e8-4b98-8781-20207dd6343b/wedding-ceremony-marble-altar-sacred-heart-cultural-center-augusta-georgia.jpg?format=1500w", "label": "Marble altar and nave", "credit": "Kelsey Smith"}] },
+
+    { "id":"morris-museum", "category":"do", "section":"downtown", "name":"Morris Museum of Art", "blurb":"One 10th St · $5, free Sun · Tue–Sun · 1–2 hrs",
+      "description":"The first US museum devoted to the art and artists of the American South — 5,000+ works from antebellum portraits to contemporary Southern painting, right on the Riverwalk.",
+      "sources":[{"url":"https://www.themorris.org/","title":"Morris Museum"}],
+      "lat":33.47869, "lng":-81.96871,
+      "images":[
+        {"url":"https://assets.simpleviewinc.com/sv-augusta/image/fetch/c_fill,f_avif,fl_strip_profile,h_400,q_65,w_600/https://assets.simpleviewinc.com/simpleview/image/upload/crm/augusta/133_7ebafe9c-5056-b3a8-4962d96179b5a605.jpg","label":"The Morris Museum of Art building on the Riverwalk","credit":"visitaugusta.com"}] },
+
+    { "id":"history-museum", "category":"do", "section":"downtown", "name":"Augusta Museum of History", "blurb":"$5 · Thu–Sun · 1–2 hrs",
+      "description":"The city's flagship history museum — Native American artifacts, Civil War relics, a 1914 steam locomotive, and a standout exhibit on hometown hero James Brown.",
+      "sources":[{"url":"https://www.augustamuseum.org/","title":"Augusta Museum of History"}],
+      "lat":33.47484, "lng":-81.95997,
+      "images":[
+        {"url":"https://assets.simpleviewinc.com/sv-augusta/image/fetch/c_fill,f_avif,fl_strip_profile,h_400,q_65,w_600/https://assets.simpleviewinc.com/simpleview/image/upload/crm/augusta/021015---Augusta-Museum-of-History-Exterior_99D9FD1F-0A59-4664-9CD7C9321BED705A_c752e37d-c40a-4e05-901a73542bccbb69.jpg","label":"The Augusta Museum of History exterior","credit":"visitaugusta.com"}] },
+
+    { "id":"wilson-home", "category":"do", "section":"downtown", "name":"Woodrow Wilson Boyhood Home", "blurb":"$10 · Wed–Sat · ~1 hr · tours on the hour",
+      "description":"A National Historic Landmark preserving the 1860s Augusta home where the 28th US president spent his formative years — a compact, well-interpreted house museum with guided tours on the hour.",
+      "sources":[{"url":"https://wilsonboyhoodhome.org/","title":"Wilson Boyhood Home"}],
+      "lat":33.47236, "lng":-81.96455,
+      "images":[
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d42d_6532ef34a494d95f236eda23_Woodrow%2520Wilson%2520boyhood%2520home%2520in%2520Augusta%252C%2520GA.jpeg", "label": "Boyhood home of Woodrow Wilson", "credit": "Chris & Sara"}] },
+
+    { "id":"canal-tour", "category":"do", "section":"canal", "name":"Augusta Canal Boat Tour", "blurb":"Discovery Center, 1450 Greene St · $14 · 90 min · Tue–Sat",
+      "description":"An open-air Petersburg boat glides the 1845 canal past 19th-century textile mills and the Confederate Powder Works, with narration and free Discovery Center entry. Tours sell out in spring — reserve well ahead (706-823-0440).",
+      "sources":[{"url":"https://augustacanal.com/boat-tours/","title":"Augusta Canal Authority"}],
+      "lat":33.47851, "lng":-81.98225,
+      "images":[
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d462_652fc93df8e81fe56ae7f11d_Augusta%252C%2520Georgia-07270.jpeg", "label": "Trails along the Augusta Canal", "credit": "Chris & Sara"},
+        {"url": "https://augustacanal.com/wp-content/uploads/bb-plugin/cache/DSC9991-1-portrait-1ea90e554a994a5cdda32b5b6b898fba-9awe3hnydfls.jpg", "label": "Petersburg boat on the Augusta Canal", "credit": "Augusta Canal Authority"}] },
+
+    { "id":"savannah-rapids", "category":"do", "section":"canal", "name":"Savannah Rapids Park & Canal Headgates", "blurb":"3300 Evans to Locks Rd, Martinez · free · ~15 min out",
+      "description":"The Augusta Canal's historic headgates ~10 miles northwest of downtown, with a level 8-mile towpath trail flanked by the river and canal and a small waterfall — a drone-worthy, golden-hour walk with kayak rentals on site.",
+      "sources":[{"url":"https://augustacanal.com/overview/","title":"Augusta Canal Authority"},{"url":"https://sylviesadventures.com/2021/01/26/savannah-rapids-ga/","title":"Sylvie's Adventures"}],
+      "lat":33.54785, "lng":-82.0429,
+      "images":[
+        {"url": "https://www.theoutbound.com/media/contents/112688/assets/1472228307776?w=960&fit=cover&fm=webp&dpr=2", "label": "Savannah Rapids Trail along the canal"},
+        {"url": "https://augustacanal.com/wp-content/uploads/2024/09/Canal-Drone-Photos_1-1-1.jpg", "label": "Aerial view of the Augusta Canal", "credit": "Augusta Canal Authority"}] },
+
+    { "id":"phinizy", "category":"do", "section":"canal", "name":"Phinizy Swamp Nature Park", "blurb":"1858 Lock and Dam Rd · free · 1.5–3 hrs",
+      "description":"A wild 1,100-acre wetland inside the city limits — boardwalks over floodplain marsh, abundant herons, egrets, and osprey, and hands-on 'Eco Explorers' science expeditions ($25) where you wade in with waders and microscopes.",
+      "sources":[{"url":"https://phinizycenter.org/","title":"Phinizy Center"},{"url":"https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia","title":"Chris & Sara"}],
+      "lat":33.38463, "lng":-81.96865,
+      "images":[
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d46c_652fc9b408d013a9fa1ef3c8_Augusta%252C%2520Georgia-06680.jpeg", "label": "Boardwalk at Phinizy Swamp", "credit": "Chris & Sara"},
+        {"url": "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d40a_652fc98c1e2801577166613f_Augusta%252C%2520Georgia-06606.jpeg", "label": "Wading into Phinizy Swamp", "credit": "Chris & Sara"}] },
+
+    { "id":"luigis", "category":"food", "section":"food-broad", "feature":true, "name":"Luigi's", "blurb":"590 Broad St · Greek-Italian · $$ · closed the final Sunday",
+      "description":"Opened in 1949 by Greek immigrant Nicholas Ballas, and a Masters-week ritual for touring professionals and their families for decades. Order the baked half-chicken in olive oil, lemon and Hellenic herbs — the best-seller — or the lasagna, veal parmigiana or moussaka.",
+      "sources":[{"url":"https://www.globalgolfpost.com/more/augustas-winning-recipe/","title":"Global Golf Post"},{"url":"https://www.postcard.inc/places/luigis-augusta-srGB1TQ8Ogp","title":"Postcard"}],
+      "lat":33.473471, "lng":-81.961553,
+      "images":[{"url":"https://s3-media0.fl.yelpcdn.com/bphoto/PKbyZ9ZuZaSzVHQED6ZI9Q/l.jpg","label":"Luigi's on Broad Street","credit":"Yelp"}] },
+
+    { "id":"frog-hollow", "category":"food", "section":"food-broad", "name":"Frog Hollow Tavern", "blurb":"1282 Broad St · farm-to-table Southern · $$$",
+      "description":"Chef Adrian Baer's seasonal, locally sourced tavern on the 1200 block — the most refined room downtown without being stiff. Duck confit, braised beef short ribs, the bone-in pork chop.",
+      "sources":[{"url":"https://froghollowtavern.com/","title":"Frog Hollow Tavern"},{"url":"https://www.theadventuristmagazine.com/city-guides/the-south/georgia/best-augusta-restaurants","title":"The Adventurist"}],
+      "lat":33.47837, "lng":-81.97505, "images":[] },
+
+    { "id":"craft-vine", "category":"food", "section":"food-broad", "name":"Craft & Vine", "blurb":"1204 Broad St · cocktails & small plates · $$",
+      "description":"Where to drink the Azalea — vodka, lemonade, grenadine — done properly, alongside charcuterie, duck with hot honey and wood-fired pizza. Happy hour twice nightly, and lively all week.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/golf-adventures/","title":"Visit Augusta"},{"url":"https://www.augustachronicle.com/story/entertainment/dining/2026/03/30/yelp-ranking-for-best-restaurants-to-try-for-masters-week-in-augusta/89290166007/","title":"Augusta Chronicle"}],
+      "lat":33.47769, "lng":-81.97290, "images":[] },
+
+    { "id":"farmhaus", "category":"food", "section":"food-counter", "name":"Farmhaus Burger", "blurb":"12th & Broad · gourmet burgers · $$ · screened patio",
+      "description":"The group-friendly option with a screened patio and televisions — hand-cut fries, boozy milkshakes, and the pimento cheese burger, which is exactly the joke you want it to be during Masters week.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/like-a-local-where-to-watch-the-masters/","title":"Visit Augusta"}],
+      "lat":33.47783, "lng":-81.97334, "images":[] },
+
+    { "id":"sports-center", "category":"food", "section":"food-counter", "name":"Sports Center", "blurb":"594 Broad St · dive bar burgers · $ · cash only, closed Sun–Mon",
+      "description":"Next door to Luigi's and its exact opposite: a cash-only room where a large share of the customers are greeted by name. A half-pound hand-shaped burger and onion rings. Unimprovable people-watching.",
+      "sources":[{"url":"https://roadfood.com/restaurants/sports-center","title":"Roadfood"},{"url":"https://www.postandcourier.com/aikenstandard/lifestyle/food/taste-of-the-town-sports-center-serves-delicious-food-in-an-old-school-setting/article_80ca27a0-2015-11ed-8788-df771c766216.html","title":"Aiken Standard"}],
+      "lat":33.47371, "lng":-81.96147, "images":[] },
+
+    { "id":"hildebrandts", "category":"food", "section":"food-counter", "name":"Hildebrandt's", "blurb":"226 6th St · German-inspired deli · $ · lunch only",
+      "description":"A grocery store run by five generations of the same family since 1879, and Augusta's oldest continuously operating business. Deli sandwiches piled with meats and cheeses, homemade spreads, Southern-style potato salad.",
+      "sources":[{"url":"https://augustagoodnews.com/hildebrandts-offers-slice-of-augusta-history/","title":"Augusta Good News"},{"url":"https://www.postandcourier.com/aikenstandard/lifestyle/food/sandwich-shop-restaurant-augusta-ga-hildebrandt-s/article_61965224-fb1a-11ed-aaa8-bfd35bb0ffb3.html","title":"Post and Courier"}],
+      "lat":33.47357, "lng":-81.96176, "images":[] },
+
+    { "id":"boll-weevil", "category":"food", "section":"food-broad", "name":"The Boll Weevil Cafe & Sweetery", "blurb":"10 James Brown Blvd · Southern + dessert · $$",
+      "description":"In a historic cotton warehouse on the street formerly called 9th, now James Brown Boulevard. Twenty-plus desserts daily — Georgia bourbon pecan pie, chocolate peanut butter cake — plus fried green tomatoes and jerk chicken if you insist on a meal first.",
+      "sources":[{"url":"https://roadfood.com/restaurants/boll-weevil-cafe-sweetery","title":"Roadfood"},{"url":"https://thebollweevil.com/","title":"The Boll Weevil"}],
+      "lat":33.47822, "lng":-81.96624,
+      "images":[
+        {"url":"https://static.spotapps.co/website_images/ab_websites/119981_website/about/about_2.jpg","label":"Fried green tomatoes","credit":"The Boll Weevil"},
+        {"url":"https://static.spotapps.co/website_images/ab_websites/119981_website/about/about_1.jpg","label":"Jerk chicken","credit":"The Boll Weevil"},
+        {"url":"https://static.spotapps.co/website_images/ab_websites/119981_website/about/about_3.jpg","label":"Chili with black beans and corn","credit":"The Boll Weevil"}] },
+
+    { "id":"new-moon", "category":"food", "section":"food-counter", "name":"New Moon Café", "blurb":"736 Broad St · breakfast & coffee · $",
+      "description":"A downtown breakfast-plate and coffee stop that fills early with people fuelling up before a gate time. Counter service; do not expect it to still be serving at eleven.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/where-to-eat-drink-like-a-local-during-masters-week/","title":"Visit Augusta"}],
+      "lat":33.47464, "lng":-81.96420, "images":[] },
+
+    { "id":"sconyers", "category":"food", "section":"food-smoke", "name":"Sconyers Bar-B-Que", "blurb":"2250 Sconyers Way · pit barbecue · $$ · 8 mi from the club",
+      "description":"Claude and Adeline Sconyers opened a roadside stand on Augusta's rural south side in 1956; it has since fed a sitting US president. Pork cooked over live coals up to 24 hours. Order the T-Loin Plate or the Plantation Platter, with hash and potato salad.",
+      "sources":[{"url":"https://en.wikipedia.org/wiki/Sconyers_Bar-B-Que","title":"Wikipedia"},{"url":"https://www.si.com/golf/lifestyle/feature-2019-04-10-whats-cooking-at-sconyers","title":"Sports Illustrated"}],
+      "lat":33.40845, "lng":-82.03270,
+      "images":[{"url":"https://www.sconyersbar-b-que.com/building.PNG","label":"The Sconyers building","credit":"Sconyers Bar-B-Que"}] },
+
+    { "id":"big-mamas", "category":"food", "section":"food-smoke", "name":"Big Mama's Soul Food", "blurb":"Deans Bridge Rd · soul food · $",
+      "description":"Sunday-dinner cooking any day of the week: fried chicken, pork chops, oxtail, collards, and fried green tomatoes that Roadfood calls firm, tart disks in crust that shatters into seasoned richness.",
+      "sources":[{"url":"https://roadfood.com/restaurants/big-mamas-soul-food/","title":"Roadfood"},{"url":"https://www.visitaugusta.com/restaurants/cuisine/soul-food/","title":"Visit Augusta"}],
+      "lat":33.42890, "lng":-82.04608, "images":[] },
+
+    { "id":"wife-saver", "category":"food", "section":"food-smoke", "name":"Wife Saver", "blurb":"3316 Washington Rd + branches · Southern · $",
+      "description":"The direct line to the sandwich: this local chain, going since 1965, supplied Augusta National's official pimento cheese from 1998 until the club took catering in-house in 2013. Fried chicken, collards, cornbread — and their own pimento cheese.",
+      "sources":[{"url":"https://www.golfdigest.com/story/masters-2019-the-curious-case-of-the-original-pimento-cheese-recipe-and-how-you-can-now-buy-it","title":"Golf Digest"},{"url":"https://citytowner.com/augusta-ga-food-scene/","title":"CityTowner"}],
+      "lat":33.51577, "lng":-82.06872, "images":[] },
+
+    { "id":"abel-brown", "category":"food", "section":"food-off", "name":"Abel Brown Southern Kitchen & Oyster Bar", "blurb":"491 Highland Ave, Surrey Center · $$$ · book ahead",
+      "description":"James Beard 2026 semifinalist Todd Schafer's own project, and the room diners rate highest in the area during tournament week. Daily rotating cold-water oysters, stuffed grey sole with boudin rice grits, Joyce Farms chicken with crispy okra.",
+      "sources":[{"url":"https://www.abelbrownaugusta.com/","title":"Abel Brown"},{"url":"https://www.augustachronicle.com/story/entertainment/dining/2026/03/30/yelp-ranking-for-best-restaurants-to-try-for-masters-week-in-augusta/89290166007/","title":"Augusta Chronicle"}],
+      "lat":33.48438, "lng":-82.02994,
+      "images":[
+        {"url":"https://images.squarespace-cdn.com/content/v1/67a5ff5a1393595a035f01b0/050ef52e-1364-4fca-a146-ca9a0de92eec/abel+brown_oyster+bar_augusta+georgia_OPF_394.jpg","label":"Crispy fried fish stuffed with Southern flavours","credit":"Abel Brown"},
+        {"url":"https://images.squarespace-cdn.com/content/v1/67a5ff5a1393595a035f01b0/1739035511533-EAQ4YKJ23Z4Q45QNLK44/abel+brown_oyster+bar_augusta+georgia_OPF_383.jpg","label":"Fresh burrata salad","credit":"Abel Brown"},
+        {"url":"https://images.squarespace-cdn.com/content/v1/67a5ff5a1393595a035f01b0/bbb99894-e8c7-4fdf-9da2-05e6affe2aaf/abel+brown_oyster+bar_augusta+georgia_OPF_374.jpg","label":"Warm blondie with scratch-made ice cream","credit":"Abel Brown"}] },
+
+    { "id":"buona-caffe", "category":"food", "section":"food-off", "name":"Buona Caffe", "blurb":"1858 Central Ave · local roastery · $ · early",
+      "description":"Augusta's own roaster, and where locals get coffee and a pastry before the day starts — which during Masters week means before six. Between downtown and Summerville.",
+      "sources":[{"url":"https://www.visitaugusta.com/blog/post/where-to-eat-drink-like-a-local-during-masters-week/","title":"Visit Augusta"}],
+      "lat":33.46879, "lng":-82.00380, "images":[] },
+
+    { "id":"partridge-inn", "category":"stay", "section":"stay-ga", "name":"The Partridge Inn", "blurb":"Summerville · historic hotel · Curio by Hilton",
+      "description":"A century-plus-old hilltop property built around a restored 1836 house, with a quarter-mile of connected verandas and the Six South rooftop bar on top — the most characterful bed within three miles of the club. About 2.8 miles to Augusta National.",
+      "sources":[{"url":"https://www.hilton.com/en/hotels/agscuqq-the-partridge-inn-augusta/hotel-info/","title":"Hilton"}],
+      "lat":33.47554, "lng":-82.01028,
+      "images":[
+        {"url":"https://live.staticflickr.com/1056/804184214_506c81e7ca_b.jpg","label":"The Partridge Inn's verandas","credit":"KF-in-Georgia"},
+        {"url":"https://live.staticflickr.com/1426/804182890_6244d98f44_b.jpg","label":"The Partridge Inn from Walton Way","credit":"KF-in-Georgia"},
+        {"url":"https://live.staticflickr.com/1170/804188610_22d39ddd01_b.jpg","label":"The hotel on The Hill","credit":"KF-in-Georgia"}] },
+
+    { "id":"augusta-marriott", "category":"stay", "section":"stay-ga", "name":"Augusta Marriott at the Convention Center", "blurb":"Downtown riverfront · full-service · ~$198 base rate",
+      "description":"On the Riverwalk at 10th Street with 25-plus Broad Street bars and restaurants on foot — the pick if your evenings matter more than your commute. Expect the rate to climb sharply from the non-surge figure as 2027 approaches.",
+      "sources":[{"url":"https://www.marriott.com/en-us/hotels/agsmc-augusta-marriott-at-the-convention-center/","title":"Marriott"}],
+      "lat":33.47861, "lng":-81.96862, "images":[] },
+
+    { "id":"hampton-washington", "category":"stay", "section":"stay-ga", "name":"Hampton Inn & Suites Augusta–Washington Rd", "blurb":"Washington Rd corridor · $2,009/night for Masters week",
+      "description":"About 1.5 miles from the club on the main corridor, and one of the better-reviewed chains in the immediate area. That price is real: it is what proximity costs in the second week of April.",
+      "sources":[{"url":"https://www.booking.com/hotel/us/hampton-inn-suites-by-hilton-augusta-washington-rd.html","title":"Booking.com"}],
+      "lat":33.51246, "lng":-82.04630,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/485830365.webp?k=90f8f08fb27b35a29291ab0f7c7ede4cd693a95a856f5113aae0c406cbdc1c54&o=","label":"Hotel exterior","credit":"Booking.com"}] },
+
+    { "id":"quality-inn-i20", "category":"stay", "section":"stay-ga", "name":"Quality Inn & Suites Augusta I-20", "blurb":"West Augusta · $812/night · the cheapest GA-side option",
+      "description":"The lowest-priced hotel-type room found anywhere in the West Augusta corridor for the actual tournament dates. Budget in name only during this week, but still less than half the Hampton on the same nights.",
+      "sources":[{"url":"https://www.booking.com/hotel/us/best-western-garden-city.html","title":"Booking.com"}],
+      "lat":33.51574, "lng":-82.04243,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/211314087.webp?k=4278a424184cb0770eb3da0126241c3a7c147ad62991dad06a5aea5dfb2ea8d2&o=","label":"Hotel exterior","credit":"Booking.com"}] },
+
+    { "id":"willcox", "category":"stay", "section":"stay-sc", "name":"The Willcox", "blurb":"100 Colleton Ave SW, Aiken · 1898 Colonial Revival · $$$",
+      "description":"The Winter Colony's own hotel, and the most characterful bed in this guide — columns, portico, a piano at weekend brunch, and a dining room worth booking whether or not you sleep here. Aiken rates run well under Augusta's for the same nights.",
+      "sources":[{"url":"https://www.visitaikensc.com/aiken-is-a-photographers-paradise/","title":"Visit Aiken"},{"url":"https://thelocalpalate.com/articles/aiken-south-carolina-unexpected-culinary-journey/","title":"The Local Palate"}],
+      "lat":33.55686, "lng":-81.72131,
+      "images":[{"url":"https://www.visitaikensc.com/wp-content/uploads/2025/05/The-Willcox-night-photo-980x653.jpeg","label":"The Willcox lit up at night","credit":"visitaikensc.com"}] },
+
+    { "id":"crowne-plaza", "category":"stay", "section":"stay-sc", "name":"Crowne Plaza North Augusta", "blurb":"Riverside Village · full-service · rooftop bar",
+      "description":"The anchor of the $200m Riverside Village development, right on the Savannah River across from downtown Augusta, with SRP Park and six-plus restaurants within a half-mile walk and Jackson's Bluff rooftop upstairs. Roughly 8 miles to the club.",
+      "sources":[{"url":"https://www.ihg.com/crowneplaza/hotels/us/en/north-augusta/aikna/hoteldetail","title":"IHG"}],
+      "lat":33.48730, "lng":-81.97400, "images":[] },
+
+    { "id":"tru-hilton", "category":"stay", "section":"stay-sc", "name":"Tru by Hilton North Augusta", "blurb":"Riverside Village · $1,104/night · newest stock",
+      "description":"The highest-rated property returned in the Riverside Village search and cheaper than the Crowne Plaza next door for the same nights. Walkable to the ballpark strip and a five-minute drive from downtown Augusta.",
+      "sources":[{"url":"https://www.booking.com/hotel/us/tru-by-hilton-north-augusta.html","title":"Booking.com"}],
+      "lat":33.48627, "lng":-81.97449,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/538749897.webp?k=c5c9221e127ade5a1c760f62efeca68ac8408e6a0c6cd49975062156383496db&o=","label":"Hotel exterior","credit":"Booking.com"}] },
+
+    { "id":"garner-aiken", "category":"stay", "section":"stay-sc", "name":"Garner Hotel Aiken South by IHG", "blurb":"Aiken · $587/night · best-value branded room",
+      "description":"The best-rated chain option in Aiken for these dates, at roughly half what a comparable Augusta hotel charges. Twenty-five to thirty-five minutes from the club, all highway — leave a real buffer for a morning round.",
+      "sources":[{"url":"https://www.booking.com/hotel/us/hotel-monterey-drive-aiken.html","title":"Booking.com"}],
+      "lat":33.53544, "lng":-81.72282,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/719198282.webp?k=30a965283f409e14d386238406f68fc5a8b029c27bccd6a9df001dfbd3d2eb18&o=","label":"Hotel exterior","credit":"Booking.com"}] },
+
+    { "id":"houndslake", "category":"stay", "section":"stay-sc", "name":"The Guest House at Houndslake", "blurb":"Aiken · boutique inn · $1,133/night",
+      "description":"Aiken's most characterful non-chain option after the Willcox, out by the Houndslake club on the town's south side. Pin is approximate — geocoded to Houndslake Drive rather than the front door.",
+      "sources":[{"url":"https://www.booking.com/hotel/us/the-guest-house-at-houndslake.html","title":"Booking.com"}],
+      "lat":33.52345, "lng":-81.73907,
+      "images":[{"url":"https://cf.bstatic.com/xdata/images/hotel/square240/157000741.webp?k=6d45021ea1e9dff1ffcb7ad9c2b74cd06b1e0573998aaae184305e2eb3543417&o=","label":"The inn exterior","credit":"Booking.com"}] },
+
+    { "id":"hopelands", "category":"do", "section":"aiken-do", "name":"Hopelands Gardens", "blurb":"135 Dupree Pl · free · 10am–sunset daily · 45–90 min",
+      "description":"Fourteen acres of former Winter Colony estate left to the city by Hope Iselin, \"Aiken's great lady of racing\" — century-old live oaks, deodar cedars, a reflecting pool, a wetlands boardwalk and camellias. The Thoroughbred Racing Hall of Fame sits inside the grounds in a converted carriage house, also free.",
+      "sources":[{"url":"https://www.visitaikensc.com/do/hopelands_gardens/","title":"Visit Aiken"},{"url":"https://www.cityofaikensc.gov/parks-playgrounds-natural-areas/hopelands-gardens/","title":"City of Aiken"}],
+      "lat":33.54891, "lng":-81.72230,
+      "images":[
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2025/05/DSC_0025-980x652.jpg","label":"Oak canopy and garden paths at Hopelands","credit":"visitaikensc.com"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2023/07/Hopelands_sclemons.jpg","label":"Hopelands Gardens under the oaks","credit":"visitaikensc.com"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2010/07/HallofFameCourtyard_Larry-Gleason-1536x741.jpg","label":"The Thoroughbred Racing Hall of Fame courtyard","credit":"Larry Gleason"}] },
+
+    { "id":"hitchcock-woods", "category":"do", "section":"aiken-do", "name":"Hitchcock Woods", "blurb":"South Boundary Ave entrance · free · sunrise to sundown",
+      "description":"One of the largest privately-owned urban forests in the nation — 2,100 acres and roughly 70 miles of sandy trails inside the city limits, where riders have right of way. A remnant of the 1833 Charleston-to-Hamburg railroad still runs through it along the Cathedral Aisle Trail.",
+      "sources":[{"url":"https://www.hitchcockwoods.org/the-woods/about-the-woods/","title":"Hitchcock Woods Foundation"},{"url":"https://www.sctrails.net/trails/trail/hitchcock-woods","title":"SC Trails"}],
+      "lat":33.55317, "lng":-81.71721,
+      "images":[
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2025/05/8W1A0039-980x653.jpg","label":"Sandy trail through longleaf pines","credit":"visitaikensc.com"},
+        {"url":"https://www.hitchcockwoods.org/wp-content/uploads/2018/01/Shelly-Schmidt-intro-pic-1.jpg","label":"A trail through the Woods","credit":"Shelly Schmidt"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2023/06/Hitchcock_Woods_2-980x654.jpg","label":"Golden light through the pines","credit":"visitaikensc.com"}] },
+
+    { "id":"training-track", "category":"do", "section":"aiken-do", "name":"Aiken Training Track", "blurb":"538 Two Notch Rd · free · workouts 7–11am",
+      "description":"\"Train Here, Win Anywhere\" — a one-mile red-clay track in operation since 1941, where 1942 Kentucky Derby winner Shut Out trained. Watch from the Cot Campbell Clockers' Stand. Blue Peter's Tree, the lone live oak in the infield, is the most photographed tree in Aiken.",
+      "sources":[{"url":"https://aikentrainingtrack.com/about","title":"Aiken Training Track"},{"url":"https://www.atlantamagazine.com/southbound-articles/relive-the-heyday-of-equestrian-culture-at-this-south-carolina-training-track/","title":"Atlanta Magazine"}],
+      "lat":33.54724, "lng":-81.71027,
+      "images":[
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2024/12/AikenTrainTrackFog_sclemons-1.jpg","label":"Horses on the training track in morning fog","credit":"visitaikensc.com"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2025/05/Blue-Peter-Tree-at-Sunrise.jpg","label":"Blue Peter's Tree at sunrise","credit":"visitaikensc.com"},
+        {"url":"https://media.theaugustapress.com/uploads/2022/03/aiken-trials-3-1536x972.jpg","label":"Horses streaking past the rail at the Aiken Trials","credit":"Mike Adams"},
+        {"url":"https://media.theaugustapress.com/uploads/2022/03/aiken-trials-10-1536x1009.jpg","label":"Horses and riders moving from paddock to track","credit":"Mike Adams"}] },
+
+    { "id":"whitney-field", "category":"do", "section":"aiken-do", "name":"Whitney Field · Aiken Polo Club", "blurb":"420 Mead Ave · $10 general admission · Sunday doubles",
+      "description":"Polo has been played continuously on this field since 1882, making it the oldest such venue in the country. Spring season runs April to June: double-headers at 2:00 and 3:30 pm, free general parking, field-side tailgate spots and a $75 VIP pavilion with an open bar. Call the hotline first — matches move for weather.",
+      "sources":[{"url":"https://aikenpolo.org/","title":"Aiken Polo Club"},{"url":"https://www.visitaikensc.com/event/aiken-polo-club-sunshine-league/","title":"Visit Aiken"}],
+      "lat":33.54649, "lng":-81.71616,
+      "images":[{"url":"https://aikenpolo.org/wp-content/uploads/2025/08/edit_PGXH2729.webp","label":"Polo action at Whitney Field","credit":"Aiken Polo Club"}] },
+
+    { "id":"south-boundary", "category":"do", "section":"aiken-do", "name":"South Boundary Avenue", "blurb":"Free · early morning or Sunday · street parking",
+      "description":"An unbroken tunnel of live oaks over the avenue, and the shot that put Aiken on the cover of Southern Living's \"South's Best\" issue in 2018. Go early or on a Sunday to keep cars out of the frame; spring adds azaleas and dogwoods along the verge.",
+      "sources":[{"url":"https://www.visitaikensc.com/aiken-is-a-photographers-paradise/","title":"Visit Aiken"},{"url":"https://www.visitaikensc.com/your-chance-to-experience-aikens-spring-gardens/","title":"Visit Aiken"}],
+      "lat":33.55379, "lng":-81.71907,
+      "images":[
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2023/06/sbounday1-1024x1024.jpg","label":"The oak canopy tunnel down South Boundary Avenue","credit":"visitaikensc.com"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2025/07/Areboretum_Trail-1-768x1024.jpg","label":"The Arboretum Trail along South Boundary in spring","credit":"visitaikensc.com"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2023/06/Whiskey_Easy_.jpg","label":"The Whiskey Road / Easy Street sign, Aiken's other must-shoot corner","credit":"visitaikensc.com"}] },
+
+    { "id":"aiken-museum", "category":"do", "section":"aiken-do", "name":"Aiken County Historical Museum", "blurb":"433 Newberry St SW · free · a Winter Colony \"cottage\"",
+      "description":"Housed in Banksia, a 17,500-square-foot Winter Colony house begun in 1862 and extended through 1931 — with an 1890s one-room schoolhouse and an early-nineteenth-century log cabin out back, and exhibits running from Native American history to the Savannah River Site.",
+      "sources":[{"url":"https://theaugustapress.com/weekend-day-trip-the-aiken-county-historical-museum/","title":"The Augusta Press"},{"url":"https://shebuystravel.com/thoroughbred-country-south-carolina/","title":"SheBuysTravel"}],
+      "lat":33.55417, "lng":-81.72528,
+      "images":[
+        {"url":"https://media.shebuystravel.com/wp-content/uploads/2025/06/18054042/thoroughbred-country-south-carolina-red-building.png","label":"The 1890s one-room schoolhouse behind Banksia","credit":"Kathleen Walls"},
+        {"url":"https://media.shebuystravel.com/wp-content/uploads/2025/06/18054103/thoroughbred-country-south-carolina-fire-engine.png","label":"Antique fire engine exhibit inside the museum","credit":"Kathleen Walls"}] },
+
+    { "id":"track-kitchen", "category":"food", "section":"aiken-eat", "name":"Track Kitchen", "blurb":"At the training track · breakfast only · $ · call ahead",
+      "description":"Since 1957 this room has fed the exercise riders, trainers and grooms who gallop thoroughbreds before sunrise — \"more like a friendly company dining room than a regular restaurant,\" per Roadfood's Jane and Michael Stern. Grits, biscuits, made-to-order omelets. Winds down by late morning.",
+      "sources":[{"url":"https://roadfood.com/restaurants/track-kitchen/","title":"Roadfood"},{"url":"https://www.postandcourier.com/aikenstandard/news/aiken-triple-crown-track-kitchen-serves-breakfast-with-a-side-of-aikens-horse-history/article_0111a3c9-9ff1-5e55-94bb-553e906f7b48.html","title":"Aiken Standard"}],
+      "lat":33.54760, "lng":-81.71080,
+      "images":[{"url":"https://www.visitaikensc.com/wp-content/uploads/2023/06/Track_Kitchen.jpg","label":"The Track Kitchen","credit":"visitaikensc.com"}] },
+
+    { "id":"whiskey-alley", "category":"food", "section":"aiken-eat", "name":"Whiskey Alley", "blurb":"The Alley · whiskey bar & small plates · $$",
+      "description":"Chef Chad Jajczyk's whiskey-forward room in the car-free Alley, open since 2017 — the chef's charcuterie board, crispy Brussels sprouts, Thai chicken salad, croque madame. A ten-minute walk from the Willcox.",
+      "sources":[{"url":"https://thelocalpalate.com/articles/aiken-south-carolina-unexpected-culinary-journey/","title":"The Local Palate"},{"url":"https://www.ilovecarolina.com/activities/whiskey-alley","title":"I Love Carolina"}],
+      "lat":33.56066, "lng":-81.72270,
+      "images":[
+        {"url":"https://thelocalpalate.com/wp-content/uploads/2025/12/Whiskey-Alley_Croque-Madame-Credit-Moose-Nicholson-1536x1024.jpg","label":"The croque madame","credit":"Moose Nicholson"},
+        {"url":"https://www.visitaikensc.com/wp-content/uploads/2024/10/WhiskeyAlley1_Sclemons-980x575.jpg","label":"The bar at Whiskey Alley","credit":"visitaikensc.com"}] },
+
+    { "id":"southbound", "category":"food", "section":"aiken-eat", "name":"Southbound Smokehouse", "blurb":"The Alley · barbecue + live music · $$ · Wed–Sat evenings",
+      "description":"Barbecue with a Southwestern turn, plus live music and karaoke — the liveliest room in The Alley. Come early for the ribs, which sell out; the pulled pork sandwich takes the \"Friend of the Devil\" sauce, and the mac and cheese is called Fleetwood Mac and Cheese.",
+      "sources":[{"url":"https://www.postandcourier.com/aikenstandard/lifestyle/food/southbound-smokehouse-restaurant-aiken-north-augusta/article_e24c2acc-904a-11ee-bf36-af10ba4ab620.html","title":"Aiken Standard"},{"url":"https://www.visitaikensc.com/eat/southbound-smokehouse/","title":"Visit Aiken"}],
+      "lat":33.56100, "lng":-81.72310,
+      "images":[{"url":"https://www.visitaikensc.com/wp-content/uploads/2023/12/402927714_747264884107132_8096768243891856813_n.jpg","label":"Southbound Smokehouse","credit":"visitaikensc.com"}] },
+
+    { "id":"carolina-bbq", "category":"food", "section":"aiken-eat", "name":"Carolina Bar-B-Que", "blurb":"New Ellenton · whole-hog buffet · $ · 15 min south",
+      "description":"Part of the Dukes family lineage behind the region's tangy mustard-ketchup \"rust gravy,\" and the place South Carolina food writers point to for hash on rice: \"On any plate from this buffet, hash on rice is essential. It is one of the best.\" Also fried squash, hushpuppies, banana pudding.",
+      "sources":[{"url":"https://www.postandcourier.com/aikenstandard/lifestyle/food/barbecue-restaurant-new-ellenton-sc-carolina-bar-b-que/article_085854f6-dfa8-11ed-8237-a381da62d947.html","title":"Aiken Standard"},{"url":"https://destination-bbq.com/stores/carolina-bar-b-que/","title":"Destination BBQ"}],
+      "lat":33.40134, "lng":-81.68457,
+      "images":[
+        {"url":"https://destination-bbq.com/wp-content/uploads/2021/02/South-Carolina-Barbecue-Hash-from-Carolina-Bar-B-Que-in-New-Ellenton.jpg.webp","label":"Hash on rice","credit":"Destination BBQ"},
+        {"url":"https://destination-bbq.com/wp-content/uploads/2021/02/Carolina-Bar-B-Que-Interior.jpg.webp","label":"Inside the restaurant","credit":"Destination BBQ"}] },
+
+    { "id":"park-ave-oyster", "category":"food", "section":"aiken-eat", "name":"Park Avenue Oyster Bar & Grill", "blurb":"148 Park Ave SW · seafood & raw bar · $$$",
+      "description":"Downtown Aiken's raw bar and the local pick for dinner — blackened North Carolina catfish, maple-bourbon grilled mahi, sweet corn hushpuppies, and rotating specials that have included a Korean beef rice soup.",
+      "sources":[{"url":"https://thelocalpalate.com/articles/aiken-south-carolina-unexpected-culinary-journey/","title":"The Local Palate"},{"url":"https://parkaveoysterbar.com/","title":"Park Avenue Oyster Bar"}],
+      "lat":33.55908, "lng":-81.72079,
+      "images":[
+        {"url":"https://static.spotapps.co/spots/ef/660e89bf444d6e9da5e30c1b11f9b2/full","label":"Fried fish over grits with corn-tomato salsa","credit":"Park Avenue Oyster Bar"},
+        {"url":"https://static.spotapps.co/spots/50/fd9e807090478e8433978ad027bc71/full","label":"Fried crab pops with slaw","credit":"Park Avenue Oyster Bar"}] },
+
+    { "id":"flanigans", "category":"food", "section":"aiken-eat", "name":"Flanigan's Ice Cream Parlor", "blurb":"221 Barnwell Ave NW · $ · open to 9pm most nights",
+      "description":"Hand-dipped ice cream, sundaes and shakes a short walk from The Alley, including a flavour called Whiskey Road. Open late enough to be the after-dinner stop.",
+      "sources":[{"url":"https://www.visitaikensc.com/eat/j-_flanagans_ice_cream/","title":"Visit Aiken"}],
+      "lat":33.56299, "lng":-81.72030,
+      "images":[{"url":"https://www.visitaikensc.com/wp-content/uploads/2023/07/Flannigans_Sclemons-1024x1024.jpg","label":"Ice cream at Flanigan's","credit":"visitaikensc.com"}] },
+
+    { "id":"redcliffe", "category":"do", "name":"Redcliffe Plantation State Historic Site", "blurb":"Beech Island, SC · grounds free · tours Thu–Mon, $10",
+      "lat":33.41821, "lng":-81.86206, "images":[] },
+    { "id":"stable-view", "category":"do", "name":"Stable View", "blurb":"117 Stable Dr, Aiken · FEI eventing · free to spectate",
+      "lat":33.64846, "lng":-81.80009, "images":[] },
+    { "id":"brick-pond", "category":"do", "name":"Brick Pond Park", "blurb":"North Augusta, SC · free · restored 40-acre wetland",
+      "lat":33.48792, "lng":-81.97206, "images":[] },
+    { "id":"living-history", "category":"do", "name":"Living History Park", "blurb":"299 W Spring Grove Ave, North Augusta · free",
+      "lat":33.49635, "lng":-81.97483, "images":[] },
+    { "id":"srp-park", "category":"do", "name":"SRP Park & Riverside Village", "blurb":"187 Railroad Ave, North Augusta · GreenJackets baseball",
+      "lat":33.48564, "lng":-81.97623, "images":[] },
+    { "id":"mistletoe", "category":"do", "name":"Mistletoe State Park", "blurb":"Clarks Hill Lake · 50–60 min · kayaks, beach, 15.5 mi of trail",
+      "lat":33.64197, "lng":-82.38568, "images":[] },
+    { "id":"hickory-knob", "category":"do", "name":"Hickory Knob State Resort Park", "blurb":"McCormick, SC · 65–75 min · 18 holes on Lake Thurmond",
+      "lat":33.88369, "lng":-82.43169, "images":[] }
+  ],
+  "route": [],
+  "branches": []
+}
+</script>
+<script type="application/json" id="attribution-data">{
+  "https://live.staticflickr.com/5032/7050792037_01118ae9ae_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "brettchisum",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/72967871@N03/7050792037"
+  },
+  "https://assets.simpleviewinc.com/sv-augusta/image/fetch/c_fill,f_avif,fl_strip_profile,h_400,q_65,w_600/https://assets.simpleviewinc.com/simpleview/image/upload/crm/augusta/021015---Augusta-Museum-of-History-Exterior_99D9FD1F-0A59-4664-9CD7C9321BED705A_c752e37d-c40a-4e05-901a73542bccbb69.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaugusta.com/plan/about-augusta/downtown/"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d46f_652fcdac17e83e0fbc0ce166_Augusta%252C%2520Georgia-07082.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://media.theaugustapress.com/uploads/2022/10/PEDESTRIAN-BRIDGE-9-1536x1049.jpg": {
+    "siteName": "The Augusta Press",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theaugustapress.com/photojournalism-pedestrian-bridge-augusta/"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d44d_652fd114a6da25bcfc4b9f52_Augusta%252C%2520Georgia-04838.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d45f_652fce233c14b9bf48c613fe_Augusta%252C%2520Georgia-07102.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d472_652fcea1b3731aa019df2abe_Augusta%252C%2520Georgia-07114.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://images.squarespace-cdn.com/content/v1/62c5c45058e5ba63815d7068/1773326398742-LBZ4AXEC8ISR8M4A6T9A/DSCF1425.jpg?format=500w": {
+    "siteName": "Kelsey Smith | Film Photographer | Georgia & the Southeast",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://kelseysmithphotography.net/blog/sacred-heart-cultural-center-augusta-georgia-film-wedding-photographer"
+  },
+  "https://images.squarespace-cdn.com/content/v1/62c5c45058e5ba63815d7068/1773326395596-YJ08T3QJKWMZUBX2OSE6/DSCF7305.jpg?format=500w": {
+    "siteName": "Kelsey Smith | Film Photographer | Georgia & the Southeast",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://kelseysmithphotography.net/blog/sacred-heart-cultural-center-augusta-georgia-film-wedding-photographer"
+  },
+  "https://images.squarespace-cdn.com/content/v1/62c5c45058e5ba63815d7068/bd890ec6-e9e8-4b98-8781-20207dd6343b/wedding-ceremony-marble-altar-sacred-heart-cultural-center-augusta-georgia.jpg?format=1500w": {
+    "siteName": "Kelsey Smith | Film Photographer | Georgia & the Southeast",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://kelseysmithphotography.net/blog/sacred-heart-cultural-center-augusta-georgia-film-wedding-photographer"
+  },
+  "https://assets.simpleviewinc.com/sv-augusta/image/fetch/c_fill,f_avif,fl_strip_profile,h_400,q_65,w_600/https://assets.simpleviewinc.com/simpleview/image/upload/crm/augusta/133_7ebafe9c-5056-b3a8-4962d96179b5a605.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaugusta.com/plan/about-augusta/downtown/"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d42d_6532ef34a494d95f236eda23_Woodrow%2520Wilson%2520boyhood%2520home%2520in%2520Augusta%252C%2520GA.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d462_652fc93df8e81fe56ae7f11d_Augusta%252C%2520Georgia-07270.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://augustacanal.com/wp-content/uploads/bb-plugin/cache/DSC9991-1-portrait-1ea90e554a994a5cdda32b5b6b898fba-9awe3hnydfls.jpg": {
+    "siteName": "Augusta Canal Authority",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://augustacanal.com/boat-tours/"
+  },
+  "https://www.theoutbound.com/media/contents/112688/assets/1472228307776?w=960&fit=cover&fm=webp&dpr=2": {
+    "siteName": "The Outbound",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theoutbound.com/georgia/cycling/bike-or-run-the-savannah-river-rapids-trail"
+  },
+  "https://augustacanal.com/wp-content/uploads/2024/09/Canal-Drone-Photos_1-1-1.jpg": {
+    "siteName": "Augusta Canal Authority",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://augustacanal.com/overview/"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d46c_652fc9b408d013a9fa1ef3c8_Augusta%252C%2520Georgia-06680.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://cdn.prod.website-files.com/615c1cf649d3f89312c413a0/66df7994702a86b7ef60d40a_652fc98c1e2801577166613f_Augusta%252C%2520Georgia-06606.jpeg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.chrisandsara.com/post/best-things-to-do-in-augusta-georgia"
+  },
+  "https://static.spotapps.co/website_images/ab_websites/119981_website/about/about_2.jpg": {
+    "siteName": "null",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://thebollweevil.com/augusta-riverwalk-boll-weevil-cafe-and-sweetery-about"
+  },
+  "https://static.spotapps.co/website_images/ab_websites/119981_website/about/about_1.jpg": {
+    "siteName": "null",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://thebollweevil.com/augusta-riverwalk-boll-weevil-cafe-and-sweetery-about"
+  },
+  "https://static.spotapps.co/website_images/ab_websites/119981_website/about/about_3.jpg": {
+    "siteName": "null",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://thebollweevil.com/augusta-riverwalk-boll-weevil-cafe-and-sweetery-about"
+  },
+  "https://www.sconyersbar-b-que.com/building.PNG": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.sconyersbar-b-que.com/history.htm"
+  },
+  "https://live.staticflickr.com/1056/804184214_506c81e7ca_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "KF-in-Georgia",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/65471798@N00/804184214"
+  },
+  "https://live.staticflickr.com/1426/804182890_6244d98f44_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "KF-in-Georgia",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/65471798@N00/804182890"
+  },
+  "https://live.staticflickr.com/1170/804188610_22d39ddd01_b.jpg": {
+    "siteName": "Flickr",
+    "credit": "KF-in-Georgia",
+    "license": "CC BY-NC",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "sourcePage": "https://www.flickr.com/photos/65471798@N00/804188610"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2025/05/The-Willcox-night-photo-980x653.jpeg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken-is-a-photographers-paradise/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2025/05/DSC_0025-980x652.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken-is-a-photographers-paradise/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/07/Hopelands_sclemons.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/do/hopelands_gardens/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2010/07/HallofFameCourtyard_Larry-Gleason-1536x741.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/do/thoroughbred_racing_hall_of_fame_and_museum/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2025/05/8W1A0039-980x653.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken-is-a-photographers-paradise/"
+  },
+  "https://www.hitchcockwoods.org/wp-content/uploads/2018/01/Shelly-Schmidt-intro-pic-1.jpg": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.hitchcockwoods.org/the-woods/about-the-woods/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/06/Hitchcock_Woods_2-980x654.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken_is_photo_taking_paradise/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2024/12/AikenTrainTrackFog_sclemons-1.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken-is-a-photographers-paradise/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2025/05/Blue-Peter-Tree-at-Sunrise.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken-is-a-photographers-paradise/"
+  },
+  "https://media.theaugustapress.com/uploads/2022/03/aiken-trials-3-1536x972.jpg": {
+    "siteName": "The Augusta Press",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theaugustapress.com/photojournalism-the-aiken-trials/"
+  },
+  "https://media.theaugustapress.com/uploads/2022/03/aiken-trials-10-1536x1009.jpg": {
+    "siteName": "The Augusta Press",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://theaugustapress.com/photojournalism-the-aiken-trials/"
+  },
+  "https://aikenpolo.org/wp-content/uploads/2025/08/edit_PGXH2729.webp": {
+    "siteName": null,
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://aikenpolo.org/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/06/sbounday1-1024x1024.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken_is_photo_taking_paradise/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2025/07/Areboretum_Trail-1-768x1024.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/your-chance-to-experience-aikens-spring-gardens/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/06/Whiskey_Easy_.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/aiken_is_photo_taking_paradise/"
+  },
+  "https://media.shebuystravel.com/wp-content/uploads/2025/06/18054042/thoroughbred-country-south-carolina-red-building.png": {
+    "siteName": "She Buys Travel",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://shebuystravel.com/thoroughbred-country-south-carolina/"
+  },
+  "https://media.shebuystravel.com/wp-content/uploads/2025/06/18054103/thoroughbred-country-south-carolina-fire-engine.png": {
+    "siteName": "She Buys Travel",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://shebuystravel.com/thoroughbred-country-south-carolina/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/06/Track_Kitchen.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/eat/track_kitchen/"
+  },
+  "https://thelocalpalate.com/wp-content/uploads/2025/12/Whiskey-Alley_Croque-Madame-Credit-Moose-Nicholson-1536x1024.jpg": {
+    "siteName": "The Local Palate",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://thelocalpalate.com/articles/aiken-south-carolina-unexpected-culinary-journey/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2024/10/WhiskeyAlley1_Sclemons-980x575.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/sip-and-savor-top-places-to-eat-and-drink-in-aiken-sc/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/12/402927714_747264884107132_8096768243891856813_n.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/eat/southbound-smokehouse/"
+  },
+  "https://destination-bbq.com/wp-content/uploads/2021/02/South-Carolina-Barbecue-Hash-from-Carolina-Bar-B-Que-in-New-Ellenton.jpg.webp": {
+    "siteName": "Destination BBQ",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://destination-bbq.com/stores/carolina-bar-b-que/"
+  },
+  "https://destination-bbq.com/wp-content/uploads/2021/02/Carolina-Bar-B-Que-Interior.jpg.webp": {
+    "siteName": "Destination BBQ",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://destination-bbq.com/stores/carolina-bar-b-que/"
+  },
+  "https://static.spotapps.co/spots/ef/660e89bf444d6e9da5e30c1b11f9b2/full": {
+    "siteName": "null",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://parkaveoysterbar.com/"
+  },
+  "https://static.spotapps.co/spots/50/fd9e807090478e8433978ad027bc71/full": {
+    "siteName": "null",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://parkaveoysterbar.com/"
+  },
+  "https://www.visitaikensc.com/wp-content/uploads/2023/07/Flannigans_Sclemons-1024x1024.jpg": {
+    "siteName": "Visit Aiken SC",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.visitaikensc.com/eat/j-_flanagans_ice_cream/"
+  },
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Augusta_GA_WV_banner.JPG/1280px-Augusta_GA_WV_banner.JPG": {
+    "siteName": "Wikimedia Commons",
+    "credit": "Gwringle",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "sourcePage": "https://commons.wikimedia.org/wiki/File:Augusta_GA_WV_banner.JPG"
+  },
+  "https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-kayak.jpg": {
+    "siteName": "Travel Trail Sail",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://traveltrailsail.com/mistletoe-state-park-review/"
+  },
+  "https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-beach.jpg": {
+    "siteName": "Travel Trail Sail",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://traveltrailsail.com/mistletoe-state-park-review/"
+  },
+  "https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-canyon-trail.jpg": {
+    "siteName": "Travel Trail Sail",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://traveltrailsail.com/mistletoe-state-park-review/"
+  },
+  "https://traveltrailsail.com/wp-content/uploads/2024/07/mistletoe-state-park-lake-evening.jpg": {
+    "siteName": "Travel Trail Sail",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://traveltrailsail.com/mistletoe-state-park-review/"
+  },
+  "https://www.thesimplesaltylife.com/wp-content/uploads/2024/01/20221217_121300-1536x1152.jpg": {
+    "siteName": "The Simple Salty Life",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thesimplesaltylife.com/walking-tour-of-savannah/"
+  },
+  "https://www.thesimplesaltylife.com/wp-content/uploads/2024/01/20221217_121108.jpg": {
+    "siteName": "The Simple Salty Life",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thesimplesaltylife.com/walking-tour-of-savannah/"
+  },
+  "https://www.thesimplesaltylife.com/wp-content/uploads/2024/01/20221217_145452.jpg": {
+    "siteName": "The Simple Salty Life",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.thesimplesaltylife.com/walking-tour-of-savannah/"
+  },
+  "https://www.travelyesplease.com/wp-content/uploads/2016/05/IMG_9453-Edit-Edit-Edit.jpg": {
+    "siteName": "Travel? Yes Please!",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.travelyesplease.com/travel-blog-bonaventure-cemetery/"
+  },
+  "https://www.ourescapeclause.com/wp-content/uploads/2021/02/Georgia_Savannah-185.avif": {
+    "siteName": "Our Escape Clause",
+    "credit": null,
+    "license": null,
+    "licenseUrl": null,
+    "sourcePage": "https://www.ourescapeclause.com/things-to-do-on-tybee-island-ga/"
+  }
+}</script>
+<script type="module">
+const DATA   = JSON.parse(document.getElementById('guide-data').textContent);
+const ITEMS  = DATA.items  || [];
+const ROUTE  = DATA.route  || [];
+const BRANCHES = DATA.branches || [];
+let activeSeason = null;
+
+// ─── GALLERY ────────────────────────────────────────────────────────────
+let GALLERIES = [];
+function galleryHTML(images){
+  let imgs = images || [];
+  if (activeSeason){ const f = imgs.filter(i => inSeason(i.season, activeSeason)); if (f.length) imgs = f; }
+  if (!imgs.length) return '<div class="no-img">No photograph</div>';
+  const gid = GALLERIES.push(imgs) - 1, f = imgs[0], multi = imgs.length > 1;
+  return `<div class="car" data-gid="${gid}" role="group" aria-roledescription="carousel" aria-label="Images">
+    <img class="car-main" src="${f.url}" alt="${f.label}" loading="lazy" role="button" tabindex="0" aria-label="Enlarge image" onerror="this.style.opacity=.2">
+    ${multi ? `<button class="car-nav prev" aria-label="Previous">‹</button><button class="car-nav next" aria-label="Next">›</button>
+    <div class="car-dots" aria-hidden="true">${imgs.map((_,i) => `<i class="${i?'':'active'}"></i>`).join('')}</div>
+    <span class="car-live sr-only" aria-live="polite"></span>` : ''}
+  </div>`;
+}
+
+// ─── RENDER ─────────────────────────────────────────────────────────────
+const CARD_VARIANTS = {};
+function renderCard(it){
+  return `<article class="card${it.feature ? ' feature' : ''}" data-id="${it.id}" aria-labelledby="t-${it.id}">${galleryHTML(it.images)}
+    <div class="body"><p class="card-title" id="t-${it.id}">${it.name}</p><p class="meta">${it.blurb}</p>
+    ${it.description ? `<p class="desc">${it.description}</p>` : ''}
+    ${it.sources?.length ? `<div class="card-sources">${it.sources.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${s.title}</a>`).join(' · ')}</div>` : ''}
+    </div></article>`;
+}
+function render(){
+  GALLERIES = [];
+  const sectionOf = i => i.section;
+  document.querySelectorAll('.cards[data-section]').forEach(el => {
+    const sec = el.dataset.section;
+    const items = ITEMS.filter(i => sectionOf(i) === sec && inSeason(i.season, activeSeason))
+      .sort((a, b) => (b.feature ? 1 : 0) - (a.feature ? 1 : 0));
+    const draw = CARD_VARIANTS[el.dataset.variant] || renderCard;
+    el.innerHTML = `<ul class="grid" role="list">${items.map(it => `<li>${draw(it)}</li>`).join('')}</ul>`;
+  });
+  wire();
+}
+
+// ─── MAP ────────────────────────────────────────────────────────────────
+const cs = getComputedStyle(document.documentElement);
+const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
+const map = L.map('map');
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+if (ROUTE.length) L.polyline(ROUTE, {color:'#888', weight:2, dashArray:'7 7', opacity:.6}).addTo(map);
+BRANCHES.forEach(b => L.polyline(b.coords, {color: b.color || '#aaa', weight:1.5, dashArray:'4 6', opacity:.5}).addTo(map));
+
+const markers = {}, catOf = {}, seasonOf = {}, pts = [];
+ITEMS.filter(i => i.lat && i.lng).forEach(it => {
+  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fcf9f0',weight:2,fillColor:color(it.category),fillOpacity:.95})
+    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.75">${it.blurb}</span>` : ''}`);
+  m.on('click', () => focusCard(it.id));
+  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);
+});
+if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([33.47,-81.97],11);
+
+const catOff = new Set();
+const inSeason = (val, s) => !s || val == null || (Array.isArray(val) ? val.includes(s) : val === s);
+function applyMarkerFilters(){
+  Object.entries(markers).forEach(([id, m]) => {
+    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
+    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
+    else if (map.hasLayer(m)) map.removeLayer(m);
+  });
+}
+
+// ─── filter chips ───────────────────────────────────────────────────────
+const LABEL = {do:'See & do', food:'Food & drink', stay:'Stay'};
+const mf = document.getElementById('mapfilter');
+if (mf){
+  mf.innerHTML = [...new Set(ITEMS.filter(i => i.lat && i.lng).map(i => i.category))]
+    .map(c => `<button data-cat="${c}"><i style="background:${color(c)}"></i>${LABEL[c] || c}</button>`).join('');
+  mf.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+    const c = btn.dataset.cat;
+    if (btn.classList.toggle('off')) catOff.add(c); else catOff.delete(c);
+    applyMarkerFilters();
+  }));
+}
+
+// ─── card ↔ marker sync ─────────────────────────────────────────────────
+const isSplit = () => document.body.classList.contains('split');
+function focusCard(id){
+  if (!isSplit()) return;
+  document.querySelectorAll('[data-id]').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+  const el = document.querySelector(`[data-id="${id}"]`); if (el) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function wire(){
+  document.querySelectorAll('.car').forEach(car => {
+    const imgs = GALLERIES[+car.dataset.gid], main = car.querySelector('.car-main'),
+          dots = car.querySelectorAll('.car-dots i'), live = car.querySelector('.car-live');
+    let idx = 0;
+    const set = d => { idx = (idx + d + imgs.length) % imgs.length; const im = imgs[idx];
+      main.src = im.url; main.alt = im.label;
+      if (live) live.textContent = `${idx+1} of ${imgs.length}: ${im.label||''}`;
+      dots.forEach((x,i) => x.classList.toggle('active', i === idx)); };
+    car.querySelector('.next')?.addEventListener('click', e => { e.stopPropagation(); set(1); });
+    car.querySelector('.prev')?.addEventListener('click', e => { e.stopPropagation(); set(-1); });
+    main.addEventListener('click', () => openLB(imgs, idx));
+    main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
+  });
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => {
+    if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+}
+
+// ─── attribution ────────────────────────────────────────────────────────
+const ATTRIBUTION = JSON.parse(document.getElementById('attribution-data').textContent || '{}');
+document.querySelectorAll('.credit[data-src]').forEach(el => {
+  const attr = ATTRIBUTION[el.dataset.src];
+  if (attr) el.textContent = attr.credit ? `${attr.credit} · ${attr.siteName}` : attr.siteName || '';
+  else if (el.dataset.src) try { el.textContent = new URL(el.dataset.src).hostname.replace('www.',''); } catch{}
+});
+
+// ─── lightbox ───────────────────────────────────────────────────────────
+const lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'),
+      lbCap = lb.querySelector('.cap'), lbCount = lb.querySelector('.count');
+let lbImgs = [], lbI = 0;
+function openLB(imgs, start){ lbImgs = imgs; lbI = start || 0; drawLB(); lb.showModal(); }
+function drawLB(){ const im = lbImgs[lbI]; lbImg.src = im.url; lbImg.alt = im.label;
+  const attr = ATTRIBUTION[im.url] || {};
+  let siteName = attr.siteName || '';
+  if (!siteName && attr.sourcePage) { try { siteName = new URL(attr.sourcePage).hostname.replace('www.',''); } catch{} }
+  const person = im.credit || attr.credit || '';
+  const site = attr.sourcePage ? `<a href="${attr.sourcePage}" target="_blank" rel="noopener">${siteName}</a>` : siteName;
+  const lic = attr.license && attr.licenseUrl ? ` · <a href="${attr.licenseUrl}" target="_blank" rel="noopener">${attr.license}</a>` : '';
+  const parts = [person, site].filter(Boolean).join(' · ');
+  lbCap.innerHTML = `${im.label}<span class="cr">${parts}${lic}</span>`;
+  lbCount.textContent = lbImgs.length > 1 ? `${lbI+1} / ${lbImgs.length}` : '';
+  lb.querySelectorAll('.arw').forEach(a => a.style.display = lbImgs.length > 1 ? '' : 'none'); }
+function stepLB(d){ lbI = (lbI + d + lbImgs.length) % lbImgs.length; drawLB(); }
+lb.querySelector('.next').addEventListener('click', e => { e.stopPropagation(); stepLB(1); });
+lb.querySelector('.prev').addEventListener('click', e => { e.stopPropagation(); stepLB(-1); });
+lb.querySelector('.x').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+document.addEventListener('keydown', e => { if (!lb.open) return;
+  if (e.key === 'ArrowRight') stepLB(1); if (e.key === 'ArrowLeft') stepLB(-1); });
+
+// ─── content images open in the lightbox too ────────────────────────────
+document.addEventListener('click', e => {
+  const img = e.target.closest('img[data-lightbox]');
+  if (!img) return;
+  const group = img.dataset.lightbox;
+  const all = group ? [...document.querySelectorAll(`img[data-lightbox="${group}"]`)] : [img];
+  const imgs = all.map(i => { const attr = ATTRIBUTION[i.src]||{}; return {url:i.src, label:i.alt||'', credit:attr.credit||''}; });
+  openLB(imgs, all.indexOf(img));
+});
+
+// ─── split view ─────────────────────────────────────────────────────────
+document.getElementById('toggle').addEventListener('click', e => {
+  const split = document.body.classList.toggle('split');
+  e.target.textContent = split ? 'Close ▸' : '◂ Map';
+  setTimeout(() => map.invalidateSize(), 200);
+});
+
+// ─── GPX export ─────────────────────────────────────────────────────────
+const exportDialog = document.getElementById('export-dialog');
+document.getElementById('export-btn').addEventListener('click', () => exportDialog.showModal());
+exportDialog.querySelector('.close').addEventListener('click', () => exportDialog.close());
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+document.getElementById('download-gpx').addEventListener('click', () => {
+  const checked = [...exportDialog.querySelectorAll('.cats input:checked')].map(c => c.value);
+  const mapped = ITEMS.filter(i => i.lat && i.lng && checked.includes(i.category));
+  const title = document.title;
+  const wpts = mapped.map(i => `<wpt lat="${i.lat}" lon="${i.lng}"><name>${esc(i.name)}</name><desc>${esc(i.blurb||'')}</desc></wpt>`).join('\n');
+  const blob = new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="travel-guide"><metadata><name>${esc(title)}</name></metadata>\n${wpts}\n</gpx>`], {type:'application/gpx+xml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'augusta-masters-2027.gpx';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  exportDialog.close();
+});
+
+render();
+</script>
+</body></html>
