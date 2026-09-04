@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Yellowhead — Sea-Tac to Whistlers Campground, Aug 8–12 2026</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800;900&family=Overpass+Mono:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <style>
@@ -296,8 +296,8 @@ body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;z-index:60;
   body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:34vh;z-index:50}
   body.split .map-container #map{height:34vh!important}
   body.split nav{top:34vh}}
-.leaflet-popup-content{font-family:Newsreader,serif;font-size:.86rem}
-.leaflet-popup-content b{font-family:Overpass,sans-serif;font-weight:800}
+.maplibregl-popup-content{font-family:Newsreader,serif;font-size:.86rem}
+.maplibregl-popup-content b{font-family:Overpass,sans-serif;font-weight:800}
 .export-row{margin:.9rem 0 0}
 .export-btn{font-family:'Overpass Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
   color:var(--sign);background:none;border:1px solid var(--line);padding:.5rem .9rem;border-radius:3px;cursor:pointer}
@@ -1158,7 +1158,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
   </div>
 
   <p class="note">Photographs are hotlinked from the sources above and from Flickr, and remain the property of their photographers and publishers — per-image credit and licence appear in the lightbox when you click any photo. Nothing here is hosted or re-published. A few images may fail to load if a site blocks hotlinking; that is the site's setting, not a broken link.</p>
-  <p class="note">Coordinates were resolved from place names and street addresses via the US Census geocoder and Photon/OpenStreetMap. Map data © OpenStreetMap contributors, available under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL</a> licence; basemap tiles © CARTO. Where a coordinate could not be verified to the right place, the pin was left off rather than guessed — see the note under the map.</p>
+  <p class="note">Coordinates were resolved from place names and street addresses via the US Census geocoder and Photon/OpenStreetMap. Map data © OpenStreetMap contributors, available under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL</a> licence; basemap tiles © OpenFreeMap. Where a coordinate could not be verified to the right place, the pin was left off rather than guessed — see the note under the map.</p>
   <p class="note">Everything time-sensitive here was gathered in the week before departure and should be re-checked: <strong>the Fraser Canyon closure and the smoke forecast</strong> (daily), <strong>campground availability</strong> (both provincial systems are almost certainly full), <strong>the Horseshoe Cafe's Saturday closing time</strong>, <strong>post-wildfire restaurant hours in Jasper</strong>, <strong>SkyTram and Maligne cruise prices</strong> (both use dynamic booking widgets that publish no plain-text figure), and <strong>your rental company's written cross-border permission</strong>. Jasper's 2026 closures — Maligne Canyon and Mount Edith Cavell — have no reopening date; if either reopens before August, you gain two of the finest short walks in the Rockies.</p>
   <p class="safe">Safe travels!</p>
  </div>
@@ -1168,7 +1168,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
 
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -1704,12 +1704,12 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
     { "id":"hells-gate", "category":"do", "name":"Hell's Gate Airtram", "blurb":"Fraser Canyon · only if Highway 1 reopens · 45–60 min",
       "lat":49.78196, "lng":-121.44685 }
   ],
-  "route": [[47.4489,-122.3094],[48.8715,-122.5866],[49.0048,-122.7569],[49.3807,-121.4413],[49.6522,-121.0009],[50.6785,-120.3389],[51.6514,-120.0379],[52.1088,-119.3105],[52.8318,-119.2640],[53.0355,-119.2290],[52.8655,-118.5361],[52.8464,-118.0779]],
+  "route": [[-122.3094,47.4489],[-122.5866,48.8715],[-122.7569,49.0048],[-121.4413,49.3807],[-121.0009,49.6522],[-120.3389,50.6785],[-120.0379,51.6514],[-119.3105,52.1088],[-119.2640,52.8318],[-119.2290,53.0355],[-118.5361,52.8655],[-118.0779,52.8464]],
   "branches": [
-    { "label":"Wells Gray corridor (Monday)", "color":"#2f8f7d", "coords":[[51.6514,-120.0379],[51.7362,-120.0142],[51.9652,-120.1232],[51.9541,-120.1769]] },
-    { "label":"Icefields Parkway extension", "color":"#c98b12", "coords":[[52.8464,-118.0779],[52.6644,-117.8835],[52.5323,-117.6446],[52.2673,-117.2865],[52.2202,-117.2261]] },
-    { "label":"Maligne Valley day", "color":"#5fa89b", "coords":[[52.8464,-118.0779],[52.9099,-118.0582],[52.8587,-117.7638],[52.7290,-117.6409]] },
-    { "label":"Fraser Canyon alternative", "color":"#9a9384", "coords":[[49.3807,-121.4413],[49.7820,-121.4469],[50.6785,-120.3389]] }
+    { "label":"Wells Gray corridor (Monday)", "color":"#2f8f7d", "coords":[[-120.0379,51.6514],[-120.0142,51.7362],[-120.1232,51.9652],[-120.1769,51.9541]] },
+    { "label":"Icefields Parkway extension", "color":"#c98b12", "coords":[[-118.0779,52.8464],[-117.8835,52.6644],[-117.6446,52.5323],[-117.2865,52.2673],[-117.2261,52.2202]] },
+    { "label":"Maligne Valley day", "color":"#5fa89b", "coords":[[-118.0779,52.8464],[-118.0582,52.9099],[-117.7638,52.8587],[-117.6409,52.7290]] },
+    { "label":"Fraser Canyon alternative", "color":"#9a9384", "coords":[[-121.4413,49.3807],[-121.4469,49.7820],[-120.3389,50.6785]] }
   ]
 }
 </script>
@@ -2612,27 +2612,59 @@ function render(){
 // ── map ────────────────────────────────────────────────────────────────────
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
-const map = L.map('map');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
-if (ROUTE.length) L.polyline(ROUTE,{color:'#12483a',weight:3,opacity:.65}).addTo(map);
-BRANCHES.forEach(b => L.polyline(b.coords,{color:b.color||'#aaa',weight:2,dashArray:'5 6',opacity:.75}).addTo(map).bindPopup(`<b>${b.label}</b>`));
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-const markers = {}, catOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat,it.lng],{radius:7,color:'#fffdf7',weight:2,fillColor:color(it.category),fillOpacity:.95})
-    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb?`<br><span style="opacity:.75">${it.blurb}</span>`:''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; pts.push([it.lat,it.lng]);
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[-119,52], zoom:5, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
+
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb?`<br><span style="opacity:.75">${it.blurb}</span>`:''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#12483a','line-width':3,'line-opacity':.65}});
+  }
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa',label:b.label||''},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':2,'line-opacity':.75,'line-dasharray':[2.5,3.0]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':7,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fffdf7','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+  map.on('click','branches', e => { const p = e.features[0].properties;
+    if (p.label) popup.setLngLat(e.lngLat).setHTML(`<b>${p.label}</b>`).addTo(map); });
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([52,-119],5);
 
 const catOff = new Set();
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id,m]) => {
-    const show = !catOff.has(catOf[id]);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category)).map(it => it.id)]]);
 }
 const LABELS = {walk:'Short walks', view:'Viewpoints', do:'See &amp; do', food:'Food', stay:'Stay'};
 const mf = document.getElementById('mapfilter');
@@ -2671,7 +2703,7 @@ function wire(){
     main.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' '){ e.preventDefault(); openLB(imgs, idx);} });
   });
   document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => {
-    if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup();
+    if (!isSplit()) return; showPopup(byId[c.dataset.id]);
   }));
 }
 
@@ -2719,7 +2751,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 // ── GPX export ─────────────────────────────────────────────────────────────

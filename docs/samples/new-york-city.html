@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>New York Off the Express — The Local's Guide · October</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Libre+Franklin:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
 <style>
@@ -581,7 +581,7 @@ dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:no
     <a href="https://rebelatlas.com/destinations/usa/new-york/where-to-stay-in-new-york-the-best-neighbourhoods-for-alternative-travellers/" target="_blank" rel="noopener">Rebel Atlas — Where to Stay</a>
     <a href="https://www.cntraveller.com/article/our-favourite-boutique-hotels-in-new-york-city" target="_blank" rel="noopener">Condé Nast Traveller — Boutique Hotels</a>
   </div>
-  <p class="fine">Photographs are hotlinked from the sources above and remain the property of their respective photographers and publications; per-image credit appears in the lightbox when you enlarge a photo. Some images may fail to load if a source changes its hosting. Coordinates and the exportable map use data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL); base map tiles © CARTO. A few pins are approximate to a street address. Event dates, seasonal hours, and closures (Nightfall tickets, Enoteca Maria, Skippy's, the Queens Night Market's final Saturday, Weeksville house tours) shift year to year — confirm before you go.</p>
+  <p class="fine">Photographs are hotlinked from the sources above and remain the property of their respective photographers and publications; per-image credit appears in the lightbox when you enlarge a photo. Some images may fail to load if a source changes its hosting. Coordinates and the exportable map use data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL); base map tiles © OpenFreeMap. A few pins are approximate to a street address. Event dates, seasonal hours, and closures (Nightfall tickets, Enoteca Maria, Skippy's, the Queens Night Market's final Saturday, Weeksville house tours) shift year to year — confirm before you go.</p>
   <p class="signoff">Now get off the express. Safe travels.</p>
 </div></section>
 
@@ -1856,7 +1856,7 @@ dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:no
     "sourcePage": "https://oana-ny.org/october-at-socrates-sculpture-park/"
   }
 }</script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="module">
 const DATA  = JSON.parse(document.getElementById('guide-data').textContent);
 const ITEMS = DATA.items || [];
@@ -1895,17 +1895,52 @@ function render(){
 
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
-const map = L.map('map'); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
-if (ROUTE.length) L.polyline(ROUTE, {color:'#888', weight:2, dashArray:'7 7', opacity:.6}).addTo(map);
+const catOff = new Set();
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-const markers = {}, catOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
-    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; pts.push([it.lat,it.lng]);
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[-73.98,40.71], zoom:11, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
+
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#888','line-width':2,'line-opacity':.6,'line-dasharray':[3.5,3.5]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':8,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([40.71,-73.98],11);
+
+function applyMarkerFilters(){
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category)).map(it => it.id)]]);
+}
 
 const mf = document.getElementById('mapfilter');
 if (mf){
@@ -1913,11 +1948,9 @@ if (mf){
   mf.innerHTML = [...new Set(ITEMS.filter(i => i.lat && i.lng).map(i => i.category))]
     .map(c => `<button data-cat="${c}"><i style="background:${color(c)}"></i>${labels[c]||c}</button>`).join('');
   mf.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
-    const c = btn.dataset.cat, off = btn.classList.toggle('off');
-    Object.entries(markers).forEach(([id, m]) => {
-      if (catOf[id] !== c) return;
-      if (off) map.removeLayer(m); else if (!map.hasLayer(m)) m.addTo(map);
-    });
+    const c = btn.dataset.cat;
+    if (btn.classList.toggle('off')) catOff.add(c); else catOff.delete(c);
+    applyMarkerFilters();
   }));
 }
 
@@ -1941,7 +1974,7 @@ function wire(){
     main.addEventListener('click', () => openLB(imgs, idx));
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
   });
-  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; showPopup(byId[c.dataset.id]); }));
 }
 
 const ATTRIBUTION = JSON.parse(document.getElementById('attribution-data').textContent || '{}');
@@ -1984,7 +2017,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 const exportDialog = document.getElementById('export-dialog');

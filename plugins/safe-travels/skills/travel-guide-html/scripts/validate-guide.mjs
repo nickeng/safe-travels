@@ -380,7 +380,7 @@ function findOrWarn(text, msg) {
 findOrWarn('map-container', 'No .map-container found (map split may not work)');
 findOrWarn('<dialog', 'No <dialog> element (lightbox may use old div pattern)');
 if (!html.includes('car-dots') && !html.includes('car-nav')) warnings.push('Not found: No carousel elements (car-dots/car-nav)');
-findOrWarn('invalidateSize', 'No invalidateSize() call (map may render gray after toggle)');
+findOrWarn('map.resize()', 'No map.resize() call (map may render at the wrong size after the split toggle)');
 
 // --- 7. Fonts: hard-banned (AI slop) + overused (good, but appearing too often) ---
 // Banned: AI-slop defaults we never want in a location-immersive guide. A trailing ' *' bans the
@@ -464,14 +464,43 @@ if (uniqueImgs.size > 0) {
 const mapEls = root.querySelectorAll('#map');
 if (mapEls.length > 1) {
   const locs = mapEls.map(nodeLine);
-  errors.push(`Lines ${locs.join(', ')}: Duplicate id="map" (${mapEls.length}x) — L.map('map') grabs the first match. Only the Leaflet div should have id="map".`);
+  errors.push(`Lines ${locs.join(', ')}: Duplicate id="map" (${mapEls.length}x) — the map initialises on the first match. Only the map div should have id="map".`);
 }
 if (firstModuleBody) {
   const sb = firstModuleBody;
   const sbStart = scriptStartLine;
-  for (const m of sb.matchAll(/\._(on|off|map|events|latlng|leaflet_id|layers)\s*=(?!=)/g)) {
+  // addSource/addLayer before the style has loaded throws — they must sit inside map.on('load', …).
+  const loadHandler = sb.match(/map\.on\(\s*['"]load['"][\s\S]*$/);
+  const loadStart = loadHandler ? loadHandler.index : Infinity;
+  for (const m of sb.matchAll(/map\.(addSource|addLayer)\s*\(/g)) {
+    if (m.index > loadStart) continue;
     const mLine = sbStart + sb.slice(0, m.index).split('\n').length - 1;
-    errors.push(`Line ${mLine}: Assignment to Leaflet internal ("${m[0].trim()}") shadows a method and throws at runtime. Track state in a parallel object.`);
+    errors.push(`Line ${mLine}: map.${m[1]}() runs before the style has loaded and will throw. Move it inside map.on('load', …).`);
+  }
+  // route/branches are [lng,lat]; a transposed pair lands far from the pins. Catch it here.
+  try {
+    const d = JSON.parse(root.querySelector('#guide-data')?.rawText || '{}');
+    const pins = (d.items || []).filter(i => i.lat && i.lng);
+    const line = [...(d.route || []), ...(d.branches || []).flatMap(b => b.coords || [])];
+    if (pins.length && line.length) {
+      const lat = pins.map(i => i.lat), lng = pins.map(i => i.lng), PAD = 5;
+      const off = line.filter(([x, y]) =>
+        y < Math.min(...lat) - PAD || y > Math.max(...lat) + PAD ||
+        x < Math.min(...lng) - PAD || x > Math.max(...lng) + PAD);
+      if (off.length) warnings.push(`${off.length}/${line.length} route/branch coordinates fall outside the items' bounding box — they must be [lng,lat], e.g. ${JSON.stringify(off[0])} looks transposed.`);
+    }
+  } catch {}
+
+  // A new Popup per pin stacks popups; the scaffold reuses one instance.
+  const popupCtors = [...sb.matchAll(/new\s+maplibregl\.Popup\s*\(/g)];
+  if (popupCtors.length > 1) {
+    const pLine = sbStart + sb.slice(0, popupCtors[1].index).split('\n').length - 1;
+    warnings.push(`Line ${pLine}: ${popupCtors.length} maplibregl.Popup instances — reuse ONE, or old popups pile up on the map.`);
+  }
+  // Per-pin layer juggling means the category and season filters will fight.
+  for (const m of sb.matchAll(/map\.(removeLayer|hasLayer)\s*\(/g)) {
+    const mLine = sbStart + sb.slice(0, m.index).split('\n').length - 1;
+    warnings.push(`Line ${mLine}: map.${m[1]}() suggests per-pin show/hide — filter the single 'items' layer with one map.setFilter() call instead.`);
   }
   for (const m of sb.matchAll(/querySelectorAll\(\s*['"]\[data-cat\]['"]\s*\)/g)) {
     const mLine = sbStart + sb.slice(0, m.index).split('\n').length - 1;

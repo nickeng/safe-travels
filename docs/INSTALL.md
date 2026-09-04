@@ -3,8 +3,6 @@
 ## Requirements
 
 * Install [node](https://nodejs.org/en/download) to run the required scripts
-* Ask Claude to set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 2 in the env in `~/.claude/settings.json`
-
 
 ## Installation
 

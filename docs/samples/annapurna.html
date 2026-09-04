@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Annapurna Circuit — 16 Days, One Pass, October</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Khand:wght@500;600;700&family=Mukta:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -356,8 +356,8 @@ body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;bottom:auto
   body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:33vh;z-index:50}
   body.split .map-container #map{height:33vh!important}
   body.split nav{top:33vh}}
-.leaflet-popup-content{font-family:'Mukta',sans-serif;font-size:.86rem}
-.leaflet-popup-content b{font-family:'Khand',sans-serif;font-weight:600;font-size:1.05rem;text-transform:uppercase}
+.maplibregl-popup-content{font-family:'Mukta',sans-serif;font-size:.86rem}
+.maplibregl-popup-content b{font-family:'Khand',sans-serif;font-weight:600;font-size:1.05rem;text-transform:uppercase}
 
 /* ── lightbox ── */
 .lightbox{border:0;padding:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:rgba(20,16,10,.96)}
@@ -1318,7 +1318,7 @@ dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:no
     <li>— <strong>Six teahouses in this guide have no photograph</strong>, because none of the sources consulted carried an image that genuinely depicts the property. Rather than illustrate them with a generic village shot, they are listed as text.</li>
   </ul>
 
-  <p class="note">Photographs are hotlinked from the sources linked above and remain the property of their authors — per-image credit appears in the lightbox when you click any photo. Coordinates: data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, available under the ODbL licence. Basemap tiles © OpenStreetMap © CARTO. Prices, fees and schedules were current at the time of research and shift constantly in Nepal — treat every figure here as an estimate to be confirmed on the ground.</p>
+  <p class="note">Photographs are hotlinked from the sources linked above and remain the property of their authors — per-image credit appears in the lightbox when you click any photo. Coordinates: data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, available under the ODbL licence. Basemap tiles © OpenStreetMap © OpenFreeMap. Prices, fees and schedules were current at the time of research and shift constantly in Nepal — treat every figure here as an estimate to be confirmed on the ground.</p>
 
   <p class="end">Safe travels!</p>
 </section>
@@ -1344,7 +1344,7 @@ dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:no
 
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -1878,16 +1878,16 @@ dialog.export-dialog .close{position:absolute;top:.7rem;right:1rem;background:no
 
   ],
   "route": [
-    [27.7172,85.3240],[28.2287,84.3797],[28.5507,84.2424],[28.6164,84.1530],[28.6418,84.1373],
-    [28.6490,84.1013],[28.6661,84.0231],[28.7227,83.9738],[28.7768,83.9726],[28.7936,83.9388],
-    [28.8156,83.8705],[28.8378,83.7843],[28.7838,83.7305],[28.7519,83.6862],[28.6433,83.5978],
-    [28.4944,83.6528],[28.4025,83.6999],[28.3581,83.8047],[28.2044,83.9663]
+    [85.3240,27.7172],[84.3797,28.2287],[84.2424,28.5507],[84.1530,28.6164],[84.1373,28.6418],
+    [84.1013,28.6490],[84.0231,28.6661],[83.9738,28.7227],[83.9726,28.7768],[83.9388,28.7936],
+    [83.8705,28.8156],[83.7843,28.8378],[83.7305,28.7838],[83.6862,28.7519],[83.5978,28.6433],
+    [83.6528,28.4944],[83.6999,28.4025],[83.8047,28.3581],[83.9663,28.2044]
   ],
   "branches": [
     { "label":"Tilicho Lake side trek", "color":"#2f6ea8",
-      "coords":[[28.6661,84.0231],[28.6697,83.9734],[28.6807,83.9452],[28.6802,83.9069],[28.6915,83.8529]] },
+      "coords":[[84.0231,28.6661],[83.9734,28.6697],[83.9452,28.6807],[83.9069,28.6802],[83.8529,28.6915]] },
     { "label":"Ghandruk finish", "color":"#3f7d4a",
-      "coords":[[28.4025,83.6999],[28.3965,83.7653],[28.3769,83.8078],[28.3581,83.8047]] }
+      "coords":[[83.6999,28.4025],[83.7653,28.3965],[83.8078,28.3769],[83.8047,28.3581]] }
   ]
 }
 </script>
@@ -3319,27 +3319,57 @@ function render(){
 /* ── map ── */
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-' + c).trim() || '#888';
-const map = L.map('map');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '© OpenStreetMap © CARTO' }).addTo(map);
-if (ROUTE.length) L.polyline(ROUTE, { color: '#2b2318', weight: 2.4, dashArray: '8 7', opacity: .62 }).addTo(map);
-BRANCHES.forEach(b => L.polyline(b.coords, { color: b.color || '#aaa', weight: 1.8, dashArray: '4 6', opacity: .72 }).addTo(map));
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-const markers = {}, catOf = {}, seasonOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat, it.lng], { radius: it.feature ? 9 : 7, color: '#fff', weight: 2, fillColor: color(it.category), fillOpacity: .95 })
-    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.72">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat, it.lng]);
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[84,28.6], zoom:8, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
+
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.72">${it.blurb}</span>` : ''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#2b2318','line-width':2.4,'line-opacity':.62,'line-dasharray':[3.33,2.92]}});
+  }
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa',label:b.label||''},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':1.8,'line-opacity':.72,'line-dasharray':[2.22,3.33]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category,feature:!!it.feature},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':['case',['get','feature'],9,7],
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts, { padding: [40, 40] }); else map.setView([28.6, 84], 8);
 
 const catOff = new Set();
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id, m]) => {
-    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category) && inSeason(it.season, activeSeason)).map(it => it.id)]]);
 }
 const LABELS = { do: 'See & do', food: 'Food', stay: 'Stay', photo: 'Photo spots' };
 const mf = document.getElementById('mapfilter');
@@ -3375,7 +3405,7 @@ function wire(){
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLB(imgs, idx); } });
   });
   document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => {
-    if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup();
+    if (!isSplit()) return; showPopup(byId[c.dataset.id]);
   }));
 }
 
@@ -3427,7 +3457,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 /* ── gpx export ── */

@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Morocco by Colour — Casablanca · Rabat · Chefchaouen · Fes · Marrakech</title>
 <meta name="description" content="A twelve-day route through five Moroccan cities, each known by its own colour — planned at an unhurried pace.">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kufam:ital,wght@0,400..900;1,400..900&family=Reem+Kufi:wght@400..700&family=Alegreya:ital,wght@0,400..800;1,400..800&family=Alegreya+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -1388,7 +1388,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:1rem;background:no
 
     <h3>Photographs</h3>
     <p style="font-size:.95rem;max-width:74ch">Every photograph here is hotlinked from the page it was found on and remains the property of the person who took it — the travel bloggers, photographers and publications listed above, plus Creative Commons contributors on Flickr. Click any image to open it full size; <strong>the photographer, the source site and the licence appear in the caption beneath it.</strong> If you're a photographer and would rather your work weren't shown here, the link back to your page is the way to reach us.</p>
-    <p style="font-size:.95rem;max-width:74ch">Coordinates were resolved against OpenStreetMap data — © OpenStreetMap contributors, available under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL</a>. Base map tiles © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>. Monthly temperature figures are standard published climate normals for Marrakech.</p>
+    <p style="font-size:.95rem;max-width:74ch">Coordinates were resolved against OpenStreetMap data — © OpenStreetMap contributors, available under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL</a>. Base map tiles © <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a>. Monthly temperature figures are standard published climate normals for Marrakech.</p>
 
     <div class="signoff">Safe travels!<span class="ar">طريق السلامة</span></div>
   </div>
@@ -1396,7 +1396,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:1rem;background:no
 </div><!-- /#content -->
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -1743,12 +1743,12 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:1rem;background:no
     {"id":"essaouira","category":"side","name":"Essaouira","blurb":"2½–3 hr west · a 2-night Atlantic extension","lat":31.51328,"lng":-9.76882},
     {"id":"tetouan","category":"side","name":"Tetouan","blurb":"1 hr 25 from Chefchaouen · UNESCO medina · Monday market","lat":35.57111,"lng":-5.36755}
   ],
-  "route": [[33.5947,-7.6120],[34.0227,-6.8340],[35.1695,-5.2642],[34.0620,-4.9820],[31.6258,-7.9889]],
+  "route": [[-7.6120,33.5947],[-6.8340,34.0227],[-5.2642,35.1695],[-4.9820,34.0620],[-7.9889,31.6258]],
   "branches": [
-    {"label":"Volubilis &amp; Meknes loop","color":"#2f6ab0","coords":[[34.0620,-4.9820],[34.0552,-5.5255],[34.0735,-5.5554],[33.8808,-5.5573],[34.0620,-4.9820]]},
-    {"label":"Tetouan","color":"#2f6ab0","coords":[[35.1695,-5.2642],[35.5711,-5.3676]]},
-    {"label":"Agafay","color":"#2f6ab0","coords":[[31.6258,-7.9889],[31.4310,-8.1899]]},
-    {"label":"Essaouira extension","color":"#2f6ab0","coords":[[31.6258,-7.9889],[31.5133,-9.7688]]}
+    {"label":"Volubilis &amp; Meknes loop","color":"#2f6ab0","coords":[[-4.9820,34.0620],[-5.5255,34.0552],[-5.5554,34.0735],[-5.5573,33.8808],[-4.9820,34.0620]]},
+    {"label":"Tetouan","color":"#2f6ab0","coords":[[-5.2642,35.1695],[-5.3676,35.5711]]},
+    {"label":"Agafay","color":"#2f6ab0","coords":[[-7.9889,31.6258],[-8.1899,31.4310]]},
+    {"label":"Essaouira extension","color":"#2f6ab0","coords":[[-7.9889,31.6258],[-9.7688,31.5133]]}
   ]
 }
 </script>
@@ -3191,29 +3191,58 @@ function render(){
 
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
-const map = L.map('map');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-if (ROUTE.length) L.polyline(ROUTE, {color:'#7a6248', weight:2.5, dashArray:'8 8', opacity:.75}).addTo(map);
-BRANCHES.forEach(b => L.polyline(b.coords, {color: b.color || '#aaa', weight:1.5, dashArray:'4 6', opacity:.5}).addTo(map));
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[-7,31.7], zoom:6, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
 
-const markers = {}, catOf = {}, seasonOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
-    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#7a6248','line-width':2.5,'line-opacity':.75,'line-dasharray':[3.2,3.2]}});
+  }
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa',label:b.label||''},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':1.5,'line-opacity':.5,'line-dasharray':[2.67,4.0]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':8,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([31.7,-7],6);
 
 const catOff = new Set();
 const inSeason = (val, s) => !s || val == null || (Array.isArray(val) ? val.includes(s) : val === s);
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id, m]) => {
-    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category) && inSeason(it.season, activeSeason)).map(it => it.id)]]);
 }
 
 const LABELS = {do:'Sights', food:'Food', stay:'Stay', side:'Excursions'};
@@ -3248,7 +3277,7 @@ function wire(){
     main.addEventListener('click', () => openLB(imgs, idx));
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
   });
-  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; showPopup(byId[c.dataset.id]); }));
 }
 
 const ATTRIBUTION = JSON.parse(document.getElementById('attribution-data').textContent || '{}');
@@ -3291,7 +3320,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 const exportDialog = document.getElementById('export-dialog');

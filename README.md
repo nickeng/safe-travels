@@ -42,10 +42,7 @@ Temporary instructions before the inevitable agent store.
 
 **Using the Claude desktop app?** Follow the [app install guide](./docs/INSTALL.md) — it walks through adding the plugin from the UI.
 
-**Using Claude Code in the terminal?** Follow the CLI steps below.
-
-1. Set `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 2 in the env in `~/.claude/settings.json`. This is required for the research team to fan out.
-2. Install the plugin:
+**Using Claude Code in the terminal?** Install the plugin with:
 ```
 /plugin marketplace add nickeng/safe-travels
 /plugin install safe-travels@safe-travels

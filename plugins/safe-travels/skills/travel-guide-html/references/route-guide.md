@@ -55,10 +55,9 @@ before dropping into the green calm of the Dingle Peninsula."
 ## Map: show the route, not just pins
 
 The map SHOULD show the journey shape:
-- Add the leg-hub coordinates to `route` in `guide-data`, in route order — this draws the route line.
-- Set the line's color in the ROUTE polyline options — one route color.
-- Markers still show individual stops, but the line gives the spatial story
-- Consider numbered markers (1, 2, 3...) to show sequence
+- Add the leg-hub coordinates to `route` in `guide-data`, in route order, as `[lng, lat]` — this draws the route line.
+- Set the line's color in the `route` layer's `line-color` paint property — one route color.
+- Pins still show individual stops, but the line gives the spatial story
 
 A dashed line suggests a route without implying exact roads.
 
@@ -73,7 +72,7 @@ All route data lives in the one `guide-data` island: the top-level `route` (and 
     {"id": "d1", "category": "do", "section": "<leg-name>-do", ...},
     {"id": "f1", "category": "food", "section": "<leg-name>-food", ...}
   ],
-  "route": [[53.27, -9.05], [52.97, -9.43], [52.14, -10.27]],
+  "route": [[-9.05, 53.27], [-9.43, 52.97], [-10.27, 52.14]],
   "branches": []
 }
 ```
@@ -92,7 +91,7 @@ Add the branches to `branches` in `guide-data`, beside `route`:
 ```json
 "branches": [
   { "label": "Aran Islands ferry",
-    "coords": [[53.27, -9.05], [53.11, -9.64], [53.09, -9.78]],
+    "coords": [[-9.05, 53.27], [-9.64, 53.11], [-9.78, 53.09]],
     "color": "#999" }
 ]
 ```
@@ -107,7 +106,7 @@ Add a brief line below the map so the visual language is self-documenting. Name 
 ### When NOT to draw branches
 
 - All legs are required (no meaningful "skip") — the `route` line is enough
-- A branch is a single stop with no route — a regular marker handles it
+- A branch is a single stop with no route — a regular pin handles it
 - The "branch" is a completely separate trip — don't clutter the main map
 
 ## Design considerations

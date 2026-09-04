@@ -12,12 +12,12 @@
     never maintain a second parallel markers array.
   • galleryHTML() renders every image an item has as a carousel (1 → plain; >1 → ‹ › arrows + dots).
   • render() loops ITEMS into the `.cards[data-section]` mounts so images can never silently collapse to one.
-  • A category filter toggles markers by category via map.hasLayer() — NEVER a custom flag on the marker.
+  • A category filter shows/hides pins with ONE map.setFilter() call — never per-pin add/remove.
   • Map split view toggle, card↔marker sync, and an optional season filter all read the same ITEMS.
   • ROUTE/MULTI-STOP guides: each stop gets its own uniquely-named sections (data-section="<town>-do"),
-    and a ROUTE polyline links the stops. The SAME mechanism. (Single-city guides leave ROUTE empty.)
+    and a ROUTE line layer links the stops. The SAME mechanism. (Single-city guides leave ROUTE empty.)
 ═══════════════════════════════════════════════════════════════════════════ -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <style>
 /* PLAIN ON PURPOSE — replace all of this. */
 /* role tokens — components read these for shared text roles; a section with its own
@@ -73,9 +73,9 @@ h3{font-size:1.15rem;margin:1.5rem 0 .3rem}  /* sub-section headings */
 /* Map split view. TWO rules make it robust:
    1) Wrap ALL reading content (nav, hero, sections) in ONE #content; shrink THAT to 50% — never
       constrain individual blocks, or content outside the one you shrink overlaps the map.
-   2) Position the .map-container WRAPPER, NOT #map. Leaflet sets an inline style="position:relative"
-      on the #map element, and inline styles beat the stylesheet — so `body.split #map{position:fixed}`
-      is silently ignored. The wrapper has no inline style, so fixing it works. */
+   2) Position the .map-container WRAPPER, NOT #map. #map carries the library's own
+      .maplibregl-map rules and must stay a plain block that fills its parent — the wrapper is
+      what goes position:fixed. */
 /* Map: in-flow by default (shows as a section in article mode).
    In split mode, it becomes fixed on the right and #content shrinks to reveal it. */
 .map-container{margin-top:1.5rem}
@@ -85,9 +85,9 @@ body.split #content{width:50%}
 body.split .map-section>h2,body.split .export-row{display:none}
 body.split .map-container{position:fixed;top:0;right:0;width:50vw;height:100vh;margin:0;z-index:50}
 body.split .map-container #map{height:100vh !important;margin:0 !important}
-/* Split view: float the legend over the map (top-right, clear of Leaflet's zoom + attribution)
+/* Split view: float the legend over the map (top-right, clear of the zoom + attribution controls)
    so pins stay decodable and filterable. Style it to the basemap, not the guide theme — a light
-   card on the light basemap (a dark card + light text if you switch to a dark basemap). */
+   card on the light basemap (a dark card + light text if you switch to the dark basemap). */
 body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;bottom:auto;z-index:60;margin:0;
   max-width:min(60vw,340px);background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
   border:1px solid #ddd;border-radius:8px;padding:.55rem .6rem;box-shadow:0 8px 24px -10px rgba(0,0,0,.35)}
@@ -150,9 +150,9 @@ dialog.export-dialog .close{position:absolute;top:.8rem;right:1rem;background:no
 
   <!-- Keep map inside main.wrap so it follows the article layout. Split view is position:fixed, so nesting is safe. -->
   <section class="map-section" id="map-section"><h2>Map</h2>
-  <!-- The Leaflet div is the ONLY element with id="map". To link a nav item to the map, point it
+  <!-- The map div is the ONLY element with id="map". To link a nav item to the map, point it
        at #map-section — NEVER put id="map" on a heading or section: it would steal
-       getElementById('map') from the real map div and L.map('map') would init on the wrong element. -->
+       getElementById('map') from the real map div and the map would initialise on the wrong one. -->
   <div class="mapfilter" id="mapfilter"></div>
   <div class="map-container"><div id="map"></div></div>
   <div class="export-row"><button class="export-btn" id="export-btn">⤓ Save map to file</button></div></section>
@@ -175,7 +175,7 @@ dialog.export-dialog .close{position:absolute;top:.8rem;right:1rem;background:no
 </div><!-- /#content -->
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -219,8 +219,8 @@ dialog.export-dialog .close{position:absolute;top:.8rem;right:1rem;background:no
 //   • `name`/`blurb`/`description` MAY contain trusted inline HTML (e.g. <span class='jp'>…</span>)
 //     and it renders as markup. Never let a raw closing-script tag appear inside any string — it
 //     would terminate this block. (The JSON data block above has the same restriction.)
-//   • `route` = [[lat,lng], …] leg hubs for multi-stop guides (dashed map line); [] for a single city.
-//   • `branches` = optional side-trips off the route: [{label, color, coords:[[lat,lng],…]}, …]; [] when none.
+//   • `route` = [[lng,lat], …] leg hubs for multi-stop guides (dashed map line); [] for a single city.
+//   • `branches` = optional side-trips off the route: [{label, color, coords:[[lng,lat],…]}, …]; [] when none.
 const DATA   = JSON.parse(document.getElementById('guide-data').textContent);
 const ITEMS  = DATA.items  || [];
 const ROUTE  = DATA.route  || [];
@@ -281,41 +281,71 @@ function render(){
 // ─── MAP: markers from the SAME ITEMS array, colored by --c-<category> ───────
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
-// Leave scroll-wheel zoom on (default) — {scrollWheelZoom:false} kills pinch to zoom on laptops.
-const map = L.map('map'); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-// ROUTE (multi-stop guides only): a dashed line through the leg hubs, in order — from the `route`
-// array in the data block above. Empty [] for a single city.
-if (ROUTE.length) L.polyline(ROUTE, {color:'#888', weight:2, dashArray:'7 7', opacity:.6}).addTo(map);
-// BRANCHES: optional side-trips off the main route — thinner, quieter lines.
-BRANCHES.forEach(b => L.polyline(b.coords, {color: b.color || '#aaa', weight:1.5, dashArray:'4 6', opacity:.5}).addTo(map));
+// Light guide: 'positron'. Dark guide: 'dark' — and restyle .mapfilter to match.
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[0,20], zoom:2, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
 
-const markers = {}, catOf = {}, seasonOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat,it.lng],{radius:8,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
-    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);  // category + season tracked OFF the marker
+// ONE popup instance, reused — a popup per pin leaves old ones stacked on the map.
+const popup = new maplibregl.Popup({closeButton:false, offset:12, maxWidth:'260px'});
+const showPopup = it => it && popup.setLngLat([it.lng, it.lat])
+  .setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`).addTo(map);
+
+// Sources and layers exist only once the style has loaded — ALL map setup goes in here.
+map.on('load', () => {
+  // ROUTE (multi-stop guides only): a dashed line through the leg hubs, in order. [] for a single city.
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#888','line-width':2,'line-opacity':.6,'line-dasharray':[4,4]}});
+  }
+  // BRANCHES: optional side-trips off the main route — thinner, quieter lines.
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa'},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':1.5,'line-opacity':.5,'line-dasharray':[3,4]}});
+  }
+
+  // ONE circle layer for every pin, colored by a `match` on category built from the same --c-* vars
+  // the cards read. Added AFTER the lines, so pins sit above the route.
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':8,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([20,0],2);
 
-// Marker visibility = the category filter AND (for seasonal guides) the active season. Both run
-// through ONE function so they can't fight (e.g. a season switch re-adding a category you turned
-// off). inSeason() is a no-op until activeSeason is set. seasonOf[id] may be a string, an array, or
-// undefined — undefined means the place shows in every season.
+// Pin visibility = the category filter AND (for seasonal guides) the active season. Both run through
+// ONE function so they can't fight (e.g. a season switch re-showing a category you turned off).
+// inSeason() is a no-op until activeSeason is set; it.season may be a string, an array, or undefined.
 const catOff = new Set();
 const inSeason = (val, s) => !s || val == null || (Array.isArray(val) ? val.includes(s) : val === s);
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id, m]) => {
-    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;   // a season switch can fire before the style has loaded
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category) && inSeason(it.season, activeSeason)).map(it => it.id)]]);
 }
 
-// ─── category filter chips: toggle marker visibility via map.hasLayer/removeLayer ────────────
-// NEVER store a custom flag on the marker (m._on, m._map, …) — those names shadow Leaflet
-// internals and throw "this._on is not a function". Read category from the parallel `catOf`.
+// ─── category filter chips: flip a category, then re-run the ONE filter function ─────────────
+// The chips only mutate `catOff` and call applyMarkerFilters() — never touch layers directly, or
+// the category and season filters overwrite each other.
 const mf = document.getElementById('mapfilter');
 if (mf){
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -350,7 +380,7 @@ function wire(){
     main.addEventListener('click', () => openLB(imgs, idx));
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
   });
-  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; showPopup(byId[c.dataset.id]); }));
 }
 
 // Image attribution — machine-injected into #attribution-data by inject-attribution.mjs, keyed by image URL.
@@ -393,11 +423,11 @@ document.addEventListener('click', e => {
   openLB(imgs, all.indexOf(img));
 });
 
-// ─── Map split view toggle (call invalidateSize after layout change) ───────────
+// ─── Map split view toggle (call map.resize() after the layout change) ────────
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 // ─── export: GPX from ITEMS ──────────────────────────────────────────────────

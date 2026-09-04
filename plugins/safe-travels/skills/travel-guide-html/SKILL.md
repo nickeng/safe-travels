@@ -218,10 +218,10 @@ The always-present backbone of every guide:
 4. **Sections** — the editorial spine between the opening and the map; card grids via the data-driven
    loop (each `.cards[data-section]` claims items whose `section` matches). How they're arranged is
    yours — see **Composing the sections**.
-5. **Map** — Leaflet, no-token tiles (CARTO light/dark or OSM). Markers colored from `--c-*` vars, a
-   category filter (toggle chips), popups with the item's primary image, fitBounds — only items with
-   coordinates get markers. Below the map, a "Save map to file" button exports selected categories as
-   .gpx (client-side from `ITEMS`). See the scaffold for the implementation.
+5. **Map** — MapLibre GL, keyless OpenFreeMap tiles (`positron` light / `dark`). All pins in ONE
+   circle layer colored from `--c-*` vars, a category filter (toggle chips), popups, fitBounds —
+   only items with coordinates get pins. Below the map, a "Save map to file" button exports selected
+   categories as .gpx (client-side from `ITEMS`). See the scaffold for the implementation.
 6. **Sources & credits** — close with a credits section linking the sources the research drew on,
    each to its original URL, plus image attributions. A reader should be able to trace a claim back
    to where it came from. Add a brief, honest note (phrased naturally) that photos are hotlinked from
@@ -384,12 +384,12 @@ Implementation (see `scaffolds/data-driven-guide.html`):
   any base `margin-top` and the map overlaps the nav). In Read mode both are in-flow.
   Use `%` for `#content` (avoids scrollbar overlap) and `vw` for the fixed map (fixed elements are
   relative to the viewport).
-- **Position the `.map-container` WRAPPER, never `#map` directly.** Leaflet puts an inline
-  `style="position:relative"` on the `#map` element, and inline styles beat the stylesheet, so
-  `body.split #map{position:fixed}` is silently ignored — the map then renders below the article.
+- **Position the `.map-container` WRAPPER, never `#map` directly.** `#map` carries the library's own
+  `.maplibregl-map` rules and must stay a plain block that fills its parent; the wrapper is what goes
+  `position:fixed`.
 - Constrain the ONE content wrapper, never individual blocks (a block outside it stays full-width and
   overlaps the map).
-- Call `map.invalidateSize()` after toggling so Leaflet re-renders.
+- Call `map.resize()` after toggling so the canvas picks up the new size (it does not observe layout on its own).
 - ≤900px: map fixed to the top ~1/3 of the viewport, content scrolls below it. Set `nav{top:33vh}`
   so the sticky nav sits below the map, not under it.
 
@@ -413,7 +413,7 @@ Use the most modern HTML/CSS/JS available, provided it has shipped in the curren
 
 ## Rules
 
-- SINGLE `.html`: inline CSS + JS; only map tiles, fonts, and Leaflet via CDN.
+- SINGLE `.html`: inline CSS + JS; only map tiles, fonts, and MapLibre GL via CDN.
 - Images: hotlink with visible credit (author's own preferred); graceful `onerror`. Some 403 — ok.
 - Embedded JS only where it informs (map, filter, tabs, lightbox, card↔marker). Respect
   `prefers-reduced-motion`.
@@ -454,13 +454,13 @@ guide's images by URL.
 
 - **Image URLs verbatim.** Emit each `src` exactly as the researcher gave it — never retype, shorten,
   or pad a filename from the place's name; a reconstructed URL 404s.
-- **Use `id="map"` for the Leaflet div only; anchor the map section with a separate id (e.g.
-  `#map-section`) and point nav links there.** This keeps `L.map('map')` / `getElementById('map')`
-  resolving to the real map div — if a heading or section also carries `id="map"`, it's matched first
-  and the map initializes on the wrong element.
-- **Keep custom state off Leaflet objects — track marker filter state in a parallel object and use
-  `map.hasLayer()`.** Assigning `m._on` / `m._map` on a marker overwrites a Leaflet method and throws
-  `this._on is not a function`.
+- **Use `id="map"` for the map div only; anchor the map section with a separate id (e.g.
+  `#map-section`) and point nav links there.** This keeps `getElementById('map')` resolving to the
+  real map div — if a heading or section also carries `id="map"`, it's matched first and the map
+  initializes on the wrong element.
+- **Every `addSource`/`addLayer` goes inside `map.on('load', …)`** — they throw before the style loads.
+- **Filter pins with ONE `map.setFilter('items', …)`** driven by a single function reading both the
+  category set and the active season — two filters touching layers independently overwrite each other.
 - **Scope the card render to `.cards[data-section]`**, not a bare `[data-section]` — the latter also matches
   the filter buttons and injects cards into them.
 - **Heading decorations and text width:** if positioning lines or accents relative to a heading,

@@ -3,7 +3,7 @@
 <title>De Bollenstreek — A Netherlands Garden Tour, Spring 2027</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <style>
 /* ─────────────────────────────────────────────────────────────
    DE BOLLENSTREEK — the bulb field as a design system.
@@ -1212,7 +1212,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
 
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -2121,10 +2121,10 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
     { "id":"alkmaar", "category":"do", "section":"__pins", "name":"Alkmaar cheese market", "blurb":"Free · Fridays 10:00–13:00 · late Mar–late Sep", "description":"The oldest surviving cheese market in the country: white-uniformed carriers, wooden barrows and price-settling by handclap.", "sources":[{"url":"https://amsterdamian.com/see/photos/say-cheese-a-visit-to-alkmaar-cheese-market/","title":"Amsterdamian"}], "lat":52.63146, "lng":4.75052, "images":[] },
     { "id":"bloesem", "category":"do", "section":"__pins", "name":"Bloesempark, Amsterdamse Bos", "blurb":"Free · peak bloom mid–late March", "description":"Four hundred Japanese cherry trees in the Amsterdamse Bos, each named for a Dutch or Japanese woman.", "sources":[{"url":"https://www.amsterdamsebos.nl/bloesempark/","title":"Amsterdamse Bos"}], "lat":52.30394, "lng":4.83548, "images":[] }
   ],
-  "route": [[52.3730,4.8920],[52.38137,4.63609],[52.26987,4.54726],[52.1572922,4.4849929],[52.08044,4.31446]],
+  "route": [[4.8920,52.3730],[4.63609,52.38137],[4.54726,52.26987],[4.4849929,52.1572922],[4.31446,52.08044]],
   "branches": [
-    { "label":"Aalsmeer flower auction", "color":"#6a3d9f", "coords":[[52.26987,4.54726],[52.25846,4.78943]] },
-    { "label":"Goeree-Overflakkee", "color":"#6a3d9f", "coords":[[52.08044,4.31446],[51.75762,4.16565]] }
+    { "label":"Aalsmeer flower auction", "color":"#6a3d9f", "coords":[[4.54726,52.26987],[4.78943,52.25846]] },
+    { "label":"Goeree-Overflakkee", "color":"#6a3d9f", "coords":[[4.31446,52.08044],[4.16565,51.75762]] }
   ]
 }
 </script>
@@ -3570,29 +3570,58 @@ function render(){
 // ─── MAP ────────────────────────────────────────────────────────────────────
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
-const map = L.map('map');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-if (ROUTE.length) L.polyline(ROUTE, {color:'#1b1610', weight:2.5, dashArray:'8 7', opacity:.7}).addTo(map);
-BRANCHES.forEach(b => L.polyline(b.coords, {color: b.color || '#aaa', weight:1.5, dashArray:'4 6', opacity:.55}).addTo(map));
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[4.6,52.2], zoom:9, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
 
-const markers = {}, catOf = {}, seasonOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat,it.lng],{radius:7,color:'#fff',weight:2,fillColor:color(it.category),fillOpacity:.95})
-    .addTo(map).bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.7">${it.blurb}</span>` : ''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#1b1610','line-width':2.5,'line-opacity':.7,'line-dasharray':[3.2,2.8]}});
+  }
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa',label:b.label||''},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':1.5,'line-opacity':.55,'line-dasharray':[2.67,4.0]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':7,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([52.2,4.6],9);
 
 const catOff = new Set();
 const inSeason = (val, s) => !s || val == null || (Array.isArray(val) ? val.includes(s) : val === s);
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id, m]) => {
-    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category) && inSeason(it.season, activeSeason)).map(it => it.id)]]);
 }
 
 const LABELS = {do:'See & do', food:'Eat & drink', stay:'Sleep'};
@@ -3628,7 +3657,7 @@ function wire(){
     main.addEventListener('click', () => openLB(imgs, idx));
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
   });
-  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+  document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => { if (!isSplit()) return; showPopup(byId[c.dataset.id]); }));
 }
 
 // ─── ATTRIBUTION ────────────────────────────────────────────────────────────
@@ -3682,7 +3711,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 // ─── EXPORT ─────────────────────────────────────────────────────────────────

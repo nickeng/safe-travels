@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lundi — Chasing Puffins in Iceland</title>
 <meta name="description" content="A puffin-season field guide to Iceland: Reykjavík's harbour islands, the South Coast cliffs, and Heimaey — the largest Atlantic puffin colony on earth.">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -337,8 +337,8 @@ body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;z-index:60;
 .export-btn{font-family:"DM Mono",monospace;font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;
   color:var(--muted);background:none;border:1px solid var(--line);padding:.5rem .9rem;cursor:pointer;border-radius:2px}
 .export-btn:hover{color:var(--coral);border-color:var(--coral)}
-.leaflet-popup-content{font-family:"Newsreader",serif;font-size:.88rem}
-.leaflet-popup-content b{font-family:"Big Shoulders Display",sans-serif;text-transform:uppercase;font-size:1.05rem;
+.maplibregl-popup-content{font-family:"Newsreader",serif;font-size:.88rem}
+.maplibregl-popup-content b{font-family:"Big Shoulders Display",sans-serif;text-transform:uppercase;font-size:1.05rem;
   letter-spacing:.02em}
 dialog.export-dialog{border:0;border-radius:4px;padding:1.9rem 2rem;max-width:390px;width:90vw;
   background:var(--paper);color:var(--ink);box-shadow:0 26px 64px -14px rgba(22,19,15,.5);margin:auto;
@@ -1383,7 +1383,7 @@ dialog.export-dialog .export-attribution{font-size:.66rem;margin:1rem 0 0}
     <li><a href="https://www.booking.com/" target="_blank" rel="noopener">Booking.com — property listings &amp; indicative rates</a></li>
   </ul>
 
-  <p style="margin-top:1.6rem;font-size:.8rem">Map tiles © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors and © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>. Geocoded coordinates derived from OpenStreetMap data, available under the <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">ODbL</a>.</p>
+  <p style="margin-top:1.6rem;font-size:.8rem">Map tiles © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors and © <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a>. Geocoded coordinates derived from OpenStreetMap data, available under the <a href="https://opendatacommons.org/licenses/odbl/" target="_blank" rel="noopener">ODbL</a>.</p>
   <p class="sig">Safe travels!</p>
 </section>
 </main>
@@ -1407,7 +1407,7 @@ dialog.export-dialog .export-attribution{font-size:.66rem;margin:1rem 0 0}
 
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -2240,11 +2240,11 @@ dialog.export-dialog .export-attribution{font-size:.66rem;margin:1rem 0 0}
       "sources":[{"url":"https://www.northsailing.is/","title":"North Sailing"}],
       "lat":66.54616, "lng":-18.00435, "images":[]}
   ],
-  "route": [[64.15040,-21.94330],[63.93666,-21.00374],[63.61546,-19.98817],[63.41665,-19.03055],[63.78749,-18.05965],[64.01667,-16.96633],[64.04314,-16.17825]],
+  "route": [[-21.94330,64.15040],[-21.00374,63.93666],[-19.98817,63.61546],[-19.03055,63.41665],[-18.05965,63.78749],[-16.96633,64.01667],[-16.17825,64.04314]],
   "branches": [
-    { "label":"Heimaey ferry", "color":"#d9451f", "coords":[[63.61546,-19.98817],[63.53077,-20.11747],[63.44010,-20.27859],[63.39960,-20.28846]] },
-    { "label":"Westfjords extension", "color":"#7d7364", "coords":[[64.15040,-21.94330],[65.07753,-22.72585],[65.43687,-23.95557],[65.50272,-24.53172]] },
-    { "label":"East Iceland extension", "color":"#7d7364", "coords":[[64.04314,-16.17825],[65.26204,-14.40353],[65.51768,-13.81601]] }
+    { "label":"Heimaey ferry", "color":"#d9451f", "coords":[[-19.98817,63.61546],[-20.11747,63.53077],[-20.27859,63.44010],[-20.28846,63.39960]] },
+    { "label":"Westfjords extension", "color":"#7d7364", "coords":[[-21.94330,64.15040],[-22.72585,65.07753],[-23.95557,65.43687],[-24.53172,65.50272]] },
+    { "label":"East Iceland extension", "color":"#7d7364", "coords":[[-16.17825,64.04314],[-14.40353,65.26204],[-13.81601,65.51768]] }
   ]
 }
 </script>
@@ -3368,32 +3368,57 @@ function render(){
 // ─── map ────────────────────────────────────────────────────────────────────
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-'+c).trim() || '#888';
-const map = L.map('map');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  {attribution:'© OpenStreetMap © CARTO'}).addTo(map);
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-if (ROUTE.length) L.polyline(ROUTE, {color:'#16130f', weight:2, dashArray:'7 7', opacity:.55}).addTo(map);
-BRANCHES.forEach(b => L.polyline(b.coords,
-  {color: b.color || '#aaa', weight:1.5, dashArray:'4 6', opacity:.55}).addTo(map));
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/bright',
+  center:[-19,64.1], zoom:6, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
 
-const markers = {}, catOf = {}, seasonOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat,it.lng],
-    {radius:7, color:'#fff', weight:2, fillColor:color(it.category), fillOpacity:.95})
-    .addTo(map)
-    .bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.75">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat,it.lng]);
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.75">${it.blurb}</span>` : ''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#16130f','line-width':2,'line-opacity':.55,'line-dasharray':[3.5,3.5]}});
+  }
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa',label:b.label||''},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':1.5,'line-opacity':.55,'line-dasharray':[2.67,4.0]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':7,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.95}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts,{padding:[40,40]}); else map.setView([64.1,-19],6);
 
 const catOff = new Set();
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id, m]) => {
-    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category) && inSeason(it.season, activeSeason)).map(it => it.id)]]);
 }
 
 // ─── category filter chips ───────────────────────────────────────────────────
@@ -3434,7 +3459,7 @@ function wire(){
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
   });
   document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => {
-    if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup(); }));
+    if (!isSplit()) return; showPopup(byId[c.dataset.id]); }));
 }
 
 // ─── attribution ────────────────────────────────────────────────────────────
@@ -3482,7 +3507,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 200);
+  setTimeout(() => map.resize(), 200);
 });
 
 // ─── GPX export ─────────────────────────────────────────────────────────────

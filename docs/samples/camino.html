@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sarria → Santiago · The Last Hundred Kilometres · Camiño Francés in October</title>
 <meta name="description" content="A six-day walking guide to the final 100 km of the Camino Francés — Sarria to Santiago de Compostela — for a solo walker in October.">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -358,8 +358,8 @@ body.split .mapfilter{position:fixed;top:.8rem;right:.8rem;left:auto;bottom:auto
   body.split .map-container{position:fixed;top:0;left:0;right:0;width:auto;height:34vh;z-index:50}
   body.split .map-container #map{height:34vh!important}
   body.split nav{top:34vh}}
-.leaflet-popup-content{font-family:'Alegreya Sans',sans-serif;font-size:.85rem}
-.leaflet-popup-content b{font-family:'Cinzel',serif}
+.maplibregl-popup-content{font-family:'Alegreya Sans',sans-serif;font-size:.85rem}
+.maplibregl-popup-content b{font-family:'Cinzel',serif}
 .export-row{margin:.9rem 0 0}
 .export-btn{font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.08em;color:var(--blue);
   background:none;border:1px solid var(--blue);padding:.46rem .85rem;border-radius:2px;cursor:pointer;text-transform:uppercase}
@@ -1323,7 +1323,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
     <p class="small">Images are hotlinked from the pages listed above and from Creative Commons photographs on Flickr and Wikimedia Commons; each retains its author's copyright and licence. Click any photograph to see its photographer, source and licence in the caption. Booking-platform images (Booking.com, Agoda, Hostelworld) appear on accommodation cards.</p>
 
     <h4>Coordinates</h4>
-    <p class="small">Map data and geocoded coordinates © OpenStreetMap contributors, available under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL licence</a>. Basemap tiles © CARTO. A small number of pins are approximate to town level; the sights, bridges and albergues along the route resolved to street level.</p>
+    <p class="small">Map data and geocoded coordinates © OpenStreetMap contributors, available under the <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">ODbL licence</a>. Basemap tiles © OpenFreeMap. A small number of pins are approximate to town level; the sights, bridges and albergues along the route resolved to street level.</p>
 
     <p class="fin">Bo Camiño. Ultreia et Suseia — safe travels!</p>
   </div>
@@ -1332,7 +1332,7 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
 
 <dialog class="lightbox" id="lightbox"><button class="x" aria-label="Close">✕</button><button class="arw prev" aria-label="Previous image">‹</button><img alt=""><button class="arw next" aria-label="Next image">›</button><div class="count"></div><div class="cap"></div></dialog>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script type="application/json" id="guide-data">
 {
   "items": [
@@ -2018,20 +2018,20 @@ dialog.export-dialog .close{position:absolute;top:.6rem;right:.9rem;background:n
   ],
 
   "route": [
-    [42.77747,-7.41490],[42.76520,-7.45036],[42.78219,-7.52128],[42.78434,-7.53548],
-    [42.80334,-7.61567],[42.80762,-7.61558],[42.82531,-7.69614],[42.83324,-7.71978],
-    [42.85740,-7.77876],[42.87355,-7.80697],[42.87247,-7.86787],[42.88812,-7.96563],
-    [42.90844,-7.99877],[42.91322,-8.01704],[42.91473,-8.07797],[42.93062,-8.13139],
-    [42.92626,-8.16253],[42.92633,-8.28002],[42.90468,-8.36242],[42.90024,-8.44654],
-    [42.88433,-8.49504],[42.88043,-8.54477]
+    [-7.41490,42.77747],[-7.45036,42.76520],[-7.52128,42.78219],[-7.53548,42.78434],
+    [-7.61567,42.80334],[-7.61558,42.80762],[-7.69614,42.82531],[-7.71978,42.83324],
+    [-7.77876,42.85740],[-7.80697,42.87355],[-7.86787,42.87247],[-7.96563,42.88812],
+    [-7.99877,42.90844],[-8.01704,42.91322],[-8.07797,42.91473],[-8.13139,42.93062],
+    [-8.16253,42.92626],[-8.28002,42.92633],[-8.36242,42.90468],[-8.44654,42.90024],
+    [-8.49504,42.88433],[-8.54477,42.88043]
   ],
 
   "branches": [
     { "label": "Camino Finisterre / Muxía extension",
-      "coords": [[42.88043,-8.54477],[42.8776208,-8.5701315],[42.96031,-9.19664],[42.90456,-9.26085],[42.88240,-9.27199],[42.99818,-9.24397],[43.11198,-9.21964]],
+      "coords": [[-8.54477,42.88043],[-8.5701315,42.8776208],[-9.19664,42.96031],[-9.26085,42.90456],[-9.27199,42.88240],[-9.24397,42.99818],[-9.21964,43.11198]],
       "color": "#b07d10" },
     { "label": "Samos &amp; Lugo, before the walk",
-      "coords": [[42.73213,-7.32550],[42.77747,-7.41490],[43.00912,-7.55821]],
+      "coords": [[-7.32550,42.73213],[-7.41490,42.77747],[-7.55821,43.00912]],
       "color": "#4a6146" }
   ]
 }
@@ -3247,30 +3247,57 @@ if (elevEl) elevEl.innerHTML = routeElevationSVG(ROUTE_PROFILE) +
 // ─── MAP ─────────────────────────────────────────────────────────────────────
 const cs = getComputedStyle(document.documentElement);
 const color = c => cs.getPropertyValue('--c-' + c).trim() || '#888';
-const map = L.map('map');
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  {attribution:'© OpenStreetMap © CARTO', maxZoom:19}).addTo(map);
+const PINNED = ITEMS.filter(i => i.lat && i.lng);
+const byId = Object.fromEntries(PINNED.map(it => [it.id, it]));
 
-if (ROUTE.length) L.polyline(ROUTE, {color:'#12408c', weight:3.4, dashArray:'9 7', opacity:.75}).addTo(map);
-BRANCHES.forEach(b => L.polyline(b.coords, {color: b.color || '#aaa', weight:1.8, dashArray:'4 7', opacity:.6}).addTo(map));
+const map = new maplibregl.Map({ container:'map', style:'https://tiles.openfreemap.org/styles/positron',
+  center:[-8.54,42.88], zoom:9, attributionControl:{compact:false} });
+map.addControl(new maplibregl.NavigationControl({showCompass:false}), 'top-left');
 
-const markers = {}, catOf = {}, seasonOf = {}, pts = [];
-ITEMS.filter(i => i.lat && i.lng).forEach(it => {
-  const m = L.circleMarker([it.lat, it.lng], {radius:7, color:'#fff', weight:2, fillColor:color(it.category), fillOpacity:.96})
-    .addTo(map)
-    .bindPopup(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.72">${it.blurb}</span>` : ''}`);
-  m.on('click', () => focusCard(it.id));
-  markers[it.id] = m; catOf[it.id] = it.category; seasonOf[it.id] = it.season; pts.push([it.lat, it.lng]);
+const popup = new maplibregl.Popup({offset:12, maxWidth:'260px', focusAfterOpen:false});
+const showPopup = it => {
+  if (!it) return;
+  popup.setLngLat([it.lng, it.lat]).setHTML(`<b>${it.name}</b>${it.blurb ? `<br><span style="opacity:.72">${it.blurb}</span>` : ''}`).addTo(map);
+};
+
+map.on('load', () => {
+  if (ROUTE.length) {
+    map.addSource('route',{type:'geojson',data:{type:'Feature',properties:{},
+      geometry:{type:'LineString',coordinates:ROUTE}}});
+    map.addLayer({id:'route',type:'line',source:'route',
+      paint:{'line-color':'#12408c','line-width':3.4,'line-opacity':.75,'line-dasharray':[2.65,2.06]}});
+  }
+  if (BRANCHES.length) {
+    map.addSource('branches',{type:'geojson',data:{type:'FeatureCollection',features:BRANCHES.map(b =>
+      ({type:'Feature',properties:{color:b.color||'#aaa',label:b.label||''},geometry:{type:'LineString',coordinates:b.coords}}))}});
+    map.addLayer({id:'branches',type:'line',source:'branches',
+      paint:{'line-color':['get','color'],'line-width':1.8,'line-opacity':.6,'line-dasharray':[2.22,3.89]}});
+  }
+
+  const cats = [...new Set(PINNED.map(i => i.category))].filter(Boolean);
+  map.addSource('items',{type:'geojson',data:{type:'FeatureCollection',features:PINNED.map(it =>
+    ({type:'Feature',properties:{id:it.id,category:it.category},geometry:{type:'Point',coordinates:[it.lng,it.lat]}}))}});
+  map.addLayer({id:'items',type:'circle',source:'items',paint:{'circle-radius':7,
+    'circle-color': cats.length ? ['match',['get','category'],...cats.flatMap(c => [c,color(c)]),'#888'] : '#888',
+    'circle-stroke-color':'#fff','circle-stroke-width':2,'circle-opacity':.96}});
+
+  map.on('click','items', e => { const it = byId[e.features[0].properties.id]; showPopup(it); focusCard(it.id); });
+  map.on('mouseenter','items', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','items', () => map.getCanvas().style.cursor = '');
+
+  if (PINNED.length) {
+    const bounds = new maplibregl.LngLatBounds();
+    PINNED.forEach(it => bounds.extend([it.lng, it.lat]));
+    map.fitBounds(bounds,{padding:40,animate:false});
+  }
+  applyMarkerFilters();
 });
-if (pts.length) map.fitBounds(pts, {padding:[40, 40]}); else map.setView([42.88, -8.54], 9);
 
 const catOff = new Set();
 function applyMarkerFilters(){
-  Object.entries(markers).forEach(([id, m]) => {
-    const show = !catOff.has(catOf[id]) && inSeason(seasonOf[id], activeSeason);
-    if (show){ if (!map.hasLayer(m)) m.addTo(map); }
-    else if (map.hasLayer(m)) map.removeLayer(m);
-  });
+  if (!map.getLayer('items')) return;
+  map.setFilter('items', ['in', ['get','id'], ['literal',
+    PINNED.filter(it => !catOff.has(it.category) && inSeason(it.season, activeSeason)).map(it => it.id)]]);
 }
 
 const LABELS = {do:'Route & sights', food:'Food', stay:'Beds', beyond:'Beyond'};
@@ -3309,7 +3336,7 @@ function wire(){
     main.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(imgs, idx); } });
   });
   document.querySelectorAll('[data-id]').forEach(c => c.addEventListener('mouseenter', () => {
-    if (!isSplit()) return; const mk = markers[c.dataset.id]; if (mk) mk.openPopup();
+    if (!isSplit()) return; showPopup(byId[c.dataset.id]);
   }));
 }
 
@@ -3360,7 +3387,7 @@ document.addEventListener('click', e => {
 document.getElementById('toggle').addEventListener('click', e => {
   const split = document.body.classList.toggle('split');
   e.target.textContent = split ? 'Close ▸' : '◂ Map';
-  setTimeout(() => map.invalidateSize(), 220);
+  setTimeout(() => map.resize(), 220);
 });
 
 // ─── GPX export ──────────────────────────────────────────────────────────────
